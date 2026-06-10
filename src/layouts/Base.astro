@@ -1,0 +1,161 @@
+---
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-noir.png';
+import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, type Locale } from '../config';
+import { nav, common } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  page: keyof typeof ROUTES; // clé logique de la page (home, rooms, …)
+  title: string;
+  description: string;
+}
+const { locale, page, title, description } = Astro.props;
+
+const t = nav[locale];
+const c = common[locale];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = (path: string) => `${base}${path}`;
+const abs = (path: string) => new URL(`${base}${path}`, Astro.site).href;
+
+const current = ROUTES[page];
+const canonical = abs(current[locale]);
+
+const navItems: Array<[keyof typeof ROUTES, string]> = [
+  ['home', t.home],
+  ['rooms', t.rooms],
+  ['events', t.events],
+  ['experiences', t.experiences],
+  ['gallery', t.gallery],
+  ['contact', t.contact],
+];
+
+const year = new Date().getFullYear();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BedAndBreakfast',
+  name: SITE.name,
+  url: abs(ROUTES.home[locale]),
+  telephone: '+552132171334',
+  email: SITE.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Rua Cosme Velho, 1342',
+    addressLocality: 'Rio de Janeiro',
+    addressRegion: 'RJ',
+    postalCode: '22241-091',
+    addressCountry: 'BR',
+  },
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Swimming pool' },
+    { '@type': 'LocationFeatureSpecification', name: 'Tropical garden' },
+  ],
+  additionalType: 'https://schema.org/EventVenue',
+};
+---
+<!doctype html>
+<html lang={HTML_LANG[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {STAGING_NOINDEX && <meta name="robots" content="noindex" />}
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(current[l])} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={abs(current.pt)} />
+    <link rel="icon" type="image/png" href={url('/favicon.png')} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;700&display=swap" rel="stylesheet" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="wrap site-header__in">
+        <a class="brand" href={url(ROUTES.home[locale])}>
+          <Image src={logo} alt="" width={84} height={84} />
+          <span>Les Jardins de Rio</span>
+        </a>
+
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+          <ul>
+            {navItems.map(([key, label]) => (
+              <li>
+                <a href={url(ROUTES[key][locale])} aria-current={key === page ? 'page' : undefined}>{label}</a>
+              </li>
+            ))}
+            <li class="lang" aria-label="Languages">
+              {LOCALES.map((l) => (
+                <a href={url(current[l])} aria-current={l === locale ? 'true' : undefined} lang={HTML_LANG[l]}>{l.toUpperCase()}</a>
+              ))}
+            </li>
+            <li>
+              <a class="btn btn--primary" href={SITE.NOBEDS_URL} title="NoBeds — URL à fournir">{t.book}</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="site-footer__grid">
+          <div>
+            <a class="brand" href={url(ROUTES.home[locale])}>
+              <Image src={logo} alt="" width={84} height={84} />
+              <span>Les Jardins de Rio</span>
+            </a>
+            <p>{c.footerTagline}</p>
+            <p>{SITE.addressLine1}<br />{SITE.addressLine2}</p>
+          </div>
+          <div>
+            <ul>
+              {navItems.map(([key, label]) => (
+                <li><a href={url(ROUTES[key][locale])}>{label}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><a href={whatsappLink(locale)}>WhatsApp · {SITE.mobile}</a></li>
+              <li><a href={SITE.phoneHref}>{SITE.phone}</a></li>
+              <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+              <li><a href={SITE.instagram} rel="noopener">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="site-footer__bottom">
+          <span>© {year} Les Jardins de Rio. {c.rights}</span>
+          <span>{c.footerNote}</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector('.nav-toggle');
+      const navEl = document.getElementById('site-nav');
+      toggle?.addEventListener('click', () => {
+        const open = navEl?.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(!!open));
+      });
+    </script>
+  </body>
+</html>
