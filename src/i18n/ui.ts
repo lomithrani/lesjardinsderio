@@ -122,7 +122,7 @@ export const home: Dict = {
 export const spaces: Dict = {
   pt: {
     items: [
-      { name: 'Lounge principal', desc: 'Salão majestoso de mais de 99 m², com 8 m de altura e teto de vidro que se abre para admirar as estrelas. Jantares sentados de 10 a 100 pessoas.', img: 'salon-principal' },
+      { name: 'Lounge principal', desc: 'Salão majestoso de mais de 99 m², com 8 m de altura e teto de vidro que se abre para admirar as estrelas. Jantares sentados de 10 a 100 pessoas.', img: 'salon-large' },
       { name: 'Rooftop panorâmico', desc: 'Vista da Baía de Guanabara e do Corcovado. Cerimônias para até 80 pessoas, casamentos ao pôr-do-sol, coquetéis e yoga.', img: 'courbes-ciel' },
       { name: 'Sala Janus', desc: 'Com vista para o jardim interno, a piscina e a Baía de Guanabara. Workshops, conferências, coquetéis e casamentos para até 40 pessoas sentadas.', img: 'salon-angle' },
       { name: 'Piscina & jardim', desc: 'Piscina de 40 m² rodeada por um jardim tropical, com bar coberto e equipado, pool house e sala de jantar coberta.', img: 'piscine-jardin' },
@@ -131,7 +131,7 @@ export const spaces: Dict = {
   },
   en: {
     items: [
-      { name: 'Main lounge', desc: 'A majestic lounge of more than 99 sqm with an 8 m ceiling that opens to admire the stars. Seated dinners from 10 to 100 people.', img: 'salon-principal' },
+      { name: 'Main lounge', desc: 'A majestic lounge of more than 99 sqm with an 8 m ceiling that opens to admire the stars. Seated dinners from 10 to 100 people.', img: 'salon-large' },
       { name: 'Panoramic rooftop', desc: 'Views of Guanabara Bay and Corcovado. Ceremonies for up to 80 people, sunset weddings, cocktails and yoga.', img: 'courbes-ciel' },
       { name: 'Janus Room', desc: 'Overlooking the inner garden, the pool and Guanabara Bay. Workshops, conferences, cocktails and weddings for up to 40 seated guests.', img: 'salon-angle' },
       { name: 'Pool & garden', desc: 'A 40 sqm pool surrounded by a tropical garden, with an equipped covered bar, pool house and covered dining room.', img: 'piscine-jardin' },
@@ -140,7 +140,7 @@ export const spaces: Dict = {
   },
   fr: {
     items: [
-      { name: 'Salon principal', desc: "Un hall majestueux de plus de 99 m², haut de 8 m, doté d'un plafond de verre qui s'ouvre sur le ciel. Dîners assis de 10 à 100 personnes.", img: 'salon-principal' },
+      { name: 'Salon principal', desc: "Un hall majestueux de plus de 99 m², haut de 8 m, doté d'un plafond de verre qui s'ouvre sur le ciel. Dîners assis de 10 à 100 personnes.", img: 'salon-large' },
       { name: 'Rooftop panoramique', desc: 'Vue sur la baie de Guanabara et le Corcovado. Cérémonies jusqu’à 80 personnes, mariages au coucher du soleil, cocktails et yoga.', img: 'courbes-ciel' },
       { name: 'Salle Janus', desc: 'Donnant sur le jardin intérieur, la piscine et la baie de Guanabara. Ateliers, conférences, cocktails et mariages jusqu’à 40 personnes assises.', img: 'salon-angle' },
       { name: 'Piscine & jardin', desc: 'Une piscine de 40 m² entourée d’un jardin tropical, avec bar couvert et équipé, pool house et salle à manger couverte.', img: 'piscine-jardin' },
