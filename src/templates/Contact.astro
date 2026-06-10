@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Curve from '../components/Curve.astro';
+import { contact, common } from '../i18n/ui';
+import { SITE, whatsappLink, type Locale } from '../config';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = contact[locale];
+const c = common[locale];
+---
+<Base locale={locale} page="contact" title={t.metaTitle} description={t.metaDesc}>
+  <section class="section section--creme" style="padding-bottom: 0.5rem;">
+    <div class="wrap">
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h1>{t.title}</h1>
+      <p class="lede">{t.intro}</p>
+    </div>
+  </section>
+
+  <Curve fill="var(--blanc)" />
+
+  <section class="section" style="padding-top: 1rem;">
+    <div class="wrap contact-grid">
+      <div class="contact-card contact-card--accent">
+        <h3>{t.whatsappTitle}</h3>
+        <p>{t.whatsappText}</p>
+        <p style="font-size: 1.25rem; font-family: var(--font-display);">{SITE.mobile}</p>
+        <a class="btn btn--light" href={whatsappLink(locale)}>{c.writeWhatsApp}</a>
+      </div>
+      <div class="contact-card">
+        <h3>{t.emailTitle}</h3>
+        <p style="font-size: 1.1rem;"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+        <a class="btn btn--ghost" href={`mailto:${SITE.email}`}>{c.sendEmail}</a>
+      </div>
+      <div class="contact-card">
+        <h3>{t.phoneTitle}</h3>
+        <p><a href={SITE.phoneHref}>{SITE.phone}</a><br /><a href={SITE.mobileHref}>{SITE.mobile}</a></p>
+        <h3 style="margin-top: 1rem;">{t.hoursTitle}</h3>
+        <p>{t.hours}</p>
+      </div>
+      <div class="contact-card">
+        <h3>{t.addressTitle}</h3>
+        <p>{SITE.addressLine1}<br />{SITE.addressLine2}</p>
+        <a class="btn btn--ghost" href={SITE.mapsUrl} rel="noopener">Google Maps</a>
+      </div>
+    </div>
+  </section>
+</Base>
