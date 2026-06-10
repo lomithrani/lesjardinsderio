@@ -1,34 +1,16 @@
 ---
-const build = new Date().toISOString();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const target = `${base}/pt/`;
 ---
 <!doctype html>
-<html lang="fr">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>Les Jardins de Rio — pipeline test</title>
-    <style>
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        font-family: Georgia, serif;
-        background: #fff;
-        color: #111;
-        text-align: center;
-      }
-      h1 { font-weight: 400; letter-spacing: 0.08em; }
-      p { color: #555; }
-      code { font-size: 0.85rem; }
-    </style>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Les Jardins de Rio</title>
   </head>
   <body>
-    <main>
-      <h1>Les Jardins de Rio</h1>
-      <p>Pipeline de déploiement opérationnel ✓</p>
-      <p><code data-testid="build-time">build: {build}</code></p>
-    </main>
+    <p><a href={target}>Les Jardins de Rio</a></p>
   </body>
 </html>
