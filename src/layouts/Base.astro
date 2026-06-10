@@ -33,6 +33,10 @@ const navItems: Array<[keyof typeof ROUTES, string]> = [
 
 const year = new Date().getFullYear();
 
+// Marqueur de build : SHA du commit (injecté par GitHub Actions) + horodatage.
+// Permet au job `verify` du workflow de confirmer que le site en ligne sert bien ce commit.
+const buildInfo = `${(process.env.GITHUB_SHA ?? 'local').slice(0, 7)} ${new Date().toISOString()}`;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BedAndBreakfast',
@@ -64,6 +68,7 @@ const jsonLd = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {STAGING_NOINDEX && <meta name="robots" content="noindex" />}
+    <meta name="build" content={buildInfo} />
     {LOCALES.map((l) => (
       <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(current[l])} />
     ))}

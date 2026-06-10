@@ -53,7 +53,16 @@ src/
 | Indexation | `src/config.ts` → `STAGING_NOINDEX = false` au lancement |
 | Surfaces suites Red / Garden View | `src/i18n/rooms.ts` |
 
-## Déploiement
+## Déploiement & vérification automatique
 
-Automatique : tout push sur `main` déclenche `.github/workflows/deploy.yml`
-(install → prebuild assets → build Astro → publication Pages, ~1 min).
+Tout push sur `main` déclenche `.github/workflows/deploy.yml` :
+
+1. **build** — install → prepare assets → `astro build`. Échec = badge rouge.
+2. **deploy** — publication sur GitHub Pages.
+3. **verify** — chaque page embarque `<meta name="build" content="<sha> <date>">` ;
+   ce job attend (retry 2 min) que le site en ligne serve **le SHA du commit**, puis
+   vérifie que les pages clés des 3 langues répondent HTTP 200.
+
+**Badge vert = le build passe ET les changements sont réellement en ligne.**
+
+[![Deploy](https://github.com/lomithrani/lesjardinsderio/actions/workflows/deploy.yml/badge.svg)](https://github.com/lomithrani/lesjardinsderio/actions/workflows/deploy.yml)

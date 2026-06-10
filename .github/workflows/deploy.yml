@@ -52,3 +52,34 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Vérifie que le site EN LIGNE sert bien le commit qui vient d'être déployé.
+  # Échoue (badge rouge) si le build est cassé en amont, si le déploiement
+  # n'est pas propagé après 2 min, ou si une page clé ne répond pas 200.
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier le déploiement effectif
+        run: |
+          BASE="https://lomithrani.github.io/lesjardinsderio"
+          SHA_SHORT="${GITHUB_SHA::7}"
+          echo "Attendu : build $SHA_SHORT sur $BASE/pt/"
+          for i in $(seq 1 12); do
+            HTML=$(curl -fsSL --max-time 20 "$BASE/pt/" || true)
+            if echo "$HTML" | grep -q "name=\"build\" content=\"$SHA_SHORT"; then
+              echo "✓ Le site sert le commit $SHA_SHORT (tentative $i)"
+              FAIL=0
+              for p in "" "pt/" "pt/quartos/" "pt/eventos/" "pt/experiencias/" "pt/galeria/" "pt/contato/" "en/" "en/rooms/" "fr/" "fr/chambres/"; do
+                code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$BASE/$p")
+                echo "  HTTP $code  /$p"
+                [ "$code" = "200" ] || FAIL=1
+              done
+              [ "$FAIL" = "0" ] && { echo "✓ Toutes les pages clés répondent 200"; exit 0; }
+              echo "✗ Au moins une page ne répond pas 200" ; exit 1
+            fi
+            echo "… build $SHA_SHORT pas encore servi (tentative $i/12), attente 10 s"
+            sleep 10
+          done
+          echo "✗ Après 2 min, le site ne sert toujours pas le build $SHA_SHORT"
+          exit 1
