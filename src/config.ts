@@ -1,8 +1,10 @@
 // Configuration centrale du site.
 // ⛑ PLACEHOLDER RESTANT : le domaine définitif (voir astro.config.mjs).
 // Tant que le site vit sur l'URL de staging GitHub Pages, on bloque l'indexation.
-// ⛑ Passer à false au lancement sur le domaine définitif.
-export const STAGING_NOINDEX = true;
+// ⛑ Passer STAGING à false au lancement sur le domaine définitif.
+// Les previews de PR (PREVIEW=1, posé par le CI) restent noindex quoi qu'il arrive.
+const STAGING = true;
+export const STAGING_NOINDEX = STAGING || process.env.PREVIEW === '1';
 
 export const SITE = {
   name: 'Les Jardins de Rio',

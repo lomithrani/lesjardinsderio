@@ -55,14 +55,27 @@ src/
 
 ## Déploiement & vérification automatique
 
-Tout push sur `main` déclenche `.github/workflows/deploy.yml` :
+GitHub Pages est configuré en source **« Deploy from a branch » → `gh-pages`**.
+`.github/workflows/deploy.yml` publie sur cette branche :
 
-1. **build** — install → prepare assets → `astro build`. Échec = badge rouge.
-2. **deploy** — publication sur GitHub Pages.
-3. **verify** — chaque page embarque `<meta name="build" content="<sha> <date>">` ;
-   ce job attend (retry 2 min) que le site en ligne serve **le SHA du commit**, puis
+- **push sur `main`** → build déployé à la **racine** de `gh-pages`
+  (staging : https://lomithrani.github.io/lesjardinsderio/) ;
+- **PR ouverte / mise à jour** → build déployé en preview sur
+  `https://lomithrani.github.io/lesjardinsderio/preview/pr-<n°>/`
+  (`noindex` forcé) + commentaire automatique sur la PR avec le lien ;
+- **PR fermée / mergée** → suppression automatique de sa preview.
+
+Dans tous les cas :
+
+1. **deploy** — install → prepare assets → `astro build` → push sur `gh-pages`.
+   Échec = badge rouge.
+2. **verify** — chaque page embarque `<meta name="build" content="<sha> <date>">` ;
+   ce job attend (retry 3 min) que l'URL cible serve **le SHA du commit**, puis
    vérifie que les pages clés des 3 langues répondent HTTP 200.
 
 **Badge vert = le build passe ET les changements sont réellement en ligne.**
+
+Workflow de contribution : jamais de commit direct sur `main` — branche
+`feat/<sujet>` ou `fix/<sujet>`, PR, validation sur la preview, merge.
 
 [![Deploy](https://github.com/lomithrani/lesjardinsderio/actions/workflows/deploy.yml/badge.svg)](https://github.com/lomithrani/lesjardinsderio/actions/workflows/deploy.yml)
