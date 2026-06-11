@@ -16,8 +16,11 @@ export const SITE = {
   addressLine2: 'Rio de Janeiro – RJ, 22241-091',
   mapsUrl: 'https://maps.google.com/maps?q=Rua+Cosme+Velho+1342,+Rio+de+Janeiro,+RJ+22241-091',
   instagram: 'https://www.instagram.com/lesjardinsderioboutiquehotel/',
-  // Moteur de réservation NoBeds — calendrier de disponibilité / réservation directe.
+  // Moteur de réservation NoBeds.
+  // Lien sortant (page autonome, ouverte dans un nouvel onglet) :
   NOBEDS_URL: 'https://nobeds.app/Calendar/Index/2515855',
+  // Version « Beta » prévue pour l'embarquement en iframe (l'URL Index bloque le framing) :
+  NOBEDS_EMBED_URL: 'https://nobeds.app/Calendar/Beta/2515855?calendars=1&minstay=1&hotel=1&rates=1&book=1',
 } as const;
 
 export type Locale = 'pt' | 'en' | 'fr';
@@ -34,6 +37,7 @@ export const HTML_LANG: Record<Locale, string> = {
 export const ROUTES: Record<string, Record<Locale, string>> = {
   home: { pt: '/pt/', en: '/en/', fr: '/fr/' },
   rooms: { pt: '/pt/quartos/', en: '/en/rooms/', fr: '/fr/chambres/' },
+  spa: { pt: '/pt/spa/', en: '/en/spa/', fr: '/fr/spa/' },
   events: { pt: '/pt/eventos/', en: '/en/events/', fr: '/fr/evenements/' },
   experiences: { pt: '/pt/experiencias/', en: '/en/experiences/', fr: '/fr/experiences/' },
   gallery: { pt: '/pt/galeria/', en: '/en/gallery/', fr: '/fr/galerie/' },
