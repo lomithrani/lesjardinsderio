@@ -220,3 +220,69 @@ p { margin: 0 0 1em; }
   .booking-embed { border-radius: 0 2.2rem 0 0; }
   .booking-embed iframe { height: 680px; }
 }
+
+/* ---- Widget de réservation NoBeds (sélecteur de suite) ---- */
+.booking { margin-top: 1.6rem; }
+.booking__label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sauge);
+  margin: 0 0 0.6rem;
+}
+.booking__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.booking__tab {
+  flex: 0 0 auto;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.1;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--sable);
+  background: var(--blanc);
+  color: var(--encre);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.booking__tab:hover { border-color: var(--or); }
+.booking__tab:focus-visible { outline: 2px solid var(--or); outline-offset: 2px; }
+.booking__tab[aria-pressed='true'] {
+  background: var(--vert);
+  color: var(--blanc);
+  border-color: var(--vert);
+}
+.booking .booking-embed {
+  position: relative;
+  margin-top: 0.9rem;
+  background: var(--creme); /* identique au fond teinté du calendrier (NOBEDS_BG) */
+}
+.booking-embed__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--sauge);
+  background: var(--creme);
+  pointer-events: none;
+}
+.booking-embed__loading.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.booking__fallback {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+@media (max-width: 600px) {
+  .booking__tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.4rem; -webkit-overflow-scrolling: touch; }
+  .booking__tab { white-space: nowrap; }
+}
