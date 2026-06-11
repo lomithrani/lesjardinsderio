@@ -5,7 +5,7 @@ Site vitrine trilingue (PT-BR / EN / FR) — maison d'hôtes & lieu d'événemen
 - **Framework** : [Astro 5](https://astro.build), sortie 100 % statique
 - **Hébergement** : GitHub Pages, déploiement automatique à chaque push sur `main`
 - **Staging** : https://lomithrani.github.io/lesjardinsderio/
-- **Réservation chambres** : NoBeds — calendrier par chambre, teinté à la charte, intégré en iframe + liens sortants (cf. `nobedsCalendar()` dans `src/config.ts`)
+- **Réservation chambres** : NoBeds — moteur de réservation par chambre (`book=1`), ouvert dans un overlay (iframe `Beta`) sur la page Chambres (cf. `nobedsBooking()` dans `src/config.ts`)
 - **Contact** : WhatsApp + mailto (pas de backend)
 
 ## Développement
@@ -33,12 +33,12 @@ Le MCP GitHub ne transporte que du texte ; les images suivent donc un canal déd
 
 ```
 src/
-  config.ts          # coordonnées, routes localisées, NoBeds (base + teinte + IDs), STAGING_NOINDEX
+  config.ts          # coordonnées, routes localisées, NoBeds (base Beta + params), STAGING_NOINDEX
   images.ts          # résolution des images par nom
   i18n/ui.ts         # textes des pages ×3 langues
   i18n/rooms.ts      # données des 8 suites ×3 langues
   styles/global.css  # design tokens + composants
-  components/        # Curve (séparateur signature)
+  components/        # Curve (séparateur signature) + Carousel
   layouts/Base.astro # head SEO + hreflang + header/footer + JSON-LD
   templates/         # 1 template par page logique
   pages/             # pt/ en/ fr/ — pages fines (slugs localisés) + redirection racine
@@ -48,7 +48,7 @@ src/
 
 | Quoi | Où |
 |---|---|
-| Teinte du widget NoBeds (fond / bouton) | `src/config.ts` → `SITE.NOBEDS_BG` / `SITE.NOBEDS_BTN` |
+| Paramètres du moteur NoBeds | `src/config.ts` → `SITE.NOBEDS_BETA_PARAMS` |
 | Domaine définitif | `astro.config.mjs` (`site`, retirer `base`, ajouter `public/CNAME`) + DNS |
 | Indexation | `src/config.ts` → `STAGING_NOINDEX = false` au lancement |
 | Surfaces suites Red / Garden View | `src/i18n/rooms.ts` |
