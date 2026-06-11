@@ -18,8 +18,17 @@ const c = common[locale];
       <p class="eyebrow">{t.eyebrow}</p>
       <h1>{t.title}</h1>
       <p class="lede">{t.intro}</p>
-      <p><a class="btn btn--primary" href={SITE.NOBEDS_URL} title="NoBeds — URL à fournir">{c.checkAvailability}</a></p>
+      <p><a class="btn btn--primary" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a></p>
       <p style="font-size: 0.9rem; opacity: 0.75;">{t.bookNote}</p>
+
+      <div class="booking-embed">
+        <iframe
+          src={SITE.NOBEDS_URL}
+          title={c.checkAvailability}
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        ></iframe>
+      </div>
     </div>
   </section>
 
@@ -36,7 +45,7 @@ const c = common[locale];
             {room.size && <span class="card__meta">{room.size} {c.sqm}</span>}
             <h3>{room.name[locale]}</h3>
             <p>{room.desc[locale]}</p>
-            <a class="btn btn--ghost" href={SITE.NOBEDS_URL} title="NoBeds — URL à fournir">{c.checkAvailability}</a>
+            <a class="btn btn--ghost" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a>
           </div>
         </article>
       ))}

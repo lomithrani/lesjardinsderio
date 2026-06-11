@@ -1,5 +1,5 @@
 // Configuration centrale du site.
-// ⛑ PLACEHOLDERS À REMPLACER : NOBEDS_URL (moteur de réservation) et le domaine définitif (voir astro.config.mjs).
+// ⛑ PLACEHOLDER RESTANT : le domaine définitif (voir astro.config.mjs).
 // Tant que le site vit sur l'URL de staging GitHub Pages, on bloque l'indexation.
 // ⛑ Passer à false au lancement sur le domaine définitif.
 export const STAGING_NOINDEX = true;
@@ -16,8 +16,8 @@ export const SITE = {
   addressLine2: 'Rio de Janeiro – RJ, 22241-091',
   mapsUrl: 'https://maps.google.com/maps?q=Rua+Cosme+Velho+1342,+Rio+de+Janeiro,+RJ+22241-091',
   instagram: 'https://www.instagram.com/lesjardinsderioboutiquehotel/',
-  // ⛑ À FOURNIR : URL du moteur de réservation NoBeds de l'établissement.
-  NOBEDS_URL: '#nobeds-url-a-fournir',
+  // Moteur de réservation NoBeds — calendrier de disponibilité / réservation directe.
+  NOBEDS_URL: 'https://nobeds.app/Calendar/Index/2515855',
 } as const;
 
 export type Locale = 'pt' | 'en' | 'fr';
