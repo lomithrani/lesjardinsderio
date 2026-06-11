@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import { roomPhoto } from '../images';
 import { roomsPage, common } from '../i18n/ui';
+import { booking } from '../i18n/booking';
 import { rooms } from '../i18n/rooms';
 import { nobedsCalendar, whatsappLink, type Locale } from '../config';
 
@@ -11,6 +12,7 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = roomsPage[locale];
 const c = common[locale];
+const b = booking[locale];
 ---
 <Base locale={locale} page="rooms" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
@@ -24,8 +26,8 @@ const c = common[locale];
            Le calendrier (fond/boutons) est teinté via l'URL ; le cadre autour suit la charte.
            Repli sans JS : les liens « voir les disponibilités » de chaque carte ci-dessous. -->
       <div class="booking">
-        <p class="booking__label">{c.chooseSuite}</p>
-        <div class="booking__tabs" role="group" aria-label={c.chooseSuite}>
+        <p class="booking__label">{b.chooseSuite}</p>
+        <div class="booking__tabs" role="group" aria-label={b.chooseSuite}>
           {rooms.map((room, i) => (
             <button
               type="button"
@@ -37,7 +39,7 @@ const c = common[locale];
         </div>
 
         <div class="booking-embed">
-          <div class="booking-embed__loading">{c.loadingCalendar}</div>
+          <div class="booking-embed__loading">{b.loadingCalendar}</div>
           <iframe
             class="booking-embed__frame"
             src={nobedsCalendar(rooms[0].nobedsId)}
@@ -49,7 +51,7 @@ const c = common[locale];
         </div>
 
         <p class="booking__fallback">
-          <a class="booking__open" href={nobedsCalendar(rooms[0].nobedsId)} target="_blank" rel="noopener noreferrer">{c.openNewTab}</a>
+          <a class="booking__open" href={nobedsCalendar(rooms[0].nobedsId)} target="_blank" rel="noopener noreferrer">{b.openNewTab}</a>
           <span aria-hidden="true"> · </span>
           <a href={whatsappLink(locale)} target="_blank" rel="noopener noreferrer">{c.writeWhatsApp}</a>
         </p>
