@@ -200,3 +200,22 @@ p { margin: 0 0 1em; }
 .cta-band { text-align: center; }
 .cta-band .btn { margin-top: 0.6rem; }
 .cta-band__actions { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+
+/* ---------- Réservation : calendrier NoBeds embarqué ---------- */
+.booking-embed {
+  margin-top: 1.6rem;
+  border: 1px solid var(--sable);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--blanc);
+  box-shadow: var(--shadow-soft);
+}
+.booking-embed iframe {
+  display: block;
+  width: 100%;
+  height: 760px;
+  border: 0;
+}
+@media (max-width: 600px) {
+  .booking-embed iframe { height: 620px; }
+}

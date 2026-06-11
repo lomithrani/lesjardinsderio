@@ -1,7 +1,5 @@
 ---
 import '../styles/global.css';
-import { Image } from 'astro:assets';
-import logo from '../assets/logo-noir.png';
 import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, type Locale } from '../config';
 import { nav, common } from '../i18n/ui';
 
@@ -73,7 +71,7 @@ const jsonLd = {
       <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(current[l])} />
     ))}
     <link rel="alternate" hreflang="x-default" href={abs(current.pt)} />
-    <link rel="icon" type="image/png" href={url('/favicon.png')} />
+    <link rel="icon" type="image/svg+xml" href={url('/logo-noir.svg')} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -90,7 +88,7 @@ const jsonLd = {
     <header class="site-header">
       <div class="wrap site-header__in">
         <a class="brand" href={url(ROUTES.home[locale])}>
-          <Image src={logo} alt="" width={84} height={84} />
+          <img src={url('/logo-noir.svg')} alt="" width="84" height="84" />
           <span>Les Jardins de Rio</span>
         </a>
 
@@ -109,7 +107,7 @@ const jsonLd = {
               ))}
             </li>
             <li>
-              <a class="btn btn--primary" href={SITE.NOBEDS_URL} title="NoBeds — URL à fournir">{t.book}</a>
+              <a class="btn btn--primary" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{t.book}</a>
             </li>
           </ul>
         </nav>
@@ -125,7 +123,7 @@ const jsonLd = {
         <div class="site-footer__grid">
           <div>
             <a class="brand" href={url(ROUTES.home[locale])}>
-              <Image src={logo} alt="" width={84} height={84} />
+              <img src={url('/logo-noir.svg')} alt="" width="84" height="84" />
               <span>Les Jardins de Rio</span>
             </a>
             <p>{c.footerTagline}</p>
