@@ -5,7 +5,7 @@ import Curve from '../components/Curve.astro';
 import { photo, roomPhoto } from '../images';
 import { home, spaces, common } from '../i18n/ui';
 import { rooms } from '../i18n/rooms';
-import { ROUTES, SITE, whatsappLink, type Locale } from '../config';
+import { ROUTES, SITE, whatsappLink, nobedsCalendar, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -27,7 +27,7 @@ const teaser = rooms.slice(0, 3);
       <h1>{t.heroTitle}</h1>
       <p>{t.heroSub}</p>
       <div class="hero__actions">
-        <a class="btn btn--light" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a>
+        <a class="btn btn--light" href={nobedsCalendar()} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a>
         <a class="btn btn--ghost" style="color: var(--blanc); border-color: var(--sable);" href={url(ROUTES.rooms[locale])}>{t.heroCtaRooms}</a>
       </div>
     </div>
