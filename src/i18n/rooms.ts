@@ -2,8 +2,9 @@ import type { Locale } from '../config';
 
 export interface Room {
   id: string;
-  nobedsId: string; // RoomID NoBeds — calendrier de réservation (cf. nobedsCalendar)
-  img: string; // nom de fichier dans src/assets/rooms/ (sans extension)
+  nobedsId: string; // RoomID NoBeds — moteur de réservation par chambre (cf. nobedsBooking)
+  img: string; // photo principale (nom de fichier dans src/assets/rooms/, sans extension)
+  gallery?: string[]; // photos additionnelles du carousel (mêmes noms de fichiers) — à fournir
   size?: number; // m²
   name: Record<Locale, string>;
   desc: Record<Locale, string>;

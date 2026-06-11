@@ -18,24 +18,19 @@ export const SITE = {
   addressLine2: 'Rio de Janeiro – RJ, 22241-091',
   mapsUrl: 'https://maps.google.com/maps?q=Rua+Cosme+Velho+1342,+Rio+de+Janeiro,+RJ+22241-091',
   instagram: 'https://www.instagram.com/lesjardinsderioboutiquehotel/',
-  // Moteur de réservation NoBeds — calendrier de disponibilité par chambre.
-  // Format documenté : https://nobeds.app/Calendar/Index/<RoomID>/<fond>/<bouton>
-  // (couleurs en hexadécimal SANS « # »). La même URL sert de lien sortant
-  // (nouvel onglet) ET de source d'iframe. Construire via nobedsCalendar() ci-dessous.
-  NOBEDS_BASE: 'https://nobeds.app/Calendar/Index',
-  // Teinte du widget aux couleurs de la charte (cf. src/styles/global.css) :
-  NOBEDS_BG: 'faf6ee', // --creme (fond du calendrier)
-  NOBEDS_BTN: '1b4d3e', // --vert  (boutons du calendrier)
-  // Suite affichée par défaut pour les CTA génériques (header, accueil) :
-  NOBEDS_DEFAULT_ID: '2515855', // Suite Deluxe (Red)
-  // Repli historique si l'URL Index refusait le framing (sans paramètres de couleur) :
-  // https://nobeds.app/Calendar/Beta/<RoomID>?calendars=1&minstay=1&hotel=1&rates=1&book=1
+  // Moteur de réservation NoBeds — par chambre (OnePage booking engine, book=1).
+  // Format : https://nobeds.app/Calendar/Beta/<RoomID>?<params>
+  // Embarqué en iframe dans l'overlay « Réserver » de chaque carte (cf. Rooms.astro).
+  NOBEDS_BETA_BASE: 'https://nobeds.app/Calendar/Beta',
+  // Paramètres NoBeds (réglables) : calendars = nb de mois affichés, minstay = séjour
+  // minimum, rates/hotel = options d'affichage, book=1 active le moteur de réservation.
+  NOBEDS_BETA_PARAMS: 'calendars=1&minstay=1&rates=1&hotel=1&book=1',
+  NOBEDS_DEFAULT_ID: '2515855', // Suite Deluxe (Red) — repli si id absent
 } as const;
 
-// Construit l'URL du calendrier NoBeds d'une chambre, teintée à la charte.
-// Utilisée à la fois comme lien (nouvel onglet) et comme source d'iframe.
-export function nobedsCalendar(id: string = SITE.NOBEDS_DEFAULT_ID): string {
-  return `${SITE.NOBEDS_BASE}/${id}/${SITE.NOBEDS_BG}/${SITE.NOBEDS_BTN}`;
+// Construit l'URL du moteur de réservation NoBeds d'une chambre (iframe de l'overlay).
+export function nobedsBooking(id: string = SITE.NOBEDS_DEFAULT_ID): string {
+  return `${SITE.NOBEDS_BETA_BASE}/${id}?${SITE.NOBEDS_BETA_PARAMS}`;
 }
 
 export type Locale = 'pt' | 'en' | 'fr';

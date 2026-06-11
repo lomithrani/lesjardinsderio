@@ -1,15 +1,39 @@
 import type { Locale } from '../config';
 
-// Libellés du widget de réservation NoBeds (page Chambres).
+// Libellés liés à la réservation (page Chambres) : bouton Réserver, overlay, carousel.
 // Gardés à part du gros ui.ts pour rester ciblés sur la fonctionnalité.
 export interface BookingStrings {
-  chooseSuite: string;
-  loadingCalendar: string;
-  openNewTab: string;
+  book: string; // bouton « Réserver »
+  bookAria: string; // préfixe aria du bouton, suivi du nom de la chambre
+  close: string; // fermer l'overlay
+  loading: string; // chargement du moteur de réservation
+  prevPhoto: string; // carousel : photo précédente
+  nextPhoto: string; // carousel : photo suivante
 }
 
 export const booking: Record<Locale, BookingStrings> = {
-  pt: { chooseSuite: 'Escolha uma suíte', loadingCalendar: 'Carregando o calendário…', openNewTab: 'Abrir em nova aba' },
-  en: { chooseSuite: 'Choose a suite', loadingCalendar: 'Loading the calendar…', openNewTab: 'Open in a new tab' },
-  fr: { chooseSuite: 'Choisir une suite', loadingCalendar: 'Chargement du calendrier…', openNewTab: 'Ouvrir dans un nouvel onglet' },
+  pt: {
+    book: 'Reservar',
+    bookAria: 'Reservar a suíte',
+    close: 'Fechar',
+    loading: 'Carregando a reserva…',
+    prevPhoto: 'Foto anterior',
+    nextPhoto: 'Próxima foto',
+  },
+  en: {
+    book: 'Book',
+    bookAria: 'Book the suite',
+    close: 'Close',
+    loading: 'Loading the booking engine…',
+    prevPhoto: 'Previous photo',
+    nextPhoto: 'Next photo',
+  },
+  fr: {
+    book: 'Réserver',
+    bookAria: 'Réserver la suite',
+    close: 'Fermer',
+    loading: 'Chargement de la réservation…',
+    prevPhoto: 'Photo précédente',
+    nextPhoto: 'Photo suivante',
+  },
 };
