@@ -1,22 +1,40 @@
 name: Deploy to GitHub Pages
 
+# Déploiement sur la branche gh-pages (source Pages = « Deploy from a branch ») :
+#   - push sur main            → build déployé à la RACINE de gh-pages
+#                                 (le dossier preview/ est préservé)
+#   - PR ouverte / mise à jour → build avec base=/lesjardinsderio/preview/pr-<n°>/
+#                                 déployé dans gh-pages:preview/pr-<n°>/ (+ noindex)
+#                                 + commentaire automatique sur la PR avec le lien
+#   - PR fermée / mergée       → suppression de gh-pages:preview/pr-<n°>/
+# Le job verify confirme que le site EN LIGNE sert bien le commit déployé.
+
 on:
   push:
     branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
+  pull-requests: write
 
+# Dédoublonne les runs d'une même cible (un par PR, un pour main).
 concurrency:
-  group: pages
+  group: deploy-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-latest
+    # Sérialise les écritures sur gh-pages (évite les conflits de push).
+    concurrency:
+      group: gh-pages-writer
+      cancel-in-progress: false
+    outputs:
+      base_url: ${{ steps.target.outputs.base_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,43 +47,68 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Déterminer la cible (racine ou preview)
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            N="${{ github.event.number }}"
+            echo "astro_base=/lesjardinsderio/preview/pr-$N" >> "$GITHUB_OUTPUT"
+            echo "dest=preview/pr-$N" >> "$GITHUB_OUTPUT"
+            echo "preview=1" >> "$GITHUB_OUTPUT"
+            echo "base_url=https://lomithrani.github.io/lesjardinsderio/preview/pr-$N" >> "$GITHUB_OUTPUT"
+          else
+            echo "astro_base=/lesjardinsderio" >> "$GITHUB_OUTPUT"
+            echo "dest=." >> "$GITHUB_OUTPUT"
+            echo "preview=" >> "$GITHUB_OUTPUT"
+            echo "base_url=https://lomithrani.github.io/lesjardinsderio" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build
+        env:
+          ASTRO_BASE: ${{ steps.target.outputs.astro_base }}
+          PREVIEW: ${{ steps.target.outputs.preview }}
         run: npm run build
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
         with:
-          enablement: true
+          ref: gh-pages
+          path: site
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publier sur gh-pages
+        run: |
+          DEST="${{ steps.target.outputs.dest }}"
+          if [ "$DEST" = "." ]; then
+            # Racine : tout remplacer SAUF preview/ et .git
+            find site -mindepth 1 -maxdepth 1 ! -name .git ! -name preview -exec rm -rf {} +
+            cp -a dist/. site/
+          else
+            rm -rf "site/$DEST"
+            mkdir -p "site/$DEST"
+            cp -a dist/. "site/$DEST/"
+          fi
+          touch site/.nojekyll
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "deploy: ${GITHUB_SHA::7} → ${DEST} (${{ github.event_name }})" \
+            || echo "Rien à committer (build identique)"
+          git push origin gh-pages
 
   # Vérifie que le site EN LIGNE sert bien le commit qui vient d'être déployé.
   # Échoue (badge rouge) si le build est cassé en amont, si le déploiement
-  # n'est pas propagé après 2 min, ou si une page clé ne répond pas 200.
+  # n'est pas propagé après 3 min, ou si une page clé ne répond pas 200.
   verify:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Vérifier le déploiement effectif
         run: |
-          BASE="https://lomithrani.github.io/lesjardinsderio"
+          BASE="${{ needs.deploy.outputs.base_url }}"
           SHA_SHORT="${GITHUB_SHA::7}"
           echo "Attendu : build $SHA_SHORT sur $BASE/pt/"
-          for i in $(seq 1 12); do
+          for i in $(seq 1 18); do
             HTML=$(curl -fsSL --max-time 20 "$BASE/pt/" || true)
             if echo "$HTML" | grep -q "name=\"build\" content=\"$SHA_SHORT"; then
               echo "✓ Le site sert le commit $SHA_SHORT (tentative $i)"
@@ -78,8 +121,59 @@ jobs:
               [ "$FAIL" = "0" ] && { echo "✓ Toutes les pages clés répondent 200"; exit 0; }
               echo "✗ Au moins une page ne répond pas 200" ; exit 1
             fi
-            echo "… build $SHA_SHORT pas encore servi (tentative $i/12), attente 10 s"
+            echo "… build $SHA_SHORT pas encore servi (tentative $i/18), attente 10 s"
             sleep 10
           done
-          echo "✗ Après 2 min, le site ne sert toujours pas le build $SHA_SHORT"
+          echo "✗ Après 3 min, le site ne sert toujours pas le build $SHA_SHORT"
           exit 1
+
+      - name: Commenter la PR avec le lien de preview
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- pr-preview-link -->';
+            const url = '${{ needs.deploy.outputs.base_url }}/';
+            const sha = context.sha.substring(0, 7);
+            const body = [
+              marker,
+              `🔍 **Preview déployée** : ${url}`,
+              '',
+              `Build \`${sha}\` — mise à jour automatique à chaque push sur la branche.`,
+            ].join('\n');
+            const { data: comments } = await github.rest.issues.listComments({
+              ...context.repo, issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ ...context.repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
+            }
+
+  # PR fermée ou mergée : suppression de sa preview.
+  cleanup:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: gh-pages-writer
+      cancel-in-progress: false
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Supprimer la preview
+        run: |
+          N="${{ github.event.number }}"
+          if [ -d "preview/pr-$N" ]; then
+            rm -rf "preview/pr-$N"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "cleanup: suppression de preview/pr-$N"
+            git push origin gh-pages
+          else
+            echo "Pas de preview à nettoyer pour la PR #$N"
+          fi

@@ -2,8 +2,11 @@
 import { defineConfig } from 'astro/config';
 
 // GitHub Pages (project page) : https://lomithrani.github.io/lesjardinsderio/
-// Quand le domaine personnalisé sera branché, remplacer `site` et retirer `base`.
+// Les previews de PR sont buildées avec ASTRO_BASE=/lesjardinsderio/preview/pr-<n°>
+// (variable posée par le CI — voir .github/workflows/deploy.yml).
+// ⛑ Quand le domaine personnalisé sera branché : remplacer `site`, retirer `base`
+// (la valeur par défaut ci-dessous), ajouter public/CNAME.
 export default defineConfig({
-  site: 'https://lomithrani.github.io',
-  base: '/lesjardinsderio',
+  site: process.env.ASTRO_SITE ?? 'https://lomithrani.github.io',
+  base: process.env.ASTRO_BASE ?? '/lesjardinsderio',
 });
