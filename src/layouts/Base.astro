@@ -23,8 +23,9 @@ const canonical = abs(current[locale]);
 const navItems: Array<[keyof typeof ROUTES, string]> = [
   ['home', t.home],
   ['rooms', t.rooms],
-  ['events', t.events],
   ['experiences', t.experiences],
+  ['spa', t.spa],
+  ['events', t.events],
   ['gallery', t.gallery],
   ['contact', t.contact],
 ];
@@ -79,7 +80,7 @@ const jsonLd = {
     <meta property="og:site_name" content={SITE.name} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>

@@ -3,9 +3,9 @@ import type { Locale } from '../config';
 type Dict = Record<Locale, any>;
 
 export const nav: Dict = {
-  pt: { home: 'Início', rooms: 'Quartos', events: 'Eventos', experiences: 'Experiências', gallery: 'Galeria', contact: 'Contato', book: 'Reservar' },
-  en: { home: 'Home', rooms: 'Rooms', events: 'Events', experiences: 'Experiences', gallery: 'Gallery', contact: 'Contact', book: 'Book now' },
-  fr: { home: 'Accueil', rooms: 'Chambres', events: 'Événements', experiences: 'Expériences', gallery: 'Galerie', contact: 'Contact', book: 'Réserver' },
+  pt: { home: 'Início', rooms: 'Quartos', spa: 'Spa', events: 'Eventos', experiences: 'Experiências', gallery: 'Galeria', contact: 'Contato', book: 'Reservar' },
+  en: { home: 'Home', rooms: 'Rooms', spa: 'Spa', events: 'Events', experiences: 'Experiences', gallery: 'Gallery', contact: 'Contact', book: 'Book now' },
+  fr: { home: 'Accueil', rooms: 'Chambres', spa: 'Spa', events: 'Événements', experiences: 'Expériences', gallery: 'Galerie', contact: 'Contact', book: 'Réserver' },
 };
 
 export const common: Dict = {
@@ -236,6 +236,66 @@ export const events: Dict = {
     privatizationText: "Les 8 suites et tous les espaces de la maison, rien que pour vous et vos invités. Idéal pour les mariages de destination, retraites et productions.",
     ctaTitle: 'Parlez-nous de votre événement',
     ctaText: 'Date, nombre d’invités, type d’événement : écrivez-nous et nous reviendrons vers vous avec une proposition.',
+  },
+};
+
+export const spa: Dict = {
+  pt: {
+    metaTitle: 'Spa & Day use — Les Jardins de Rio',
+    metaDesc: 'Um spa a céu aberto: massagens e tratamentos sob consulta, relaxamento à beira da piscina cristalina e fórmulas day use no jardim tropical do Cosme Velho.',
+    eyebrow: 'Spa & bem-estar',
+    title: 'Um spa a céu aberto, no coração do jardim',
+    lede: 'Entre a piscina cristalina, o jardim tropical e o canto dos pássaros, o tempo desacelera. Tratamentos, massagens e dias de descanso, a minutos do Corcovado.',
+    introTitle: 'Recarregar as energias, em plena natureza',
+    introText: 'Longe da agitação da cidade, a casa convida ao descanso: espreguiçadeiras à sombra das palmeiras, água turquesa, terraços envoltos em verde. Nossos tratamentos e massagens são reservados sob consulta, neste cenário de exceção.',
+    items: [
+      { key: 'soins', img: 'terrasse-coussins', title: 'Tratamentos & massagens', text: 'Massagens e tratamentos corporais sob agendamento, no quarto ou de frente para o jardim, com profissionais parceiros.' },
+      { key: 'eau', img: 'piscine-canopee', title: 'Relaxar à beira da água', text: 'Piscina cristalina, espreguiçadeiras e pool bar: uma pausa aquática sob a copa tropical.' },
+      { key: 'yoga', img: 'jardin-aerien', title: 'Yoga & holístico', text: 'Sessões de yoga no rooftop e oficinas holísticas, em formatos íntimos, sob consulta.' },
+    ],
+    dayuseEyebrow: 'Sem se hospedar',
+    dayuseTitle: 'Day use',
+    dayuseText: 'Aproveite a casa por um dia, sem dormir: acesso à piscina, ao jardim e aos espaços de convivência, com tranquilidade.',
+    includes: ['Acesso à piscina e ao jardim tropical', 'Espreguiçadeiras e áreas de descanso', 'Pool bar', 'Sob reserva, conforme disponibilidade'],
+    note: 'Preços, tratamentos disponíveis e calendário sob consulta — fale conosco pelo WhatsApp.',
+  },
+  en: {
+    metaTitle: 'Spa & Day use — Les Jardins de Rio',
+    metaDesc: 'An open-air spa: massages and treatments on request, relaxation by the crystal-clear pool, and day-use packages in the tropical garden of Cosme Velho.',
+    eyebrow: 'Spa & wellness',
+    title: 'An open-air spa, in the heart of the garden',
+    lede: 'Between the crystal-clear pool, the tropical garden and the song of birds, time slows down. Treatments, massages and relaxing days, minutes from Corcovado.',
+    introTitle: 'Recharge, surrounded by nature',
+    introText: "Away from the city's bustle, the house naturally invites rest: sunbeds in the shade of palm trees, turquoise water, terraces nestled in greenery. Our treatments and massages are booked on request, in this exceptional setting.",
+    items: [
+      { key: 'soins', img: 'terrasse-coussins', title: 'Treatments & massages', text: 'Body treatments and massages by appointment, in your room or facing the garden, by partner practitioners.' },
+      { key: 'eau', img: 'piscine-canopee', title: 'Relaxation by the water', text: 'Crystal-clear pool, sunbeds and pool bar: an aquatic pause under the tropical canopy.' },
+      { key: 'yoga', img: 'jardin-aerien', title: 'Yoga & holistic', text: 'Rooftop yoga sessions and holistic workshops, in intimate formats, on request.' },
+    ],
+    dayuseEyebrow: 'Without staying over',
+    dayuseTitle: 'Day use',
+    dayuseText: 'Enjoy the house for a day, without spending the night: access to the pool, the garden and the living spaces, in peace and quiet.',
+    includes: ['Access to the pool and tropical garden', 'Sunbeds and relaxation areas', 'Pool bar', 'By reservation, subject to availability'],
+    note: 'Prices, available treatments and calendar on request — chat with us on WhatsApp.',
+  },
+  fr: {
+    metaTitle: 'Spa & Day use — Les Jardins de Rio',
+    metaDesc: "Un spa à ciel ouvert : massages et soins sur demande, détente au bord de la piscine cristalline et formules day use dans le jardin tropical de Cosme Velho.",
+    eyebrow: 'Spa & bien-être',
+    title: 'Un spa à ciel ouvert, au cœur du jardin',
+    lede: "Entre la piscine cristalline, le jardin tropical et le chant des oiseaux, le temps ralentit. Soins, massages et journées détente, à quelques minutes du Corcovado.",
+    introTitle: 'Se ressourcer, les pieds dans la nature',
+    introText: "Loin de l'agitation de la ville, la maison se prête naturellement au repos : transats à l'ombre des palmiers, eau turquoise, terrasses lovées dans la verdure. Nos soins et massages se réservent sur demande, dans ce décor d'exception.",
+    items: [
+      { key: 'soins', img: 'terrasse-coussins', title: 'Soins & massages', text: 'Massages et soins du corps sur réservation, en chambre ou face au jardin, dispensés par des praticiens partenaires.' },
+      { key: 'eau', img: 'piscine-canopee', title: "Détente au fil de l'eau", text: 'Piscine cristalline, transats et pool bar : une parenthèse aquatique sous la canopée tropicale.' },
+      { key: 'yoga', img: 'jardin-aerien', title: 'Yoga & holistique', text: 'Séances de yoga sur le rooftop et ateliers holistiques, en formats intimes, sur demande.' },
+    ],
+    dayuseEyebrow: 'Sans séjourner',
+    dayuseTitle: 'Day use',
+    dayuseText: "Profitez de la maison le temps d'une journée, sans y dormir : accès à la piscine, au jardin et aux espaces de vie, dans le calme.",
+    includes: ['Accès à la piscine et au jardin tropical', 'Transats et espaces de détente', 'Pool bar', 'Sur réservation, selon disponibilité'],
+    note: 'Tarifs, soins disponibles et calendrier sur demande — écrivez-nous sur WhatsApp.',
   },
 };
 
