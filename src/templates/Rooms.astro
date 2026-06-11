@@ -5,7 +5,7 @@ import Curve from '../components/Curve.astro';
 import { roomPhoto } from '../images';
 import { roomsPage, common } from '../i18n/ui';
 import { rooms } from '../i18n/rooms';
-import { SITE, type Locale } from '../config';
+import { nobedsCalendar, whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -18,17 +18,41 @@ const c = common[locale];
       <p class="eyebrow">{t.eyebrow}</p>
       <h1>{t.title}</h1>
       <p class="lede">{t.intro}</p>
-      <p><a class="btn btn--primary" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a></p>
       <p style="font-size: 0.9rem; opacity: 0.75;">{t.bookNote}</p>
 
-      <div class="booking-embed">
-        <iframe
-          src={SITE.NOBEDS_EMBED_URL}
-          title={c.checkAvailability}
-          loading="lazy"
-          scrolling="no"
-          referrerpolicy="no-referrer"
-        ></iframe>
+      <!-- Widget de réservation : sélecteur de suite + calendrier NoBeds teinté à la charte.
+           Le calendrier (fond/boutons) est teinté via l'URL ; le cadre autour suit la charte.
+           Repli sans JS : les liens « voir les disponibilités » de chaque carte ci-dessous. -->
+      <div class="booking">
+        <p class="booking__label">{c.chooseSuite}</p>
+        <div class="booking__tabs" role="group" aria-label={c.chooseSuite}>
+          {rooms.map((room, i) => (
+            <button
+              type="button"
+              class="booking__tab"
+              data-url={nobedsCalendar(room.nobedsId)}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+            >{room.name[locale]}</button>
+          ))}
+        </div>
+
+        <div class="booking-embed">
+          <div class="booking-embed__loading">{c.loadingCalendar}</div>
+          <iframe
+            class="booking-embed__frame"
+            src={nobedsCalendar(rooms[0].nobedsId)}
+            title={c.checkAvailability}
+            loading="lazy"
+            scrolling="no"
+            referrerpolicy="no-referrer"
+          ></iframe>
+        </div>
+
+        <p class="booking__fallback">
+          <a class="booking__open" href={nobedsCalendar(rooms[0].nobedsId)} target="_blank" rel="noopener noreferrer">{c.openNewTab}</a>
+          <span aria-hidden="true"> · </span>
+          <a href={whatsappLink(locale)} target="_blank" rel="noopener noreferrer">{c.writeWhatsApp}</a>
+        </p>
       </div>
     </div>
   </section>
@@ -46,10 +70,34 @@ const c = common[locale];
             {room.size && <span class="card__meta">{room.size} {c.sqm}</span>}
             <h3>{room.name[locale]}</h3>
             <p>{room.desc[locale]}</p>
-            <a class="btn btn--ghost" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a>
+            <a class="btn btn--ghost" href={nobedsCalendar(room.nobedsId)} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a>
           </div>
         </article>
       ))}
     </div>
   </section>
+
+  <script>
+    // Sélecteur de suite : change la source de l'iframe NoBeds sans recharger la page.
+    for (const root of document.querySelectorAll('.booking')) {
+      const frame = root.querySelector('.booking-embed__frame');
+      const open = root.querySelector('.booking__open');
+      const loading = root.querySelector('.booking-embed__loading');
+      const tabs = root.querySelectorAll('.booking__tab');
+      if (frame && loading) {
+        frame.addEventListener('load', () => loading.classList.add('is-hidden'));
+      }
+      for (const tab of tabs) {
+        tab.addEventListener('click', () => {
+          const url = tab.getAttribute('data-url');
+          if (!url) return;
+          for (const other of tabs) other.setAttribute('aria-pressed', 'false');
+          tab.setAttribute('aria-pressed', 'true');
+          if (loading) loading.classList.remove('is-hidden');
+          if (frame) frame.setAttribute('src', url);
+          if (open) open.setAttribute('href', url);
+        });
+      }
+    }
+  </script>
 </Base>

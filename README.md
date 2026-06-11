@@ -5,7 +5,7 @@ Site vitrine trilingue (PT-BR / EN / FR) — maison d'hôtes & lieu d'événemen
 - **Framework** : [Astro 5](https://astro.build), sortie 100 % statique
 - **Hébergement** : GitHub Pages, déploiement automatique à chaque push sur `main`
 - **Staging** : https://lomithrani.github.io/lesjardinsderio/
-- **Réservation chambres** : NoBeds (lien externe — URL à fournir)
+- **Réservation chambres** : NoBeds — calendrier par chambre, teinté à la charte, intégré en iframe + liens sortants (cf. `nobedsCalendar()` dans `src/config.ts`)
 - **Contact** : WhatsApp + mailto (pas de backend)
 
 ## Développement
@@ -33,7 +33,7 @@ Le MCP GitHub ne transporte que du texte ; les images suivent donc un canal déd
 
 ```
 src/
-  config.ts          # coordonnées, routes localisées, ⛑ NOBEDS_URL, STAGING_NOINDEX
+  config.ts          # coordonnées, routes localisées, NoBeds (base + teinte + IDs), STAGING_NOINDEX
   images.ts          # résolution des images par nom
   i18n/ui.ts         # textes des pages ×3 langues
   i18n/rooms.ts      # données des 8 suites ×3 langues
@@ -48,7 +48,7 @@ src/
 
 | Quoi | Où |
 |---|---|
-| URL du moteur NoBeds | `src/config.ts` → `SITE.NOBEDS_URL` |
+| Teinte du widget NoBeds (fond / bouton) | `src/config.ts` → `SITE.NOBEDS_BG` / `SITE.NOBEDS_BTN` |
 | Domaine définitif | `astro.config.mjs` (`site`, retirer `base`, ajouter `public/CNAME`) + DNS |
 | Indexation | `src/config.ts` → `STAGING_NOINDEX = false` au lancement |
 | Surfaces suites Red / Garden View | `src/i18n/rooms.ts` |
