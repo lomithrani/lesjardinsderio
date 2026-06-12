@@ -2,8 +2,10 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
-import { photo, roomPhoto } from '../images';
+import Carousel from '../components/Carousel.astro';
+import { image, cover, galleryOr } from '../images';
 import { home, spaces, common } from '../i18n/ui';
+import { booking } from '../i18n/booking';
 import { rooms } from '../i18n/rooms';
 import { ROUTES, SITE, whatsappLink, type Locale } from '../config';
 
@@ -12,6 +14,7 @@ const { locale } = Astro.props;
 const t = home[locale];
 const sp = spaces[locale];
 const c = common[locale];
+const b = booking[locale];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (p: string) => `${base}${p}`;
 const teaser = rooms.slice(0, 3);
@@ -20,7 +23,7 @@ const teaser = rooms.slice(0, 3);
   <!-- Hero -->
   <section class="hero">
     <div class="hero__img">
-      <Image src={photo('hero-maison-piscine')} alt="" widths={[640, 1024, 1600]} sizes="100vw" loading="eager" fetchpriority="high" />
+      <Image src={image('photos/hero-maison-piscine')} alt="" widths={[640, 1024, 1600]} sizes="100vw" loading="eager" fetchpriority="high" />
     </div>
     <div class="wrap hero__content">
       <p class="eyebrow">{t.heroEyebrow}</p>
@@ -44,7 +47,7 @@ const teaser = rooms.slice(0, 3);
         <p>{t.introText2}</p>
       </div>
       <div class="ph">
-        <Image src={photo('interieur-perspective')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/interieur-perspective')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
     </div>
   </section>
@@ -61,7 +64,7 @@ const teaser = rooms.slice(0, 3);
         {sp.items.map((item: any) => (
           <article class="card">
             <div class="card__img">
-              <Image src={photo(item.img)} alt={item.name} widths={[420, 720]} sizes="(min-width: 680px) 30vw, 92vw" />
+              <Carousel images={galleryOr(`spaces/${item.key}`, item.img)} alt={item.name} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
             </div>
             <div class="card__body">
               <h3>{item.name}</h3>
@@ -85,7 +88,7 @@ const teaser = rooms.slice(0, 3);
         {teaser.map((room) => (
           <article class="card">
             <div class="card__img">
-              <Image src={roomPhoto(room.img)} alt={room.name[locale]} widths={[420, 720]} sizes="(min-width: 680px) 30vw, 92vw" />
+              <Image src={cover(`rooms/${room.id}`)} alt={room.name[locale]} widths={[420, 720]} sizes="(min-width: 680px) 30vw, 92vw" />
             </div>
             <div class="card__body">
               {room.size && <span class="card__meta">{room.size} {c.sqm}</span>}
@@ -111,7 +114,7 @@ const teaser = rooms.slice(0, 3);
         <a class="btn btn--light" href={url(ROUTES.events[locale])}>{t.eventsCta}</a>
       </div>
       <div class="ph ph--alt">
-        <Image src={photo('piscine-jungle')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/piscine-jungle')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
     </div>
   </section>
@@ -122,7 +125,7 @@ const teaser = rooms.slice(0, 3);
   <section class="section">
     <div class="wrap split">
       <div class="ph ph--soft">
-        <Image src={photo('facade-palmiers')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/facade-palmiers')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
       <div>
         <p class="eyebrow">{t.locationEyebrow}</p>
