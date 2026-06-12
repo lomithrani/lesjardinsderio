@@ -9,6 +9,7 @@ export interface BookingStrings {
   loading: string; // chargement du moteur de réservation
   prevPhoto: string; // carousel : photo précédente
   nextPhoto: string; // carousel : photo suivante
+  viewLarge: string; // ouvrir la vue grand format d'une carte
 }
 
 export const booking: Record<Locale, BookingStrings> = {
@@ -19,6 +20,7 @@ export const booking: Record<Locale, BookingStrings> = {
     loading: 'Carregando a reserva…',
     prevPhoto: 'Foto anterior',
     nextPhoto: 'Próxima foto',
+    viewLarge: 'Ver em tela grande',
   },
   en: {
     book: 'Book',
@@ -27,6 +29,7 @@ export const booking: Record<Locale, BookingStrings> = {
     loading: 'Loading the booking engine…',
     prevPhoto: 'Previous photo',
     nextPhoto: 'Next photo',
+    viewLarge: 'View larger',
   },
   fr: {
     book: 'Réserver',
@@ -35,5 +38,6 @@ export const booking: Record<Locale, BookingStrings> = {
     loading: 'Chargement de la réservation…',
     prevPhoto: 'Photo précédente',
     nextPhoto: 'Photo suivante',
+    viewLarge: 'Voir en grand',
   },
 };
