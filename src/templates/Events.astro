@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
-import { photo } from '../images';
+import { image } from '../images';
 import { events, common } from '../i18n/ui';
 import { SITE, whatsappLink, type Locale } from '../config';
 
@@ -23,7 +23,7 @@ const waContext: Record<Locale, string> = {
         <p class="lede">{t.intro}</p>
       </div>
       <div class="ph">
-        <Image src={photo('piscine-canopee')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" loading="eager" />
+        <Image src={image('photos/piscine-canopee')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" loading="eager" />
       </div>
     </div>
   </section>
@@ -56,7 +56,7 @@ const waContext: Record<Locale, string> = {
         <p>{t.privatizationText}</p>
       </div>
       <div class="ph ph--alt">
-        <Image src={photo('jardin-transats')} alt="" widths={[480, 800]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/jardin-transats')} alt="" widths={[480, 800]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
     </div>
   </section>

@@ -1,7 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { photo } from '../images';
+import { image } from '../images';
 import { gallery } from '../i18n/ui';
 import type { Locale } from '../config';
 
@@ -11,26 +11,26 @@ const t = gallery[locale];
 
 // Sélection + alts trilingues
 const shots: Array<{ img: string; alt: Record<Locale, string> }> = [
-  { img: 'piscine-maison', alt: { pt: 'A piscina e a casa', en: 'The pool and the house', fr: 'La piscine et la maison' } },
-  { img: 'salon-large', alt: { pt: 'O lounge principal', en: 'The main lounge', fr: 'Le salon principal' } },
-  { img: 'allee-piscine', alt: { pt: 'Aleia ao longo da piscina', en: 'Alley along the pool', fr: 'Allée le long de la piscine' } },
-  { img: 'coin-art-rose', alt: { pt: 'Recanto artístico', en: 'Artistic corner', fr: 'Coin artistique' } },
-  { img: 'piscine-escalier', alt: { pt: 'Escadas curvas junto à piscina', en: 'Curved stairs by the pool', fr: 'Escalier courbe près de la piscine' } },
-  { img: 'terrasse-coussins', alt: { pt: 'Terraço com almofadas', en: 'Terrace with cushions', fr: 'Terrasse aux coussins' } },
-  { img: 'jardin-aerien', alt: { pt: 'O jardim visto de cima', en: 'The garden from above', fr: 'Le jardin vu d’en haut' } },
-  { img: 'piscine-arbres', alt: { pt: 'A piscina entre as árvores', en: 'The pool through the trees', fr: 'La piscine à travers les arbres' } },
-  { img: 'terrasse-courbes', alt: { pt: 'Curvas brancas do terraço', en: 'White curves of the terrace', fr: 'Courbes blanches de la terrasse' } },
-  { img: 'bar-interieur', alt: { pt: 'O bar interno', en: 'The indoor bar', fr: 'Le bar intérieur' } },
-  { img: 'piscine-jungle', alt: { pt: 'Vegetação tropical', en: 'Tropical greenery', fr: 'Végétation tropicale' } },
-  { img: 'terrasse-palmier', alt: { pt: 'Terraço sob a palmeira', en: 'Terrace under the palm tree', fr: 'Terrasse sous le palmier' } },
-  { img: 'jardin-transats', alt: { pt: 'Espreguiçadeiras no gramado', en: 'Loungers on the lawn', fr: 'Transats sur la pelouse' } },
-  { img: 'piscine-jardin', alt: { pt: 'Folhagens à beira da piscina', en: 'Foliage by the pool', fr: 'Feuillages au bord de la piscine' } },
-  { img: 'courbes-ciel', alt: { pt: 'Curvas contra o céu', en: 'Curves against the sky', fr: 'Courbes sur le ciel' } },
+  { img: 'photos/piscine-maison', alt: { pt: 'A piscina e a casa', en: 'The pool and the house', fr: 'La piscine et la maison' } },
+  { img: 'photos/salon-large', alt: { pt: 'O lounge principal', en: 'The main lounge', fr: 'Le salon principal' } },
+  { img: 'photos/allee-piscine', alt: { pt: 'Aleia ao longo da piscina', en: 'Alley along the pool', fr: 'Allée le long de la piscine' } },
+  { img: 'photos/coin-art-rose', alt: { pt: 'Recanto artístico', en: 'Artistic corner', fr: 'Coin artistique' } },
+  { img: 'photos/piscine-escalier', alt: { pt: 'Escadas curvas junto à piscina', en: 'Curved stairs by the pool', fr: 'Escalier courbe près de la piscine' } },
+  { img: 'photos/terrasse-coussins', alt: { pt: 'Terraço com almofadas', en: 'Terrace with cushions', fr: 'Terrasse aux coussins' } },
+  { img: 'photos/jardin-aerien', alt: { pt: 'O jardim visto de cima', en: 'The garden from above', fr: 'Le jardin vu d’en haut' } },
+  { img: 'photos/piscine-arbres', alt: { pt: 'A piscina entre as árvores', en: 'The pool through the trees', fr: 'La piscine à travers les arbres' } },
+  { img: 'photos/terrasse-courbes', alt: { pt: 'Curvas brancas do terraço', en: 'White curves of the terrace', fr: 'Courbes blanches de la terrasse' } },
+  { img: 'photos/bar-interieur', alt: { pt: 'O bar interno', en: 'The indoor bar', fr: 'Le bar intérieur' } },
+  { img: 'photos/piscine-jungle', alt: { pt: 'Vegetação tropical', en: 'Tropical greenery', fr: 'Végétation tropicale' } },
+  { img: 'photos/terrasse-palmier', alt: { pt: 'Terraço sob a palmeira', en: 'Terrace under the palm tree', fr: 'Terrasse sous le palmier' } },
+  { img: 'photos/jardin-transats', alt: { pt: 'Espreguiçadeiras no gramado', en: 'Loungers on the lawn', fr: 'Transats sur la pelouse' } },
+  { img: 'photos/piscine-jardin', alt: { pt: 'Folhagens à beira da piscina', en: 'Foliage by the pool', fr: 'Feuillages au bord de la piscine' } },
+  { img: 'photos/courbes-ciel', alt: { pt: 'Curvas contra o céu', en: 'Curves against the sky', fr: 'Courbes sur le ciel' } },
 ];
 
 // Liens vers la version pleine taille optimisée
 const fulls = await Promise.all(
-  shots.map((s) => getImage({ src: photo(s.img), width: 1600 }))
+  shots.map((s) => getImage({ src: image(s.img), width: 1600 }))
 );
 ---
 <Base locale={locale} page="gallery" title={t.metaTitle} description={t.metaDesc}>
@@ -45,7 +45,7 @@ const fulls = await Promise.all(
     <div class="wrap gallery">
       {shots.map((s, i) => (
         <a href={fulls[i].src} target="_blank" rel="noopener">
-          <Image src={photo(s.img)} alt={s.alt[locale]} widths={[360, 600]} sizes="(min-width: 760px) 30vw, 46vw" loading={i < 3 ? 'eager' : 'lazy'} />
+          <Image src={image(s.img)} alt={s.alt[locale]} widths={[360, 600]} sizes="(min-width: 760px) 30vw, 46vw" loading={i < 3 ? 'eager' : 'lazy'} />
         </a>
       ))}
     </div>
