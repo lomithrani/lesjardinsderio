@@ -1,0 +1,182 @@
+---
+import { booking } from '../i18n/booking';
+import type { Locale } from '../config';
+
+// Overlay « grand format » des cartes à carrousel (Home espaces, Chambres, Expériences, Spa).
+// Un seul overlay par page : au clic sur une carte [data-lightbox-card], son contenu déjà rendu
+// (photos du carrousel, titre, texte, CTA) est cloné dedans — aucune duplication de données.
+// Le carrousel de l'overlay est de type « peek » : grande image centrée, voisines visibles et
+// atténuées sur les bords, navigation par flèches, clavier et swipe tactile.
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const b = booking[locale];
+---
+<div class="lightbox" data-lightbox data-label-view={b.viewLarge} hidden>
+  <div class="lightbox__backdrop" data-lightbox-close></div>
+  <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="">
+    <button class="lightbox__close" type="button" data-lightbox-close aria-label={b.close}>
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="lightbox__stage">
+      <div class="lightbox__viewport" data-lightbox-viewport>
+        <div class="lightbox__track" data-lightbox-track></div>
+      </div>
+      <button class="lightbox__nav lightbox__nav--prev" type="button" data-lightbox-prev aria-label={b.prevPhoto} hidden>
+        <span aria-hidden="true">&lsaquo;</span>
+      </button>
+      <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label={b.nextPhoto} hidden>
+        <span aria-hidden="true">&rsaquo;</span>
+      </button>
+      <div class="lightbox__counter" data-lightbox-counter aria-hidden="true"></div>
+    </div>
+
+    <div class="lightbox__body">
+      <div class="lightbox__text">
+        <span class="card__meta" data-lightbox-meta hidden></span>
+        <h2 class="lightbox__title" data-lightbox-title></h2>
+        <p class="lightbox__desc" data-lightbox-desc></p>
+      </div>
+      <div class="lightbox__cta" data-lightbox-cta></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Lightbox « grand format » des cartes. Vanilla, sans dépendance.
+  const box = document.querySelector('[data-lightbox]');
+  if (box) {
+    const viewport = box.querySelector('[data-lightbox-viewport]');
+    const track = box.querySelector('[data-lightbox-track]');
+    const counter = box.querySelector('[data-lightbox-counter]');
+    const titleEl = box.querySelector('[data-lightbox-title]');
+    const metaEl = box.querySelector('[data-lightbox-meta]');
+    const descEl = box.querySelector('[data-lightbox-desc]');
+    const ctaEl = box.querySelector('[data-lightbox-cta]');
+    const dialog = box.querySelector('.lightbox__dialog');
+    const prevBtn = box.querySelector('[data-lightbox-prev]');
+    const nextBtn = box.querySelector('[data-lightbox-next]');
+    const labelView = box.getAttribute('data-label-view') || '';
+
+    let slides = [];
+    let index = 0;
+    let lastFocus = null;
+
+    // Centre la slide active dans le viewport (translation du track en pixels).
+    const center = (animate = true) => {
+      const slide = slides[index];
+      if (!slide) return;
+      const offset = slide.offsetLeft - (viewport.clientWidth - slide.offsetWidth) / 2;
+      track.style.transition = animate ? '' : 'none';
+      track.style.transform = `translateX(${-offset}px)`;
+      if (!animate) void track.offsetWidth; // force le reflow avant de réactiver la transition
+      slides.forEach((s, i) => s.setAttribute('data-active', String(i === index)));
+      if (counter) counter.textContent = slides.length > 1 ? `${index + 1} / ${slides.length}` : '';
+    };
+    const show = (next) => {
+      index = (next + slides.length) % slides.length;
+      center();
+    };
+
+    const open = (card) => {
+      // Photos : clones des <img> déjà rendues par le carrousel de la carte (srcset conservé).
+      track.innerHTML = '';
+      for (const img of card.querySelectorAll('.card__img img')) {
+        const slide = document.createElement('div');
+        slide.className = 'lightbox__slide';
+        const clone = img.cloneNode(true);
+        clone.setAttribute('sizes', '80vw'); // le navigateur repiochera dans le srcset une variante adaptée
+        clone.setAttribute('loading', 'eager');
+        clone.setAttribute('draggable', 'false');
+        slide.appendChild(clone);
+        track.appendChild(slide);
+      }
+      slides = Array.from(track.children);
+      index = 0;
+      const multi = slides.length > 1;
+      prevBtn.hidden = !multi;
+      nextBtn.hidden = !multi;
+
+      // Texte : titre, méta éventuelle (surface), description.
+      const title = (card.querySelector('.card__body h3')?.textContent || '').trim();
+      titleEl.textContent = title;
+      dialog.setAttribute('aria-label', title);
+      const meta = card.querySelector('.card__meta');
+      metaEl.hidden = !meta;
+      if (meta) metaEl.textContent = meta.textContent;
+      descEl.textContent = (card.querySelector('.card__body p')?.textContent || '').trim();
+
+      // CTA : clone du bouton/lien de la carte. Les boutons [data-resa-open] clonés
+      // fonctionnent grâce à la délégation au document du script de réservation.
+      ctaEl.innerHTML = '';
+      const btn = card.querySelector('.card__body .btn');
+      if (btn) ctaEl.appendChild(btn.cloneNode(true));
+
+      box.hidden = false;
+      document.body.classList.add('lightbox-open');
+      lastFocus = document.activeElement;
+      box.querySelector('.lightbox__close')?.focus();
+      requestAnimationFrame(() => center(false));
+    };
+
+    const close = () => {
+      box.hidden = true;
+      document.body.classList.remove('lightbox-open');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+
+    // Cartes cliquables (les clics sur liens, boutons et flèches du mini-carrousel sont ignorés).
+    for (const card of document.querySelectorAll('[data-lightbox-card]')) {
+      card.classList.add('is-lightbox');
+      card.setAttribute('tabindex', '0');
+      const title = (card.querySelector('.card__body h3')?.textContent || '').trim();
+      card.setAttribute('aria-label', title ? `${labelView} — ${title}` : labelView);
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return;
+        open(card);
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.target === card) {
+          e.preventDefault();
+          open(card);
+        }
+      });
+    }
+
+    prevBtn?.addEventListener('click', () => show(index - 1));
+    nextBtn?.addEventListener('click', () => show(index + 1));
+    for (const el of box.querySelectorAll('[data-lightbox-close]')) el.addEventListener('click', close);
+
+    // Cliquer sur une photo voisine la centre.
+    track.addEventListener('click', (e) => {
+      const s = e.target.closest('.lightbox__slide');
+      if (!s) return;
+      const i = slides.indexOf(s);
+      if (i !== -1 && i !== index) show(i);
+    });
+
+    // Clavier. L'overlay NoBeds (z-index supérieur) garde la priorité s'il est ouvert :
+    // un premier Échap le ferme (son propre script), un second ferme la lightbox.
+    document.addEventListener('keydown', (e) => {
+      if (box.hidden) return;
+      const resa = document.querySelector('[data-resa]');
+      if (resa && !resa.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(index - 1);
+      else if (e.key === 'ArrowRight') show(index + 1);
+    });
+
+    // Swipe tactile / glisser souris.
+    let startX = null;
+    viewport.addEventListener('pointerdown', (e) => { startX = e.clientX; });
+    viewport.addEventListener('pointerup', (e) => {
+      if (startX === null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+    });
+    viewport.addEventListener('pointercancel', () => { startX = null; });
+
+    window.addEventListener('resize', () => { if (!box.hidden) center(false); });
+  }
+</script>
