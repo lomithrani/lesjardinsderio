@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import Carousel from '../components/Carousel.astro';
+import CardLightbox from '../components/CardLightbox.astro';
 import { image, galleryOr } from '../images';
 import { spa, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
@@ -40,7 +41,7 @@ const b = booking[locale];
   <section class="section" style="padding-top: 0;">
     <div class="wrap cards cards--3">
       {t.items.map((item: any) => (
-        <article class="card" id={item.key}>
+        <article class="card" id={item.key} data-lightbox-card>
           <div class="card__img">
             <Carousel images={galleryOr(`spa/${item.key}`, item.img)} alt={item.title} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
           </div>
@@ -82,4 +83,5 @@ const b = booking[locale];
       <p style="opacity: 0.75;">{t.note}</p>
     </div>
   </section>
+  <CardLightbox locale={locale} />
 </Base>
