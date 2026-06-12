@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import Carousel from '../components/Carousel.astro';
+import { galleryOr } from '../images';
 import { roomsPage, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
 import { rooms } from '../i18n/rooms';
@@ -28,7 +29,7 @@ const b = booking[locale];
   <section class="section" style="padding-top: 1rem;">
     <div class="wrap cards cards--2">
       {rooms.map((room) => {
-        const images = [room.img, ...(room.gallery ?? [])];
+        const images = galleryOr(`rooms/${room.id}`);
         return (
           <article class="card" id={room.id}>
             <div class="card__img">

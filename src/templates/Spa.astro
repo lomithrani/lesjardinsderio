@@ -2,14 +2,17 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
-import { photo } from '../images';
+import Carousel from '../components/Carousel.astro';
+import { image, galleryOr } from '../images';
 import { spa, common } from '../i18n/ui';
+import { booking } from '../i18n/booking';
 import { whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = spa[locale];
 const c = common[locale];
+const b = booking[locale];
 ---
 <Base locale={locale} page="spa" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
@@ -29,7 +32,7 @@ const c = common[locale];
         <p>{t.introText}</p>
       </div>
       <div class="ph ph--alt">
-        <Image src={photo('jardin-transats')} alt={t.introTitle} widths={[480, 760, 960]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/jardin-transats')} alt={t.introTitle} widths={[480, 760, 960]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
     </div>
   </section>
@@ -39,7 +42,7 @@ const c = common[locale];
       {t.items.map((item: any) => (
         <article class="card" id={item.key}>
           <div class="card__img">
-            <Image src={photo(item.img)} alt={item.title} widths={[420, 720]} sizes="(min-width: 680px) 30vw, 92vw" />
+            <Carousel images={galleryOr(`spa/${item.key}`, item.img)} alt={item.title} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
           </div>
           <div class="card__body">
             <h3>{item.title}</h3>
@@ -56,7 +59,7 @@ const c = common[locale];
   <section class="section section--vert">
     <div class="wrap split split--reverse">
       <div class="ph ph--soft">
-        <Image src={photo('piscine-canopee')} alt={t.dayuseTitle} widths={[480, 760, 960]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/piscine-canopee')} alt={t.dayuseTitle} widths={[480, 760, 960]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
       <div>
         <p class="eyebrow">{t.dayuseEyebrow}</p>
