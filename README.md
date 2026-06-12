@@ -16,25 +16,59 @@ npm run dev      # prépare les assets puis lance le serveur de dev
 npm run build    # prépare les assets puis build de production dans dist/
 ```
 
-## Pipeline d'assets binaires
+## Photos : un dossier = une collection
+
+Les photos sont organisées en **collections** : un dossier sous `assets-src/`,
+lu automatiquement par les carrousels et les cartes du site. **Pour ajouter une
+photo à une chambre ou une expérience, il suffit de la déposer dans le bon
+dossier** — aucun code à modifier :
+
+```
+assets-src/
+  rooms/<id de la suite>/      # carrousel de la page Chambres (ex. rooms/presidential-pink/)
+  experiences/<clé>/           # carrousel des cartes Expériences (dayuse, workshops, gastronomy)
+  spa/<clé>/                   # carrousel des cartes Spa (soins, eau, yoga)
+  spaces/<clé>/                # carrousel des espaces sur la Home (lounge, rooftop, janus, piscine, evenementiel)
+  photos/                      # photos générales (héros, ambiance, galerie)
+```
+
+Mode d'emploi (sans git) : sur GitHub, **naviguer dans le dossier cible**
+(ex. `assets-src/rooms/presidential-pink/`) puis « Add file → Upload files ».
+⚠ Uploader depuis l'intérieur du dossier — un upload depuis la racine ne préserve
+pas l'arborescence.
+
+Conventions :
+- les photos d'un dossier sont triées par nom de fichier → préfixer `01-`, `02-`, …
+  pour contrôler l'ordre du carrousel ; la première photo sert de couverture ;
+- **l'ID d'une photo = son chemin sans extension** (ex. `photos/salon-large`,
+  `rooms/presidential-pink/suite-pink`), réutilisable partout via `image(id)`
+  (`src/images.ts`) — on référence, on ne duplique jamais un binaire ;
+- formats acceptés : jpg, jpeg, png, webp ;
+- une collection référencée mais vide **fait échouer le build** (message explicite).
+
+> Note : `presidential-white` n'a pas encore de vraie photo ; en attendant, sa
+> couverture est téléchargée au build depuis le CDN du site actuel (fallback dans
+> `prepare-assets.mjs`). Déposer une photo dans `assets-src/rooms/presidential-white/`
+> rend ce fallback inutile.
+
+### Pipeline d'assets binaires
 
 Le MCP GitHub ne transporte que du texte ; les images suivent donc un canal dédié :
 
 - `assets-src/` — **source de vérité des binaires** (photos, logo, favicon), committée
-  dans le repo. Pour ajouter/mettre à jour des images : upload via l'interface GitHub
-  (« Add file → Upload files ») ou commit git classique.
+  dans le repo (voir ci-dessus pour l'ajout).
 - `assets-b64/` — canal de secours : fichiers `*.b64` (base64) poussables via le MCP,
-  décodés au build.
+  décodés au build (les chemins relatifs y reproduisent les collections).
 - `scripts/prepare-assets.mjs` — exécuté automatiquement avant `dev`/`build`
-  (`prebuild`/`predev`) : copie `assets-src/` et décode `assets-b64/` vers
-  `src/assets/` (+ `public/favicon.png`). Ces destinations sont ignorées par git.
+  (`prebuild`/`predev`) : régénère `src/assets/` depuis `assets-src/` et `assets-b64/`
+  (+ `public/favicon.png`). Ces destinations sont ignorées par git.
 
 ## Structure
 
 ```
 src/
   config.ts          # coordonnées, routes localisées, NoBeds (base Beta + params), STAGING_NOINDEX
-  images.ts          # résolution des images par nom
+  images.ts          # résolution des images par ID / collection (dossier)
   i18n/ui.ts         # textes des pages ×3 langues
   i18n/rooms.ts      # données des 8 suites ×3 langues
   styles/global.css  # design tokens + composants
