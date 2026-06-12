@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import { roomPhoto } from '../images';
+
+interface Props {
+  images: string[]; // noms de fichiers (sans extension) dans src/assets/rooms/
+  alt: string;
+  prevLabel: string;
+  nextLabel: string;
+}
+const { images, alt, prevLabel, nextLabel } = Astro.props;
+const multi = images.length > 1;
+---
+<div class="carousel" data-carousel>
+  <div class="carousel__track">
+    {images.map((name, i) => (
+      <div class="carousel__slide" data-active={i === 0 ? 'true' : 'false'}>
+        <Image
+          src={roomPhoto(name)}
+          alt={i === 0 ? alt : ''}
+          widths={[480, 760, 960]}
+          sizes="(min-width: 680px) 45vw, 92vw"
+          loading={i === 0 ? 'lazy' : 'lazy'}
+        />
+      </div>
+    ))}
+  </div>
+
+  {multi && (
+    <>
+      <button class="carousel__nav carousel__nav--prev" type="button" data-carousel-prev aria-label={prevLabel}>
+        <span aria-hidden="true">&lsaquo;</span>
+      </button>
+      <button class="carousel__nav carousel__nav--next" type="button" data-carousel-next aria-label={nextLabel}>
+        <span aria-hidden="true">&rsaquo;</span>
+      </button>
+      <div class="carousel__dots" role="tablist">
+        {images.map((_, i) => (
+          <button class="carousel__dot" type="button" data-carousel-dot={i} data-active={i === 0 ? 'true' : 'false'} aria-label={`${i + 1}`}></button>
+        ))}
+      </div>
+    </>
+  )}
+</div>
+
+<script>
+  // Carousel léger : navigation entre slides (aucun contrôle rendu s'il n'y a qu'une photo).
+  for (const root of document.querySelectorAll('[data-carousel]')) {
+    const slides = Array.from(root.querySelectorAll('.carousel__slide'));
+    if (slides.length < 2) continue;
+    const dots = Array.from(root.querySelectorAll('[data-carousel-dot]'));
+    let index = 0;
+    const show = (next) => {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((s, i) => s.setAttribute('data-active', String(i === index)));
+      dots.forEach((d, i) => d.setAttribute('data-active', String(i === index)));
+    };
+    root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => show(index - 1));
+    root.querySelector('[data-carousel-next]')?.addEventListener('click', () => show(index + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => show(i)));
+  }
+</script>

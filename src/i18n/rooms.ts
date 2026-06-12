@@ -2,7 +2,9 @@ import type { Locale } from '../config';
 
 export interface Room {
   id: string;
-  img: string; // nom de fichier dans src/assets/rooms/ (sans extension)
+  nobedsId: string; // RoomID NoBeds — moteur de réservation par chambre (cf. nobedsBooking)
+  img: string; // photo principale (nom de fichier dans src/assets/rooms/, sans extension)
+  gallery?: string[]; // photos additionnelles du carousel (mêmes noms de fichiers) — à fournir
   size?: number; // m²
   name: Record<Locale, string>;
   desc: Record<Locale, string>;
@@ -12,7 +14,7 @@ export interface Room {
 // ⛑ À valider par le client : surfaces des suites Red et Garden View ; photos par chambre.
 export const rooms: Room[] = [
   {
-    id: 'presidential-white', img: 'suite-white', size: 80,
+    id: 'presidential-white', nobedsId: '2515860', img: 'suite-white', size: 80,
     name: { pt: 'Suíte Presidencial (White)', en: 'Presidential Suite (White)', fr: 'Suite Présidentielle (White)' },
     desc: {
       pt: 'A suíte mais elegante e espaçosa da casa. Pedra natural e mármore branco, quatro ambientes — quarto, banheiro com banheira e ducha, closet — e três terraços privativos: jardim de verão, de inverno e interno.',
@@ -21,7 +23,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'presidential-pink', img: 'suite-pink', size: 53,
+    id: 'presidential-pink', nobedsId: '2515859', img: 'suite-pink', size: 53,
     name: { pt: 'Suíte Presidencial (Pink)', en: 'Presidential Suite (Pink)', fr: 'Suite Présidentielle (Pink)' },
     desc: {
       pt: 'Ampla e relaxante, com decoração inspirada em uma biblioteca. Terraço privativo com acesso direto à piscina e aos jardins, banheiro balinês com banheira e dupla cuba. Ideal para uma família de quatro.',
@@ -30,7 +32,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'luxury-violet', img: 'suite-violet', size: 28,
+    id: 'luxury-violet', nobedsId: '2515862', img: 'suite-violet', size: 28,
     name: { pt: 'Suíte Luxury (Violet)', en: 'Luxury Suite (Violet)', fr: 'Suite Luxury (Violet)' },
     desc: {
       pt: 'Recentemente modernizada, oferece uma experiência serena: acesso direto ao jardim, terraço privativo perfeito para relaxar, ducha e estação de boas-vindas com iPad.',
@@ -39,7 +41,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'master-orange', img: 'suite-orange', size: 28,
+    id: 'master-orange', nobedsId: '2515857', img: 'suite-orange', size: 28,
     name: { pt: 'Suíte Master (Orange)', en: 'Suite Master (Orange)', fr: 'Suite Master (Orange)' },
     desc: {
       pt: 'Suíte elegante no prédio principal. Banheiro com acesso exclusivo a um charmoso jardim de inverno e acesso direto ao jardim tropical.',
@@ -48,7 +50,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'luxury-yellow', img: 'suite-yellow', size: 32,
+    id: 'luxury-yellow', nobedsId: '2515856', img: 'suite-yellow', size: 32,
     name: { pt: 'Suíte Luxury (Yellow)', en: 'Luxury Suite (Yellow)', fr: 'Suite Luxury (Yellow)' },
     desc: {
       pt: 'Uma mistura única de decoração moderna e original, com banheira de mármore e entrada independente pelo exterior da casa.',
@@ -57,7 +59,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'deluxe-red', img: 'suites-deluxe',
+    id: 'deluxe-red', nobedsId: '2515855', img: 'suites-deluxe',
     name: { pt: 'Suíte Deluxe (Red)', en: 'Deluxe Suite (Red)', fr: 'Suite Deluxe (Red)' },
     desc: {
       pt: 'Suíte moderna no prédio principal, com vista para a piscina e persianas de madeira exclusivas e acolhedoras.',
@@ -66,7 +68,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'deluxe-garden', img: 'suites-deluxe',
+    id: 'deluxe-garden', nobedsId: '2515861', img: 'suites-deluxe',
     name: { pt: 'Suíte Deluxe (Garden View)', en: 'Deluxe Suite (Garden View)', fr: 'Suite Deluxe (Garden View)' },
     desc: {
       pt: 'Suíte espaçosa de grandes proporções, com vários pátios e closet.',
@@ -75,7 +77,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'deluxe-green', img: 'suite-green', size: 32,
+    id: 'deluxe-green', nobedsId: '2515858', img: 'suite-green', size: 32,
     name: { pt: 'Suíte Deluxe (Green)', en: 'Deluxe Suite (Green)', fr: 'Suite Deluxe (Green)' },
     desc: {
       pt: 'No prédio anexo, com acesso independente ao jardim e vista para a piscina, a floresta e o jardim. Comunica-se com outra suíte no nível inferior — ideal para famílias. Ar-condicionado, smart TV, Wi-Fi.',

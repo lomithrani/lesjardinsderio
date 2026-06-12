@@ -18,12 +18,20 @@ export const SITE = {
   addressLine2: 'Rio de Janeiro – RJ, 22241-091',
   mapsUrl: 'https://maps.google.com/maps?q=Rua+Cosme+Velho+1342,+Rio+de+Janeiro,+RJ+22241-091',
   instagram: 'https://www.instagram.com/lesjardinsderioboutiquehotel/',
-  // Moteur de réservation NoBeds.
-  // Lien sortant (page autonome, ouverte dans un nouvel onglet) :
-  NOBEDS_URL: 'https://nobeds.app/Calendar/Index/2515855',
-  // Version « Beta » prévue pour l'embarquement en iframe (l'URL Index bloque le framing) :
-  NOBEDS_EMBED_URL: 'https://nobeds.app/Calendar/Beta/2515855?calendars=1&minstay=1&hotel=1&rates=1&book=1',
+  // Moteur de réservation NoBeds — par chambre (OnePage booking engine, book=1).
+  // Format : https://nobeds.app/Calendar/Beta/<RoomID>?<params>
+  // Embarqué en iframe dans l'overlay « Réserver » de chaque carte (cf. Rooms.astro).
+  NOBEDS_BETA_BASE: 'https://nobeds.app/Calendar/Beta',
+  // Paramètres NoBeds (réglables) : calendars = nb de mois affichés, minstay = séjour
+  // minimum, rates/hotel = options d'affichage, book=1 active le moteur de réservation.
+  NOBEDS_BETA_PARAMS: 'calendars=1&minstay=1&rates=1&hotel=1&book=1',
+  NOBEDS_DEFAULT_ID: '2515855', // Suite Deluxe (Red) — repli si id absent
 } as const;
+
+// Construit l'URL du moteur de réservation NoBeds d'une chambre (iframe de l'overlay).
+export function nobedsBooking(id: string = SITE.NOBEDS_DEFAULT_ID): string {
+  return `${SITE.NOBEDS_BETA_BASE}/${id}?${SITE.NOBEDS_BETA_PARAMS}`;
+}
 
 export type Locale = 'pt' | 'en' | 'fr';
 export const LOCALES: Locale[] = ['pt', 'en', 'fr'];

@@ -1,16 +1,17 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
-import { roomPhoto } from '../images';
+import Carousel from '../components/Carousel.astro';
 import { roomsPage, common } from '../i18n/ui';
+import { booking } from '../i18n/booking';
 import { rooms } from '../i18n/rooms';
-import { SITE, type Locale } from '../config';
+import { nobedsBooking, whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = roomsPage[locale];
 const c = common[locale];
+const b = booking[locale];
 ---
 <Base locale={locale} page="rooms" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
@@ -18,18 +19,7 @@ const c = common[locale];
       <p class="eyebrow">{t.eyebrow}</p>
       <h1>{t.title}</h1>
       <p class="lede">{t.intro}</p>
-      <p><a class="btn btn--primary" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a></p>
       <p style="font-size: 0.9rem; opacity: 0.75;">{t.bookNote}</p>
-
-      <div class="booking-embed">
-        <iframe
-          src={SITE.NOBEDS_EMBED_URL}
-          title={c.checkAvailability}
-          loading="lazy"
-          scrolling="no"
-          referrerpolicy="no-referrer"
-        ></iframe>
-      </div>
     </div>
   </section>
 
@@ -37,19 +27,98 @@ const c = common[locale];
 
   <section class="section" style="padding-top: 1rem;">
     <div class="wrap cards cards--2">
-      {rooms.map((room) => (
-        <article class="card" id={room.id}>
-          <div class="card__img">
-            <Image src={roomPhoto(room.img)} alt={room.name[locale]} widths={[480, 760, 960]} sizes="(min-width: 680px) 45vw, 92vw" />
-          </div>
-          <div class="card__body">
-            {room.size && <span class="card__meta">{room.size} {c.sqm}</span>}
-            <h3>{room.name[locale]}</h3>
-            <p>{room.desc[locale]}</p>
-            <a class="btn btn--ghost" href={SITE.NOBEDS_URL} target="_blank" rel="noopener noreferrer">{c.checkAvailability}</a>
-          </div>
-        </article>
-      ))}
+      {rooms.map((room) => {
+        const images = [room.img, ...(room.gallery ?? [])];
+        return (
+          <article class="card" id={room.id}>
+            <div class="card__img">
+              <Carousel images={images} alt={room.name[locale]} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
+            </div>
+            <div class="card__body">
+              {room.size && <span class="card__meta">{room.size} {c.sqm}</span>}
+              <h3>{room.name[locale]}</h3>
+              <p>{room.desc[locale]}</p>
+              <button
+                class="btn btn--primary card__book"
+                type="button"
+                data-resa-open
+                data-nobeds-url={nobedsBooking(room.nobedsId)}
+                data-room-name={room.name[locale]}
+                aria-label={`${b.bookAria} ${room.name[locale]}`}
+              >{b.book}</button>
+            </div>
+          </article>
+        );
+      })}
     </div>
   </section>
+
+  <!-- Overlay de réservation (partagé) : l'iframe NoBeds n'est chargée qu'à l'ouverture. -->
+  <div class="resa" data-resa hidden>
+    <div class="resa__backdrop" data-resa-close></div>
+    <div class="resa__dialog" role="dialog" aria-modal="true" aria-labelledby="resa-title">
+      <div class="resa__bar">
+        <h2 class="resa__title" id="resa-title"></h2>
+        <button class="resa__close" type="button" data-resa-close aria-label={b.close}>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="resa__body">
+        <div class="resa__loading">{b.loading}</div>
+        <iframe class="resa__frame" title="NoBeds" referrerpolicy="no-referrer"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Overlay de réservation : ouvre l'iframe NoBeds de la chambre cliquée (chargée à la demande).
+    const modal = document.querySelector('[data-resa]');
+    if (modal) {
+      const dialog = modal.querySelector('.resa__dialog');
+      const frame = modal.querySelector('.resa__frame');
+      const titleEl = modal.querySelector('.resa__title');
+      const loading = modal.querySelector('.resa__loading');
+      let lastFocus = null;
+
+      const open = (urlVal, name) => {
+        if (!urlVal) return;
+        titleEl.textContent = name || '';
+        if (loading) loading.classList.remove('is-hidden');
+        frame.setAttribute('src', urlVal);
+        modal.hidden = false;
+        document.body.classList.add('resa-open');
+        lastFocus = document.activeElement;
+        modal.querySelector('.resa__close')?.focus();
+      };
+      const close = () => {
+        modal.hidden = true;
+        document.body.classList.remove('resa-open');
+        frame.setAttribute('src', 'about:blank'); // réinitialise l'iframe
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+
+      frame?.addEventListener('load', () => loading?.classList.add('is-hidden'));
+
+      for (const btn of document.querySelectorAll('[data-resa-open]')) {
+        btn.addEventListener('click', () =>
+          open(btn.getAttribute('data-nobeds-url'), btn.getAttribute('data-room-name')),
+        );
+      }
+      for (const el of modal.querySelectorAll('[data-resa-close]')) {
+        el.addEventListener('click', close);
+      }
+      document.addEventListener('keydown', (e) => {
+        if (modal.hidden) return;
+        if (e.key === 'Escape') { close(); return; }
+        if (e.key === 'Tab') {
+          const f = dialog.querySelectorAll('button, iframe, [href], [tabindex]:not([tabindex="-1"])');
+          if (!f.length) return;
+          const first = f[0];
+          const last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+    }
+  </script>
 </Base>
