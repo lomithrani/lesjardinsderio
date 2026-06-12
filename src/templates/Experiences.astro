@@ -1,15 +1,17 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
-import { photo } from '../images';
+import Carousel from '../components/Carousel.astro';
+import { galleryOr } from '../images';
 import { experiences, common } from '../i18n/ui';
+import { booking } from '../i18n/booking';
 import { whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = experiences[locale];
 const c = common[locale];
+const b = booking[locale];
 ---
 <Base locale={locale} page="experiences" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
@@ -26,7 +28,7 @@ const c = common[locale];
       {t.items.map((item: any) => (
         <article class="card" id={item.key}>
           <div class="card__img">
-            <Image src={photo(item.img)} alt={item.title} widths={[420, 720]} sizes="(min-width: 680px) 30vw, 92vw" />
+            <Carousel images={galleryOr(`experiences/${item.key}`, item.img)} alt={item.title} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
           </div>
           <div class="card__body">
             <h3>{item.title}</h3>
