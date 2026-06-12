@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import Carousel from '../components/Carousel.astro';
+import CardLightbox from '../components/CardLightbox.astro';
 import { galleryOr } from '../images';
 import { roomsPage, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
@@ -31,7 +32,7 @@ const b = booking[locale];
       {rooms.map((room) => {
         const images = galleryOr(`rooms/${room.id}`);
         return (
-          <article class="card" id={room.id}>
+          <article class="card" id={room.id} data-lightbox-card>
             <div class="card__img">
               <Carousel images={images} alt={room.name[locale]} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
             </div>
@@ -100,11 +101,11 @@ const b = booking[locale];
 
       frame?.addEventListener('load', () => loading?.classList.add('is-hidden'));
 
-      for (const btn of document.querySelectorAll('[data-resa-open]')) {
-        btn.addEventListener('click', () =>
-          open(btn.getAttribute('data-nobeds-url'), btn.getAttribute('data-room-name')),
-        );
-      }
+      // Délégation au document : couvre aussi les boutons clonés dans la lightbox.
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-resa-open]');
+        if (btn) open(btn.getAttribute('data-nobeds-url'), btn.getAttribute('data-room-name'));
+      });
       for (const el of modal.querySelectorAll('[data-resa-close]')) {
         el.addEventListener('click', close);
       }
@@ -122,4 +123,5 @@ const b = booking[locale];
       });
     }
   </script>
+  <CardLightbox locale={locale} />
 </Base>

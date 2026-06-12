@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import Carousel from '../components/Carousel.astro';
+import CardLightbox from '../components/CardLightbox.astro';
 import { image, cover, galleryOr } from '../images';
 import { home, spaces, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
@@ -62,7 +63,7 @@ const teaser = rooms.slice(0, 3);
       <p class="lede">{t.spacesIntro}</p>
       <div class="cards cards--3" style="margin-top: 2.2rem;">
         {sp.items.map((item: any) => (
-          <article class="card">
+          <article class="card" data-lightbox-card>
             <div class="card__img">
               <Carousel images={galleryOr(`spaces/${item.key}`, item.img)} alt={item.name} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
             </div>
@@ -139,4 +140,5 @@ const teaser = rooms.slice(0, 3);
       </div>
     </div>
   </section>
+  <CardLightbox locale={locale} />
 </Base>
