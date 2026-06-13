@@ -1,0 +1,132 @@
+---
+// Bouton « Envoyer un e-mail » à menu de choix universel.
+// Un mailto: nu est un cul-de-sac pour les visiteurs desktop sans client mail
+// configuré ; on déroule donc un menu : Gmail / Outlook (compositeurs web
+// pré-remplis, nouvel onglet), Apple Mail / iCloud (mailto:, qui ouvre le client
+// par défaut — Apple Mail pour les comptes iCloud), et « copier l'adresse » en
+// dernier recours universel. L'adresse reste affichée en clair à côté du bouton.
+import { emailComposers, SITE, type Locale } from '../config';
+import { common } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  context?: string;                          // contexte (sujet/corps) : ex. « événement »
+  label?: string;                            // texte du déclencheur (défaut : « Envoyer un e-mail »)
+  variant?: 'ghost' | 'light' | 'primary';   // style du bouton déclencheur
+  align?: 'start' | 'center' | 'end';        // ancrage du panneau sous le bouton
+}
+const { locale, context, label, variant = 'ghost', align = 'start' } = Astro.props;
+const c = common[locale];
+const composers = emailComposers(locale, context);
+const triggerLabel = label ?? c.sendEmail;
+const uid = 'em-' + Math.random().toString(36).slice(2, 8);
+
+// Noms affichés des fournisseurs (Gmail / Outlook = marques, non traduits ;
+// mailto: présenté comme « Apple Mail / iCloud », sa cible la plus courante).
+const providerLabel: Record<string, string> = {
+  gmail: 'Gmail',
+  outlook: 'Outlook',
+  mailto: c.emailAppleMail,
+};
+---
+<div class="emailmenu" data-emailmenu data-align={align}>
+  <button
+    type="button"
+    class={`btn btn--${variant} emailmenu__trigger`}
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls={uid}
+    data-emailmenu-trigger
+  >{triggerLabel}</button>
+
+  <div class="emailmenu__panel" id={uid} role="menu" data-emailmenu-panel>
+    <p class="emailmenu__hint">{c.emailMenuHint}</p>
+    {composers.map((m) => (
+      <a
+        class="emailmenu__item"
+        role="menuitem"
+        href={m.href}
+        target={m.external ? '_blank' : undefined}
+        rel={m.external ? 'noopener noreferrer' : undefined}
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m3.5 7 8.5 6 8.5-6" />
+        </svg>
+        <span>{providerLabel[m.provider]}</span>
+      </a>
+    ))}
+    <button
+      type="button"
+      class="emailmenu__item emailmenu__item--copy"
+      role="menuitem"
+      data-emailmenu-copy
+      data-address={SITE.email}
+      data-label-copy={c.emailCopy}
+      data-label-copied={c.emailCopied}
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="11" height="11" rx="2" />
+        <path d="M5 15V5a2 2 0 0 1 2-2h8" />
+      </svg>
+      <span data-emailmenu-copy-label>{c.emailCopy}</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Menu e-mail : toggle, fermeture (clic dehors / Échap), copie presse-papier.
+  // Idempotent et multi-instances : chaque [data-emailmenu] est câblé indépendamment.
+  for (const menu of document.querySelectorAll('[data-emailmenu]')) {
+    const trigger = menu.querySelector('[data-emailmenu-trigger]');
+    const panel = menu.querySelector('[data-emailmenu-panel]');
+    if (!trigger || !panel) continue;
+
+    const setOpen = (open: boolean) => {
+      panel.setAttribute('data-open', String(open));
+      trigger.setAttribute('aria-expanded', String(open));
+    };
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setOpen(panel.getAttribute('data-open') !== 'true');
+    });
+
+    // Copie de l'adresse avec retour visuel, puis fermeture différée.
+    const copyBtn = menu.querySelector('[data-emailmenu-copy]');
+    if (copyBtn) {
+      const labelEl = copyBtn.querySelector('[data-emailmenu-copy-label]');
+      const address = copyBtn.getAttribute('data-address') || '';
+      const labelCopy = copyBtn.getAttribute('data-label-copy') || '';
+      const labelCopied = copyBtn.getAttribute('data-label-copied') || '';
+      let resetTimer: ReturnType<typeof setTimeout> | undefined;
+      copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+          await navigator.clipboard.writeText(address);
+        } catch {
+          return; // presse-papier indisponible : l'adresse reste visible en clair sur la page
+        }
+        copyBtn.classList.add('is-copied');
+        if (labelEl) labelEl.textContent = labelCopied;
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          copyBtn.classList.remove('is-copied');
+          if (labelEl) labelEl.textContent = labelCopy;
+          setOpen(false);
+        }, 1600);
+      });
+    }
+
+    // Fermeture au clic en dehors et à la touche Échap.
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target as Node)) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.getAttribute('data-open') === 'true') {
+        setOpen(false);
+        (trigger as HTMLElement).focus();
+      }
+    });
+  }
+</script>

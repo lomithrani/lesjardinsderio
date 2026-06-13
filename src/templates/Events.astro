@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
+import EmailButton from '../components/EmailButton.astro';
 import { image } from '../images';
 import { events, common } from '../i18n/ui';
 import { SITE, whatsappLink, type Locale } from '../config';
@@ -69,8 +70,11 @@ const waContext: Record<Locale, string> = {
       <p class="lede" style="margin-inline: auto;">{t.ctaText}</p>
       <div class="cta-band__actions">
         <a class="btn btn--primary" href={whatsappLink(locale, waContext[locale])}>{c.writeWhatsApp}</a>
-        <a class="btn btn--ghost" href={`mailto:${SITE.email}`}>{c.sendEmail}</a>
+        <EmailButton locale={locale} context={waContext[locale]} variant="ghost" align="center" />
       </div>
+      <p style="margin-top: 1rem; font-size: 0.92rem; opacity: 0.75;">
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
     </div>
   </section>
 </Base>
