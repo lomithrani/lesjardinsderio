@@ -22,11 +22,12 @@ const triggerLabel = label ?? c.sendEmail;
 const uid = 'em-' + Math.random().toString(36).slice(2, 8);
 
 // Noms affichés des fournisseurs (Gmail / Outlook = marques, non traduits ;
-// mailto: présenté comme « Apple Mail / iCloud », sa cible la plus courante).
+// mailto: présenté de façon générique « E-mail » — ouvre le client par défaut,
+// quel qu'il soit : Apple Mail/iCloud, Thunderbird, Outlook desktop, etc.).
 const providerLabel: Record<string, string> = {
   gmail: 'Gmail',
   outlook: 'Outlook',
-  mailto: c.emailAppleMail,
+  mailto: c.emailDefault,
 };
 ---
 <div class="emailmenu" data-emailmenu data-align={align}>

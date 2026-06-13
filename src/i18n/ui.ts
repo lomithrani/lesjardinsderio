@@ -16,7 +16,7 @@ export const common: Dict = {
     footerTagline: 'Natureza & arte no coração do Rio de Janeiro.',
     footerNote: 'Casa de hóspedes & espaço de eventos — Cosme Velho, Rio de Janeiro.',
     rights: 'Todos os direitos reservados.',
-    emailMenuHint: 'Escrever com', emailAppleMail: 'Apple Mail / iCloud',
+    emailMenuHint: 'Escrever com', emailDefault: 'E-mail',
     emailCopy: 'Copiar endereço', emailCopied: 'Endereço copiado!',
   },
   en: {
@@ -26,7 +26,7 @@ export const common: Dict = {
     footerTagline: 'Nature & art in the heart of Rio de Janeiro.',
     footerNote: 'Guest house & event venue — Cosme Velho, Rio de Janeiro.',
     rights: 'All rights reserved.',
-    emailMenuHint: 'Compose with', emailAppleMail: 'Apple Mail / iCloud',
+    emailMenuHint: 'Compose with', emailDefault: 'E-mail',
     emailCopy: 'Copy address', emailCopied: 'Address copied!',
   },
   fr: {
@@ -36,7 +36,7 @@ export const common: Dict = {
     footerTagline: "Nature & art au cœur de Rio de Janeiro.",
     footerNote: "Maison d'hôtes & lieu d'événements — Cosme Velho, Rio de Janeiro.",
     rights: 'Tous droits réservés.',
-    emailMenuHint: 'Écrire avec', emailAppleMail: 'Apple Mail / iCloud',
+    emailMenuHint: 'Écrire avec', emailDefault: 'E-mail',
     emailCopy: "Copier l'adresse", emailCopied: 'Adresse copiée !',
   },
 };
