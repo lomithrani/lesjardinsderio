@@ -16,7 +16,7 @@ export const SITE = {
   email: 'lesjardinsderio@gmail.com',
   addressLine1: 'Rua Cosme Velho, 1342 – Cosme Velho',
   addressLine2: 'Rio de Janeiro – RJ, 22241-091',
-  mapsUrl: 'https://maps.google.com/maps?q=Rua+Cosme+Velho+1342,+Rio+de+Janeiro,+RJ+22241-091',
+  mapsUrl: 'https://maps.app.goo.gl/gCyWFP2PJh8RmYYw5',
   instagram: 'https://www.instagram.com/lesjardinsderioboutiquehotel/',
   // Moteur de réservation NoBeds — par chambre (OnePage booking engine, book=1).
   // Format : https://nobeds.app/Calendar/Beta/<RoomID>?<params>
