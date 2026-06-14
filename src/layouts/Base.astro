@@ -142,7 +142,13 @@ const jsonLd = {
               <li><a href={whatsappLink(locale)}>WhatsApp · {SITE.mobile}</a></li>
               <li><a href={SITE.phoneHref}>{SITE.phone}</a></li>
               <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
-              <li><a href={SITE.instagram} rel="noopener">Instagram</a></li>
+              <li><a class="social-link" href={SITE.instagram} rel="noopener" aria-label="Instagram">
+                <svg class="social-link__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="2" width="20" height="20" rx="5.5" />
+                  <circle cx="12" cy="12" r="4.2" />
+                  <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none" />
+                </svg>
+              </a></li>
             </ul>
           </div>
         </div>

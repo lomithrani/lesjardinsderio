@@ -197,6 +197,9 @@ p { margin: 0 0 1em; }
 .site-footer .brand img { filter: invert(1) brightness(2); }
 .site-footer ul { list-style: none; margin: 0; padding: 0; }
 .site-footer li { margin-bottom: 0.45rem; }
+.social-link { display: inline-flex; align-items: center; justify-content: center; width: 2.4rem; height: 2.4rem; border-radius: 999px; color: var(--blanc); transition: color 0.2s ease, background 0.2s ease; }
+.social-link:hover { color: var(--or); background: rgba(232, 220, 200, 0.12); }
+.social-link__icon { display: block; }
 .site-footer__bottom { margin-top: 2.4rem; padding-top: 1.2rem; border-top: 1px solid rgba(232, 220, 200, 0.25); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
 
 /* ---------- Bandeau CTA ---------- */
