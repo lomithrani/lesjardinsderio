@@ -3,7 +3,7 @@
 // Tant que le site vit sur l'URL de staging GitHub Pages, on bloque l'indexation.
 // ⛑ Passer STAGING à false au lancement sur le domaine définitif.
 // Les previews de PR (PREVIEW=1, posé par le CI) restent noindex quoi qu'il arrive.
-const STAGING = true;
+const STAGING = false;
 export const STAGING_NOINDEX = STAGING || process.env.PREVIEW === '1';
 
 export const SITE = {

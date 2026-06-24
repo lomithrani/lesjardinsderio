@@ -1,12 +1,19 @@
 name: Deploy to GitHub Pages
 
-# Déploiement sur la branche gh-pages (source Pages = « Deploy from a branch ») :
-#   - push sur main            → build déployé à la RACINE de gh-pages
-#                                 (le dossier preview/ est préservé)
-#   - PR ouverte / mise à jour → build avec base=/lesjardinsderio/preview/pr-<n°>/
-#                                 déployé dans gh-pages:preview/pr-<n°>/ (+ noindex)
-#                                 + commentaire automatique sur la PR avec le lien
-#   - PR fermée / mergée       → suppression de gh-pages:preview/pr-<n°>/
+# Déploiement sur la branche gh-pages (source Pages = « Deploy from a branch »),
+# servie sur le domaine personnalisé https://lesjardinsderio.com.br :
+#   - push sur main            → build (base=/) déployé à la RACINE de gh-pages
+#                                 (preview/ et validation/ sont préservés)
+#   - PR ouverte / mise à jour → 2 builds :
+#                                 • base=/preview/pr-<n°>  → gh-pages:preview/pr-<n°>/
+#                                   (adresse précise et stable de CETTE PR)
+#                                 • base=/validation       → gh-pages:validation/
+#                                   (= la dernière PR poussée ; adresse stable client)
+#                                 + commentaire automatique avec les deux liens
+#   - PR fermée / mergée       → suppression de gh-pages:preview/pr-<n°>/ et
+#                                 recalcul de validation/ depuis la PR ouverte la
+#                                 plus récente (ou suppression si plus aucune PR)
+# Les previews et la validation sont toujours noindex (PREVIEW=1).
 # Le job verify confirme que le site EN LIGNE sert bien le commit déployé.
 
 on:
@@ -35,6 +42,7 @@ jobs:
       cancel-in-progress: false
     outputs:
       base_url: ${{ steps.target.outputs.base_url }}
+      validation_url: ${{ steps.target.outputs.validation_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,18 +60,19 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             N="${{ github.event.number }}"
-            echo "astro_base=/lesjardinsderio/preview/pr-$N" >> "$GITHUB_OUTPUT"
+            echo "astro_base=/preview/pr-$N" >> "$GITHUB_OUTPUT"
             echo "dest=preview/pr-$N" >> "$GITHUB_OUTPUT"
             echo "preview=1" >> "$GITHUB_OUTPUT"
-            echo "base_url=https://lomithrani.github.io/lesjardinsderio/preview/pr-$N" >> "$GITHUB_OUTPUT"
+            echo "base_url=https://lesjardinsderio.com.br/preview/pr-$N" >> "$GITHUB_OUTPUT"
+            echo "validation_url=https://lesjardinsderio.com.br/validation" >> "$GITHUB_OUTPUT"
           else
-            echo "astro_base=/lesjardinsderio" >> "$GITHUB_OUTPUT"
+            echo "astro_base=/" >> "$GITHUB_OUTPUT"
             echo "dest=." >> "$GITHUB_OUTPUT"
             echo "preview=" >> "$GITHUB_OUTPUT"
-            echo "base_url=https://lomithrani.github.io/lesjardinsderio" >> "$GITHUB_OUTPUT"
+            echo "base_url=https://lesjardinsderio.com.br" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build
+      - name: Build (cible principale)
         env:
           ASTRO_BASE: ${{ steps.target.outputs.astro_base }}
           PREVIEW: ${{ steps.target.outputs.preview }}
@@ -75,30 +84,46 @@ jobs:
           ref: gh-pages
           path: site
 
-      - name: Publier sur gh-pages
+      - name: Copier le build dans gh-pages
         run: |
           DEST="${{ steps.target.outputs.dest }}"
           if [ "$DEST" = "." ]; then
-            # Racine : tout remplacer SAUF preview/ et .git
-            find site -mindepth 1 -maxdepth 1 ! -name .git ! -name preview -exec rm -rf {} +
+            # Racine : tout remplacer SAUF preview/, validation/ et .git
+            find site -mindepth 1 -maxdepth 1 ! -name .git ! -name preview ! -name validation -exec rm -rf {} +
             cp -a dist/. site/
           else
             rm -rf "site/$DEST"
             mkdir -p "site/$DEST"
             cp -a dist/. "site/$DEST/"
           fi
+
+      - name: Build + copie de la validation (dernière PR)
+        if: github.event_name == 'pull_request'
+        env:
+          ASTRO_BASE: /validation
+          PREVIEW: '1'
+        run: |
+          npm run build
+          rm -rf site/validation
+          mkdir -p site/validation
+          cp -a dist/. site/validation/
+
+      - name: Publier sur gh-pages
+        run: |
           touch site/.nojekyll
           cd site
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "deploy: ${GITHUB_SHA::7} → ${DEST} (${{ github.event_name }})" \
+          git commit -m "deploy: ${GITHUB_SHA::7} → ${{ steps.target.outputs.dest }} (${{ github.event_name }})" \
             || echo "Rien à committer (build identique)"
           git push origin gh-pages
 
   # Vérifie que le site EN LIGNE sert bien le commit qui vient d'être déployé.
   # Échoue (badge rouge) si le build est cassé en amont, si le déploiement
   # n'est pas propagé après 3 min, ou si une page clé ne répond pas 200.
+  # NB : juste après la bascule du domaine, ce job peut échouer le temps que le
+  # certificat HTTPS de GitHub Pages soit émis (curl https indisponible).
   verify:
     needs: deploy
     runs-on: ubuntu-latest
@@ -127,19 +152,22 @@ jobs:
           echo "✗ Après 3 min, le site ne sert toujours pas le build $SHA_SHORT"
           exit 1
 
-      - name: Commenter la PR avec le lien de preview
+      - name: Commenter la PR avec les liens (preview + validation)
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
             const marker = '<!-- pr-preview-link -->';
-            const url = '${{ needs.deploy.outputs.base_url }}/';
+            const previewUrl = '${{ needs.deploy.outputs.base_url }}/';
+            const validationUrl = '${{ needs.deploy.outputs.validation_url }}/';
             const sha = context.sha.substring(0, 7);
             const body = [
               marker,
-              `🔍 **Preview déployée** : ${url}`,
+              `🔍 **Preview de cette PR** : ${previewUrl}`,
+              `✅ **Validation client (dernière PR)** : ${validationUrl}`,
               '',
               `Build \`${sha}\` — mise à jour automatique à chaque push sur la branche.`,
+              `_La page « validation » pointe toujours sur la PR ouverte la plus récemment mise à jour._`,
             ].join('\n');
             const { data: comments } = await github.rest.issues.listComments({
               ...context.repo, issue_number: context.issue.number,
@@ -151,7 +179,7 @@ jobs:
               await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
             }
 
-  # PR fermée ou mergée : suppression de sa preview.
+  # PR fermée ou mergée : suppression de sa preview + recalcul de validation/.
   cleanup:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
@@ -159,21 +187,70 @@ jobs:
       group: gh-pages-writer
       cancel-in-progress: false
     steps:
+      - name: Trouver la PR ouverte la plus récente
+        id: latest
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: prs } = await github.rest.pulls.list({
+              ...context.repo, state: 'open', sort: 'updated', direction: 'desc', per_page: 1,
+            });
+            if (prs.length === 0) {
+              core.setOutput('has', 'false');
+              core.setOutput('ref', '');
+              core.setOutput('number', '');
+            } else {
+              core.setOutput('has', 'true');
+              core.setOutput('ref', prs[0].head.sha);
+              core.setOutput('number', String(prs[0].number));
+            }
+
+      - name: Checkout de la PR la plus récente
+        if: steps.latest.outputs.has == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.latest.outputs.ref }}
+
+      - name: Setup Node
+        if: steps.latest.outputs.has == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build de la validation depuis la PR la plus récente
+        if: steps.latest.outputs.has == 'true'
+        env:
+          ASTRO_BASE: /validation
+          PREVIEW: '1'
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         with:
           ref: gh-pages
+          path: site
 
-      - name: Supprimer la preview
+      - name: Mettre à jour preview + validation, puis publier
         run: |
           N="${{ github.event.number }}"
-          if [ -d "preview/pr-$N" ]; then
-            rm -rf "preview/pr-$N"
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git commit -m "cleanup: suppression de preview/pr-$N"
-            git push origin gh-pages
+          # Supprimer la preview de la PR fermée
+          rm -rf "site/preview/pr-$N"
+          # Recalculer la validation
+          rm -rf site/validation
+          if [ "${{ steps.latest.outputs.has }}" = "true" ]; then
+            mkdir -p site/validation
+            cp -a dist/. site/validation/
+            echo "validation ← PR #${{ steps.latest.outputs.number }}"
           else
-            echo "Pas de preview à nettoyer pour la PR #$N"
+            echo "Plus aucune PR ouverte : validation/ supprimée"
           fi
+          touch site/.nojekyll
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "cleanup: PR #$N fermée → preview supprimée, validation recalculée" \
+            || echo "Rien à committer"
+          git push origin gh-pages
