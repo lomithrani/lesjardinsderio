@@ -340,3 +340,43 @@ body.lightbox-open { overflow: hidden; }
   .lightbox__slide { flex-basis: 86%; height: clamp(220px, 44vh, 420px); }
   .lightbox__body { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
 }
+
+/* ---------- Menu e-mail (bouton « Envoyer un e-mail ») ---------- */
+/* mailto: étant un cul-de-sac pour les desktops sans client mail, le bouton
+   déroule un menu : Gmail / Outlook (web), Apple Mail / iCloud (mailto:), copie. */
+.emailmenu { position: relative; display: inline-block; }
+/* Nettoie le rendu natif du <button> ; les classes .btn--* reprennent la main
+   (le ghost réaffiche sa bordure or, le primary reste sans bordure). */
+.emailmenu__trigger { appearance: none; -webkit-appearance: none; cursor: pointer; }
+
+.emailmenu__panel {
+  position: absolute; z-index: 60; top: calc(100% + 0.55rem); left: 0;
+  min-width: 15rem; max-width: calc(100vw - 2rem);
+  background: var(--blanc); border: 1px solid var(--sable);
+  border-radius: 0 1.4rem 0 0; box-shadow: var(--shadow-soft);
+  padding: 0.5rem; display: none; flex-direction: column; gap: 0.1rem;
+}
+.emailmenu__panel[data-open='true'] { display: flex; }
+.emailmenu[data-align='center'] .emailmenu__panel { left: 50%; transform: translateX(-50%); }
+.emailmenu[data-align='end'] .emailmenu__panel { left: auto; right: 0; }
+
+.emailmenu__hint {
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--or); font-weight: 700; margin: 0; padding: 0.35rem 0.85rem 0.5rem;
+}
+.emailmenu__item {
+  display: flex; align-items: center; gap: 0.7rem; width: 100%;
+  padding: 0.6rem 0.85rem; border-radius: 0 0.8rem 0 0;
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 700;
+  color: var(--encre); text-decoration: none; text-align: left;
+  background: none; border: 0; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.emailmenu__item:hover { background: var(--creme); color: var(--sauge); }
+.emailmenu__item svg { flex: 0 0 auto; color: var(--or); transition: color 0.15s ease; }
+.emailmenu__item--copy {
+  margin-top: 0.25rem; padding-top: 0.7rem;
+  border-top: 1px solid var(--sable); border-radius: 0;
+}
+.emailmenu__item.is-copied { color: var(--vert); }
+.emailmenu__item.is-copied svg { color: var(--vert); }

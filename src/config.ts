@@ -63,3 +63,55 @@ export function whatsappLink(locale: Locale, context?: string): string {
   const text = encodeURIComponent(base[locale] + (context ? ` — ${context}` : '') + '.');
   return `https://wa.me/${SITE.whatsappNumber}?text=${text}`;
 }
+
+// ── Composition d'e-mail (bouton « Envoyer un e-mail ») ──────────────────────
+// mailto: ne fonctionne que si le visiteur a un client mail configuré comme
+// gestionnaire par défaut — souvent absent sur desktop (cf. EmailButton.astro).
+// On propose donc, en plus de mailto:, les compositeurs web de Gmail et Outlook
+// (pré-remplis, ouverts dans un nouvel onglet).
+// ⚠ iCloud Mail web n'expose PAS d'URL de composition fiable : c'est mailto: qui
+//   sert les comptes iCloud (il ouvre Apple Mail, où le compte iCloud est branché).
+//   L'item mailto: capte donc aussi Apple Mail / iCloud et tout autre client par défaut.
+export type EmailProvider = 'gmail' | 'outlook' | 'mailto';
+
+export interface EmailComposer {
+  provider: EmailProvider;
+  href: string;
+  external: boolean; // true → webmail (nouvel onglet) ; false → mailto:
+}
+
+export function emailComposers(locale: Locale, context?: string): EmailComposer[] {
+  const subjectBase: Record<Locale, string> = {
+    pt: 'Contato — Les Jardins de Rio',
+    en: 'Enquiry — Les Jardins de Rio',
+    fr: 'Demande — Les Jardins de Rio',
+  };
+  const bodyBase: Record<Locale, string> = {
+    pt: 'Olá! Gostaria de informações sobre Les Jardins de Rio',
+    en: 'Hello! I would like information about Les Jardins de Rio',
+    fr: 'Bonjour ! Je souhaiterais des informations sur Les Jardins de Rio',
+  };
+  const suffix = context ? ` — ${context}` : '';
+  const subject = subjectBase[locale] + suffix;
+  const body = bodyBase[locale] + suffix + '.';
+  const to = SITE.email;
+  const e = encodeURIComponent;
+
+  return [
+    {
+      provider: 'gmail',
+      href: `https://mail.google.com/mail/?view=cm&fs=1&to=${e(to)}&su=${e(subject)}&body=${e(body)}`,
+      external: true,
+    },
+    {
+      provider: 'outlook',
+      href: `https://outlook.live.com/mail/0/deeplink/compose?to=${e(to)}&subject=${e(subject)}&body=${e(body)}`,
+      external: true,
+    },
+    {
+      provider: 'mailto',
+      href: `mailto:${to}?subject=${e(subject)}&body=${e(body)}`,
+      external: false,
+    },
+  ];
+}
