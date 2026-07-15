@@ -1,4 +1,17 @@
 ---
-import Tpl from '../../templates/Gallery.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const target = `${base}/fr/`;
 ---
-<Tpl locale="fr" />
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    <title>Les Jardins de Rio</title>
+  </head>
+  <body>
+    <p><a href={target}>Les Jardins de Rio</a></p>
+  </body>
+</html>
