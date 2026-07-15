@@ -6,13 +6,15 @@ import CardLightbox from '../components/CardLightbox.astro';
 import { galleryOr } from '../images';
 import { experiences, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
-import { whatsappLink, type Locale } from '../config';
+import { ROUTES, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = experiences[locale];
 const c = common[locale];
 const b = booking[locale];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = (p: string) => `${base}${p}`;
 ---
 <Base locale={locale} page="experiences" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
@@ -34,13 +36,16 @@ const b = booking[locale];
           <div class="card__body">
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-            <a class="btn btn--ghost" href={whatsappLink(locale, item.title)}>{c.writeWhatsApp}</a>
+            <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
           </div>
         </article>
       ))}
     </div>
     <div class="wrap" style="margin-top: 2rem;">
       <p style="opacity: 0.75;">{t.note}</p>
+      <p style="margin-top: 1.3rem;">
+        <a class="btn btn--primary" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
+      </p>
     </div>
   </section>
   <CardLightbox locale={locale} />
