@@ -6,7 +6,7 @@ import CardLightbox from '../components/CardLightbox.astro';
 import { galleryOr } from '../images';
 import { experiences, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
-import { ROUTES, whatsappLink, type Locale } from '../config';
+import { ROUTES, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -36,7 +36,7 @@ const url = (p: string) => `${base}${p}`;
           <div class="card__body">
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-            <a class="btn btn--ghost" href={whatsappLink(locale, item.title)}>{c.writeWhatsApp}</a>
+            <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
           </div>
         </article>
       ))}
