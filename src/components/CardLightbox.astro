@@ -35,7 +35,7 @@ const b = booking[locale];
       <div class="lightbox__text">
         <span class="card__meta" data-lightbox-meta hidden></span>
         <h2 class="lightbox__title" data-lightbox-title></h2>
-        <p class="lightbox__desc" data-lightbox-desc></p>
+        <div class="lightbox__desc" data-lightbox-desc></div>
       </div>
       <div class="lightbox__cta" data-lightbox-cta></div>
     </div>
@@ -104,7 +104,14 @@ const b = booking[locale];
       const meta = card.querySelector('.card__meta');
       metaEl.hidden = !meta;
       if (meta) metaEl.textContent = meta.textContent;
-      descEl.textContent = (card.querySelector('.card__body p')?.textContent || '').trim();
+
+      // Contenu enrichi (sections) si la carte en fournit un, sinon simple paragraphe (comportement inchangé).
+      const fullEl = card.querySelector('[data-lightbox-full]');
+      if (fullEl) {
+        descEl.innerHTML = fullEl.innerHTML;
+      } else {
+        descEl.textContent = (card.querySelector('.card__body p')?.textContent || '').trim();
+      }
 
       // CTA : clone du bouton/lien de la carte. Les boutons [data-resa-open] clonés
       // fonctionnent grâce à la délégation au document du script de réservation.
