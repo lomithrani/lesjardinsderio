@@ -37,6 +37,16 @@ const url = (p: string) => `${base}${p}`;
             <h3>{item.title}</h3>
             <p>{item.text}</p>
             <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
+            {item.sections && (
+              <div class="card__full" data-lightbox-full hidden>
+                {item.sections.map((s: any) => (
+                  <>
+                    <h4>{s.title}</h4>
+                    <p>{s.text}</p>
+                  </>
+                ))}
+              </div>
+            )}
           </div>
         </article>
       ))}
