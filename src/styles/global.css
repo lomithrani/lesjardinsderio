@@ -329,6 +329,12 @@ body.resa-open { overflow: hidden; }
 }
 .lightbox__title { font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin: 0.1rem 0 0.3rem; }
 .lightbox__desc { margin: 0; max-width: 56rem; }
+.lightbox__desc h4 {
+  font-family: var(--font-display); font-weight: 400; font-size: 1.05rem;
+  color: var(--vert); margin: 1.1em 0 0.25em;
+}
+.lightbox__desc h4:first-child { margin-top: 0; }
+.lightbox__desc p:last-child { margin-bottom: 0; }
 .lightbox__cta { flex: 0 0 auto; }
 .lightbox__cta:empty { display: none; }
 body.lightbox-open { overflow: hidden; }
