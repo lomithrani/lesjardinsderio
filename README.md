@@ -63,6 +63,59 @@ Le MCP GitHub ne transporte que du texte ; les images suivent donc un canal déd
   (`prebuild`/`predev`) : régénère `src/assets/` depuis `assets-src/` et `assets-b64/`
   (+ `public/favicon.png`). Ces destinations sont ignorées par git.
 
+## Mesure d'audience & cookies
+
+Le site charge le conteneur **Google Tag Manager** `GTM-MCLC59W8` (`GTM_ID`,
+`src/config.ts`), et lui seul : GA4 n'est pas appelé en direct depuis le code, il
+se configure comme un **tag du conteneur**, dans l'interface GTM. Deux chemins
+parallèles compteraient deux fois les mêmes visites.
+
+Le conteneur n'est posé **que sur la production** (`GTM_ENABLED`) : ni sur les
+previews de PR ou la page de validation (`PREVIEW=1`, posé par le CI), ni en dev
+local — le trafic de test ne doit pas polluer les statistiques de la cliente.
+
+Sur les **previews de PR**, le bandeau s'affiche et se manipule normalement mais
+tourne **à vide** : le choix est enregistré et le mode Consentement mis à jour,
+sans aucun GTM derrière (`CONSENT_UI_ENABLED` vs `GTM_ENABLED`). C'est ce qui
+permet de le faire relire.
+
+⛑ **À régler côté Google, sur le tag GA4 dans GTM** — deux réglages qui vivaient
+dans le code tant que GA4 était appelé en direct, et qui relèvent désormais de la
+configuration GTM :
+
+1. **Conservation des données** : Analytics → Admin → « 14 mois ». C'est la durée
+   annoncée au visiteur par le bandeau, les deux doivent rester alignées.
+2. **Durée du cookie de mesure** : `cookie_expires` à `34128000` (≈ 13 mois) et
+   `cookie_update` à `false` dans les paramètres du tag. Sans ça GA4 pose un
+   cookie de 2 ans, prolongé à chaque visite — ce que la CNIL refuse.
+
+**Ce que fait le dispositif** :
+
+- le `<head>` initialise le **mode Consentement Google (v2)** avec tout en
+  `denied` — y compris les signaux publicitaires, jamais utilisés ici ;
+- ce bootstrap s'exécute **avant** le snippet GTM — ordre critique : les valeurs
+  par défaut doivent être posées avant que le conteneur ne démarre, sinon ses tags
+  pourraient se déclencher avant et le bandeau ne serait qu'un décor ;
+- tant que le visiteur n'a pas cliqué « Accepter », les tags de mesure du
+  conteneur restent donc bridés (le RGPD exige un consentement *préalable* au
+  dépôt ; la LGPD brésilienne est plus souple, le même dispositif couvre les
+  deux) ;
+- le bandeau (`src/components/CookieBanner.astro`, textes dans `i18n/ui.ts`)
+  propose **Refuser** et **Accepter** avec le même style, la même taille et la
+  même place — deux boutons rigoureusement identiques, comme le demande la CNIL ;
+- le détail « En savoir plus » nomme le destinataire (Google), le transfert
+  possible hors UE, et lie sa politique de confidentialité ; il ne qualifie
+  **pas** les données d'« anonymes » (GA4 les rattache à un identifiant
+  pseudonyme, qui reste une donnée personnelle au sens du RGPD) ;
+- le cookie de mesure doit être plafonné à **13 mois** et **non prolongé** à
+  chaque visite (`cookie_expires` / `cookie_update`, plafond CNIL) — réglage à
+  faire sur le tag GA4 dans GTM, cf. le point 2 ci-dessus ;
+- le choix est stocké dans `localStorage` (`ljdr-consent`) et **expire au bout de
+  6 mois** (recommandation CNIL) : le bandeau est alors reproposé ;
+- le lien **« Cookies »** en bas de page rouvre le bandeau à tout moment ;
+  refuser après avoir accepté repasse le consentement en `denied` **et efface les
+  cookies `_ga` déjà posés**.
+
 ## Structure
 
 ```

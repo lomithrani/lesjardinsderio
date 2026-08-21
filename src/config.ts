@@ -6,13 +6,6 @@
 const STAGING = false;
 export const STAGING_NOINDEX = STAGING || process.env.PREVIEW === '1';
 
-// Google Tag Manager (conteneur de la cliente).
-// Le tag n'est posé que sur le site de production : ni sur les previews de PR et
-// la page de validation (PREVIEW=1, posé par le CI), ni en dev local — le trafic
-// de test ne doit pas polluer les statistiques.
-export const GTM_ID = 'GTM-MCLC59W8';
-export const ANALYTICS_ENABLED = import.meta.env.PROD && process.env.PREVIEW !== '1';
-
 export const SITE = {
   name: 'Les Jardins de Rio',
   phone: '+55 (21) 3217-1334',
@@ -122,3 +115,38 @@ export function emailComposers(locale: Locale, context?: string): EmailComposer[
     },
   ];
 }
+
+// ── Mesure d'audience & consentement ────────────────────────────────────────
+// Conteneur Google Tag Manager de la cliente. C'est le SEUL chemin de chargement
+// Google du site : GA4 n'est pas appelé en direct depuis le code, il se configure
+// comme un tag DANS l'interface GTM. Deux chemins parallèles compteraient deux
+// fois les mêmes visites.
+export const GTM_ID = 'GTM-MCLC59W8';
+
+// Le conteneur n'est posé que sur la production : ni sur les previews de PR et la
+// page de validation (PREVIEW=1, posé par le CI), ni en dev local — le trafic de
+// test ne doit pas polluer les statistiques de la cliente.
+export const GTM_ENABLED = import.meta.env.PROD && process.env.PREVIEW !== '1';
+
+// Le bandeau s'affiche partout où un tag Google peut se déclencher (donc en
+// production), et AUSSI sur les previews de PR — sans quoi il serait invisible là
+// où on le fait justement relire. En preview il tourne à vide : le choix est
+// enregistré et le Mode Consentement mis à jour, mais il n'y a aucun GTM derrière.
+export const CONSENT_UI_ENABLED = GTM_ENABLED || process.env.PREVIEW === '1';
+
+// ⛑ À FAIRE CÔTÉ GOOGLE, sur le tag GA4 configuré dans GTM :
+//   1. Conservation des données : Analytics → Admin → « 14 mois ». Le bandeau
+//      annonce 14 mois au visiteur ; si la propriété est réglée autrement, le
+//      texte affiché devient faux. Les deux doivent rester alignés.
+//   2. Durée du cookie de mesure : régler « cookie_expires » à 34128000 (≈ 13
+//      mois) et « cookie_update » à false dans les paramètres du tag GA4. Sans
+//      ça GA4 pose un cookie de 2 ans PROLONGÉ à chaque visite, ce que la CNIL
+//      refuse explicitement. Ce réglage vivait dans le code tant que GA4 était
+//      appelé en direct ; il relève désormais de la configuration GTM.
+
+// Clé localStorage du choix du visiteur ({ v, choice: 'granted' | 'denied', ts }).
+export const CONSENT_KEY = 'ljdr-consent';
+
+// Durée de validité du choix : 6 mois (recommandation CNIL, valable pour un refus
+// comme pour une acceptation). Passé ce délai, le bandeau est reproposé.
+export const CONSENT_MAX_AGE = 182 * 24 * 60 * 60 * 1000;

@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
-import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, ANALYTICS_ENABLED, GTM_ID, type Locale } from '../config';
-import { nav, common } from '../i18n/ui';
+import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, GTM_ENABLED, GTM_ID, CONSENT_UI_ENABLED, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
+import { nav, common, cookies } from '../i18n/ui';
+import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
   locale: Locale;
@@ -13,6 +14,7 @@ const { locale, page, title, description } = Astro.props;
 
 const t = nav[locale];
 const c = common[locale];
+const ck = cookies[locale];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (path: string) => `${base}${path}`;
 const abs = (path: string) => new URL(`${base}${path}`, Astro.site).href;
@@ -70,9 +72,84 @@ const jsonLd = {
 <html lang={HTML_LANG[locale]}>
   <head>
     <meta charset="utf-8" />
+    {/* ORDRE CRITIQUE — le bootstrap du Mode Consentement ci-dessous doit
+        s'exécuter AVANT le chargement de GTM : il pose les valeurs par défaut
+        (tout « denied ») que les tags du conteneur sont censés respecter. Si
+        GTM démarrait en premier, ses tags pourraient se déclencher avant, et
+        le bandeau ne serait plus qu'un décor. Ne pas intervertir ces deux blocs. */}
+    {CONSENT_UI_ENABLED && (
+      <script is:inline define:vars={{ consentKey: CONSENT_KEY, consentMaxAge: CONSENT_MAX_AGE }}>
+        // Mode Consentement Google (v2). Tout est refusé par défaut, et gtag.js n'est
+        // même pas téléchargé tant que le visiteur n'a pas accepté : le RGPD exige un
+        // consentement PRÉALABLE au dépôt (les visiteurs FR/EN y sont soumis ; la LGPD
+        // brésilienne est plus souple mais couverte par le même dispositif).
+        // Ce script doit rester inline et en tête : il s'exécute avant tout rendu.
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('consent', 'default', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          wait_for_update: 500,
+        });
+
+        // Appelé au clic sur « Accepter », ou d'emblée si le choix est déjà
+        // enregistré — auquel cas ce script s'exécutant avant GTM, le conteneur
+        // démarre directement avec le consentement accordé.
+        // Aucun script n'est injecté ici : GA4 est un tag DU conteneur GTM, qui
+        // lit ce signal. Idempotent, le visiteur pouvant refuser puis ré-accepter
+        // sans recharger la page.
+        window.ljdrLoadAnalytics = function () {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+        };
+
+        // Retrait du consentement : on repasse en « denied » et on efface les cookies
+        // GA déjà posés (sur l'hôte comme sur le domaine parent, GA utilisant les deux).
+        window.ljdrRevokeAnalytics = function () {
+          gtag('consent', 'update', { analytics_storage: 'denied' });
+          // GA pose son cookie sur le domaine principal, qui n'est pas forcément
+          // l'hôte courant (www.exemple.com → .exemple.com). On tente donc l'hôte
+          // puis chacun de ses parents ; les suffixes publics sont rejetés par le
+          // navigateur, sans dommage.
+          var parts = location.hostname.split('.');
+          var scopes = [''];
+          for (var i = 0; i < parts.length - 1; i++) {
+            var d = parts.slice(i).join('.');
+            scopes.push('; domain=' + d, '; domain=.' + d);
+          }
+          document.cookie.split(';').forEach(function (raw) {
+            var name = raw.split('=')[0].trim();
+            if (name.indexOf('_ga') !== 0 && name !== '_gid') return;
+            scopes.forEach(function (scope) {
+              document.cookie = name + '=; Max-Age=0; path=/' + scope;
+            });
+          });
+        };
+
+        // Choix enregistré, ou null si absent/expiré (→ le bandeau se réaffiche).
+        window.ljdrReadConsent = function () {
+          try {
+            var raw = localStorage.getItem(consentKey);
+            if (!raw) return null;
+            var saved = JSON.parse(raw);
+            if (!saved || typeof saved.ts !== 'number' || Date.now() - saved.ts > consentMaxAge) {
+              localStorage.removeItem(consentKey);
+              return null;
+            }
+            return saved.choice === 'granted' ? 'granted' : 'denied';
+          } catch (e) {
+            return null;
+          }
+        };
+
+        if (window.ljdrReadConsent() === 'granted') window.ljdrLoadAnalytics();
+      </script>
+    )}
     {/* Google Tag Manager. is:inline est indispensable : sans lui, Astro sortirait
         le snippet de l'en-tête pour le regrouper dans un bundle chargé plus tard. */}
-    {ANALYTICS_ENABLED && <script is:inline set:html={gtmSnippet} />}
+    {GTM_ENABLED && <script is:inline set:html={gtmSnippet} />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -96,12 +173,17 @@ const jsonLd = {
   </head>
   <body>
     {/* Google Tag Manager (noscript) */}
-    {ANALYTICS_ENABLED && (
+    {GTM_ENABLED && (
       <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     )}
 
     <a class="skip-link" href="#main">Skip to content</a>
+
+    {/* Placé en tête du <body> — le bandeau est en position fixed, l'affichage ne
+        bouge pas, mais le choix devient le premier élément atteint au clavier et
+        par un lecteur d'écran, au lieu d'arriver après tout le pied de page. */}
+    {CONSENT_UI_ENABLED && <CookieBanner locale={locale} />}
 
     <header class="site-header">
       <div class="wrap site-header__in">
@@ -171,7 +253,15 @@ const jsonLd = {
         </div>
         <div class="site-footer__bottom">
           <span>© {year} Les Jardins de Rio. {c.rights}</span>
-          <span>{c.footerNote}</span>
+          <span>
+            {c.footerNote}
+            {CONSENT_UI_ENABLED && (
+              <>
+                {' · '}
+                <button type="button" class="cookie-reopen" data-cookie-open>{ck.manage}</button>
+              </>
+            )}
+          </span>
         </div>
       </div>
     </footer>
