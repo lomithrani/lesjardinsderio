@@ -404,3 +404,66 @@ body.lightbox-open { overflow: hidden; }
 }
 .emailmenu__item.is-copied { color: var(--vert); }
 .emailmenu__item.is-copied svg { color: var(--vert); }
+
+/* ---------- Bandeau cookies ---------- */
+/* Non modal : le bandeau se pose au-dessus du contenu sans le bloquer ni piéger
+   le focus. Refuser et Accepter ont la même taille et la même place (exigence
+   RGPD : le refus doit être aussi simple que l'acceptation). */
+.cookie-banner {
+  position: fixed; z-index: 95; left: 0; right: 0; bottom: 0;
+  padding-block: 0 clamp(0.6rem, 2vw, 1.2rem);
+  pointer-events: none; /* laisse cliquer la page autour de la carte */
+}
+.cookie-banner[hidden] { display: none; }
+
+.cookie-banner__card {
+  pointer-events: auto;
+  max-width: 46rem; margin-left: auto;
+  background: var(--blanc); border: 1px solid var(--sable);
+  border-radius: 0 1.6rem 0 0; box-shadow: var(--shadow-soft);
+  padding: 1.2rem 1.4rem 1.3rem;
+  /* Le détail « En savoir plus » est long : la carte ne doit jamais dépasser
+     l'écran, elle défile à l'intérieur d'elle-même. */
+  max-height: calc(100vh - 2rem); overflow-y: auto;
+  animation: cookie-in 0.28s ease-out both;
+}
+@keyframes cookie-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cookie-banner__title { font-size: 1.25rem; margin: 0 0 0.4rem; }
+.cookie-banner__text { margin: 0 0 0.7rem; font-size: 0.95rem; }
+
+.cookie-banner__more { margin-bottom: 1rem; font-size: 0.9rem; }
+.cookie-banner__more summary {
+  cursor: pointer; font-weight: 700; color: var(--sauge);
+  font-size: 0.85rem; letter-spacing: 0.04em;
+}
+.cookie-banner__more p { margin: 0.6rem 0 0; color: var(--encre); opacity: 0.85; }
+.cookie-banner__more a { color: var(--sauge); font-weight: 700; }
+
+/* Petit écran + « En savoir plus » déplié : la carte défile, mais les deux
+   boutons restent collés en bas — le choix ne doit jamais demander de scroller. */
+.cookie-banner__actions {
+  display: flex; flex-wrap: wrap; gap: 0.7rem;
+  position: sticky; bottom: 0; background: var(--blanc); padding-top: 0.6rem;
+}
+/* Deux <button> strictement identiques : on neutralise le rendu natif (dont la
+   bordure ajoutée par le navigateur) pour que « Refuser » et « Accepter » aient
+   exactement la même boîte, la même couleur et le même poids visuel. */
+.cookie-banner__actions .btn {
+  flex: 1 1 10rem; text-align: center; cursor: pointer;
+  appearance: none; -webkit-appearance: none; border: 0;
+}
+
+/* Lien « Cookies » du pied de page : rouvre le bandeau à tout moment. */
+.cookie-reopen {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--font-body); font-size: inherit; color: var(--blanc);
+  text-decoration: underline; text-decoration-color: var(--or); text-underline-offset: 3px;
+}
+
+@media (max-width: 680px) {
+  .cookie-banner__card { border-radius: 0 1.2rem 0 0; padding: 1rem 1.1rem 1.1rem; }
+}

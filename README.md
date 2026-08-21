@@ -63,6 +63,47 @@ Le MCP GitHub ne transporte que du texte ; les images suivent donc un canal déd
   (`prebuild`/`predev`) : régénère `src/assets/` depuis `assets-src/` et `assets-b64/`
   (+ `public/favicon.png`). Ces destinations sont ignorées par git.
 
+## Mesure d'audience & cookies
+
+Le site ne dépose **aucun cookie** tant que Google Analytics n'est pas activé, et
+GA n'est activé qu'après acceptation explicite du visiteur.
+
+**Pour brancher GA4** : coller l'ID de mesure (`G-XXXXXXXXXX`, dans Google
+Analytics → Admin → Flux de données → Flux Web) dans `GA_MEASUREMENT_ID`
+(`src/config.ts`), **puis régler Admin → Conservation des données sur « 14 mois »** :
+c'est la durée annoncée au visiteur par le bandeau, les deux doivent rester
+alignées.
+
+Sur les **previews de PR**, le bandeau s'affiche et se manipule normalement mais
+tourne **à vide** : aucun GA n'est déclenché derrière (`CONSENT_UI_ENABLED` vs
+`ANALYTICS_ENABLED`). C'est ce qui permet de le faire relire avant même que l'ID
+de mesure existe. Tant que la chaîne est vide, aucun script Google n'est chargé
+et le bandeau ne s'affiche pas. La mesure reste désactivée sur les previews de PR
+et en staging (pages `noindex`), pour ne pas polluer les statistiques.
+
+**Ce que fait le dispositif**, une fois l'ID renseigné :
+
+- le `<head>` initialise le **mode Consentement Google (v2)** avec tout en
+  `denied` — y compris les signaux publicitaires, jamais utilisés ici ;
+- `gtag.js` n'est **pas téléchargé** tant que le visiteur n'a pas cliqué
+  « Accepter » (le RGPD exige un consentement *préalable* au dépôt ; la LGPD
+  brésilienne est plus souple, le même dispositif couvre les deux) ;
+- le bandeau (`src/components/CookieBanner.astro`, textes dans `i18n/ui.ts`)
+  propose **Refuser** et **Accepter** avec le même style, la même taille et la
+  même place — deux boutons rigoureusement identiques, comme le demande la CNIL ;
+- le détail « En savoir plus » nomme le destinataire (Google), le transfert
+  possible hors UE, et lie sa politique de confidentialité ; il ne qualifie
+  **pas** les données d'« anonymes » (GA4 les rattache à un identifiant
+  pseudonyme, qui reste une donnée personnelle au sens du RGPD) ;
+- le cookie de mesure est plafonné à **13 mois** et **n'est pas prolongé** à
+  chaque visite (`cookie_expires` / `cookie_update`, plafond CNIL — GA4 poserait
+  sinon un cookie de 2 ans renouvelé à chaque passage) ;
+- le choix est stocké dans `localStorage` (`ljdr-consent`) et **expire au bout de
+  6 mois** (recommandation CNIL) : le bandeau est alors reproposé ;
+- le lien **« Cookies »** en bas de page rouvre le bandeau à tout moment ;
+  refuser après avoir accepté repasse le consentement en `denied` **et efface les
+  cookies `_ga` déjà posés**.
+
 ## Structure
 
 ```

@@ -550,3 +550,48 @@ export const roomsPage: Dict = {
     bookNote: 'La réservation passe par notre système sécurisé NoBeds.',
   },
 };
+
+// Bandeau cookies (mesure d'audience GA4). RGPD : le refus doit être aussi
+// simple que l'acceptation, et le choix révocable à tout moment — d'où le lien
+// « Cookies » du pied de page qui rouvre le bandeau.
+//
+// Rédaction volontairement prudente : on ne parle PAS de données « anonymes »
+// (GA4 rattache la visite à un identifiant pseudonyme, ce qui reste une donnée
+// personnelle au sens du RGPD), on nomme le destinataire (Google) et le transfert
+// possible hors UE, et on n'affirme sur la publicité que ce que la configuration
+// garantit réellement (signaux publicitaires en « denied » en dur, cf. Base.astro).
+export const cookies: Dict = {
+  pt: {
+    title: 'Cookies e privacidade',
+    text: 'Usamos cookies de medição de audiência (Google Analytics) para entender como o site é consultado. Nenhum cookie é depositado sem o seu consentimento.',
+    accept: 'Aceitar',
+    decline: 'Recusar',
+    more: 'Saiba mais',
+    details:
+      'Se você aceitar, cookies de medição são depositados no seu aparelho e o Google Analytics 4 registra sua navegação: páginas vistas, página de origem, idioma, país e cidade aproximados, tipo de aparelho e navegador. Esses dados ficam vinculados a um identificador aleatório e nunca ao seu nome — não conseguimos identificar você, mas eles também não são totalmente anônimos. São tratados por nossa conta pelo Google, que pode hospedá-los fora do Brasil e da União Europeia, e são conservados por 14 meses antes de serem excluídos. Os cookies de medição expiram em no máximo 13 meses, e o identificador de visitante não é prorrogado a cada passagem. Os sinais publicitários do Google estão desativados: esses dados não servem para segmentação de anúncios e não os repassamos a mais ninguém. Se você recusar, nenhum cookie é depositado e nenhum dado é enviado. Sua escolha fica registrada no seu navegador por 6 meses; você pode mudá-la a qualquer momento pelo link “Cookies” no rodapé.',
+    policy: 'Política de privacidade do Google',
+    manage: 'Cookies',
+  },
+  en: {
+    title: 'Cookies & privacy',
+    text: 'We use audience measurement cookies (Google Analytics) to understand how the site is used. No cookie is stored without your consent.',
+    accept: 'Accept',
+    decline: 'Decline',
+    more: 'Learn more',
+    details:
+      'If you accept, measurement cookies are stored on your device and Google Analytics 4 records your visit: pages viewed, referring page, language, approximate country and city, device type and browser. This data is tied to a random identifier and never to your name — we cannot identify you from it, but it is not fully anonymous either. It is processed on our behalf by Google, which may host it outside the European Union, and is kept for 14 months before being deleted. The measurement cookies expire after no more than 13 months, and the visitor identifier is not extended on each visit. Google’s advertising signals are switched off: this data is not used for ad targeting, and we pass it on to no one else. If you decline, no cookie is stored and no data is sent. Your choice is kept in your browser for 6 months; you can change it at any time via the “Cookies” link in the footer.',
+    policy: 'Google’s privacy policy',
+    manage: 'Cookies',
+  },
+  fr: {
+    title: 'Cookies & confidentialité',
+    text: "Nous utilisons des cookies de mesure d'audience (Google Analytics) pour comprendre comment le site est consulté. Aucun cookie n'est déposé sans votre accord.",
+    accept: 'Accepter',
+    decline: 'Refuser',
+    more: 'En savoir plus',
+    details:
+      "Si vous acceptez, des cookies de mesure sont déposés sur votre appareil et Google Analytics 4 enregistre votre navigation : pages consultées, page d'origine, langue, pays et ville approximatifs, type d'appareil et navigateur. Ces données sont rattachées à un identifiant aléatoire et jamais à votre nom — nous ne pouvons pas vous identifier, mais elles ne sont pas pour autant totalement anonymes. Elles sont traitées pour notre compte par Google, qui peut les héberger hors de l'Union européenne, et sont conservées 14 mois avant d'être supprimées. Les cookies de mesure expirent au bout de 13 mois au plus, et l'identifiant de visiteur n'est pas prolongé à chaque passage. Les signaux publicitaires de Google sont désactivés : ces données ne servent pas au ciblage publicitaire et nous ne les cédons à personne d'autre. Si vous refusez, aucun cookie n'est déposé et aucune donnée n'est envoyée. Votre choix est enregistré dans votre navigateur pendant 6 mois ; vous pouvez en changer à tout moment via le lien « Cookies » en bas de page.",
+    policy: 'Politique de confidentialité de Google',
+    manage: 'Cookies',
+  },
+};
