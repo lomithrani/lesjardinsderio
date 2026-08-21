@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/quartos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/quartos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/rooms/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/chambres/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/quartos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/rooms/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/quartos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/rooms/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/chambres/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/quartos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/chambres/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/quartos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/rooms/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/chambres/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/quartos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/spa/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/spa/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/spa/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/spa/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/spa/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/spa/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/spa/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/spa/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/spa/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/spa/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/spa/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/spa/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/spa/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/spa/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/spa/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/eventos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/eventos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/events/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/evenements/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/eventos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/events/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/eventos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/events/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/evenements/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/eventos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/evenements/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/eventos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/events/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/evenements/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/eventos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/experiencias/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/experiencias/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/experiences/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/experiences/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/experiencias/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/experiences/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/experiencias/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/experiences/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/experiences/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/experiencias/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/experiences/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/experiencias/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/experiences/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/experiences/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/experiencias/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/contato/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/contato/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/contato/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/contact/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/contato/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/contato/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/contact/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/contato/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/contato/" />
+  </url>
+</urlset>
