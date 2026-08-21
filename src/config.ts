@@ -115,3 +115,36 @@ export function emailComposers(locale: Locale, context?: string): EmailComposer[
     },
   ];
 }
+
+// ── Mesure d'audience & consentement ────────────────────────────────────────
+// ⛑ PLACEHOLDER : coller ici l'ID de mesure GA4 (format « G-XXXXXXXXXX »),
+//   récupérable dans Google Analytics → Admin → Flux de données → Flux Web.
+//   Tant que la chaîne est vide, AUCUN script Google n'est chargé et le bandeau
+//   cookies ne s'affiche pas : le site ne dépose alors strictement aucun cookie.
+export const GA_MEASUREMENT_ID: string = '';
+
+// Pas de mesure d'audience sur les previews de PR ni en staging (pages noindex) :
+// on ne pollue pas les statistiques de la cliente avec nos propres visites.
+export const ANALYTICS_ENABLED = GA_MEASUREMENT_ID !== '' && !STAGING_NOINDEX;
+
+// Le bandeau, lui, s'affiche AUSSI sur les previews de PR — sans quoi il serait
+// invisible là où on le fait justement relire. En preview il fonctionne à vide :
+// le choix est enregistré, mais il n'y a aucun GA à déclencher derrière.
+export const CONSENT_UI_ENABLED = ANALYTICS_ENABLED || process.env.PREVIEW === '1';
+
+// Durée de vie du cookie de mesure (_ga) : 13 mois, plafond recommandé par la
+// CNIL. Sans ce réglage, GA4 pose un cookie de 2 ans, PROLONGÉ à chaque visite —
+// ce que la CNIL refuse explicitement (cf. cookie_update: false dans Base.astro).
+export const GA_COOKIE_MAX_AGE_SECONDS = 390 * 24 * 60 * 60; // ≈ 13 mois
+
+// ⛑ À FAIRE CÔTÉ GOOGLE, une fois l'ID renseigné :
+//   Analytics → Admin → Conservation des données → « 14 mois ».
+//   Le bandeau annonce 14 mois au visiteur ; si la propriété est réglée
+//   autrement, le texte affiché devient faux. Les deux doivent rester alignés.
+
+// Clé localStorage du choix du visiteur ({ v, choice: 'granted' | 'denied', ts }).
+export const CONSENT_KEY = 'ljdr-consent';
+
+// Durée de validité du choix : 6 mois (recommandation CNIL, valable pour un refus
+// comme pour une acceptation). Passé ce délai, le bandeau est reproposé.
+export const CONSENT_MAX_AGE = 182 * 24 * 60 * 60 * 1000;

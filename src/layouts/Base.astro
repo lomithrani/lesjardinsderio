@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
-import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, type Locale } from '../config';
-import { nav, common } from '../i18n/ui';
+import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, ANALYTICS_ENABLED, CONSENT_UI_ENABLED, GA_MEASUREMENT_ID, GA_COOKIE_MAX_AGE_SECONDS, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
+import { nav, common, cookies } from '../i18n/ui';
+import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
   locale: Locale;
@@ -13,6 +14,7 @@ const { locale, page, title, description } = Astro.props;
 
 const t = nav[locale];
 const c = common[locale];
+const ck = cookies[locale];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (path: string) => `${base}${path}`;
 const abs = (path: string) => new URL(`${base}${path}`, Astro.site).href;
@@ -81,9 +83,97 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;700&display=swap" rel="stylesheet" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {CONSENT_UI_ENABLED && (
+      <script is:inline define:vars={{ gaId: ANALYTICS_ENABLED ? GA_MEASUREMENT_ID : '', gaCookieMaxAge: GA_COOKIE_MAX_AGE_SECONDS, consentKey: CONSENT_KEY, consentMaxAge: CONSENT_MAX_AGE }}>
+        // Mode Consentement Google (v2). Tout est refusé par défaut, et gtag.js n'est
+        // même pas téléchargé tant que le visiteur n'a pas accepté : le RGPD exige un
+        // consentement PRÉALABLE au dépôt (les visiteurs FR/EN y sont soumis ; la LGPD
+        // brésilienne est plus souple mais couverte par le même dispositif).
+        // Ce script doit rester inline et en tête : il s'exécute avant tout rendu.
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('consent', 'default', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          wait_for_update: 500,
+        });
+
+        var analyticsLoaded = false;
+
+        // Appelé au clic sur « Accepter », ou d'emblée si le choix est déjà enregistré.
+        window.ljdrLoadAnalytics = function () {
+          // Toujours réémis : le visiteur peut refuser puis ré-accepter sans recharger,
+          // auquel cas gtag.js est déjà là mais le consentement, lui, est repassé
+          // en « denied » — seule l'injection du script doit être jouée une fois.
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+          if (!gaId) return; // preview de PR : le bandeau tourne à vide, sans GA derrière
+          if (analyticsLoaded) return;
+          analyticsLoaded = true;
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+          document.head.appendChild(s);
+          gtag('js', new Date());
+          gtag('config', gaId, {
+            // Plafond CNIL : 13 mois, et pas de prolongation à chaque visite.
+            cookie_expires: gaCookieMaxAge,
+            cookie_update: false,
+          });
+        };
+
+        // Retrait du consentement : on repasse en « denied » et on efface les cookies
+        // GA déjà posés (sur l'hôte comme sur le domaine parent, GA utilisant les deux).
+        window.ljdrRevokeAnalytics = function () {
+          gtag('consent', 'update', { analytics_storage: 'denied' });
+          // GA pose son cookie sur le domaine principal, qui n'est pas forcément
+          // l'hôte courant (www.exemple.com → .exemple.com). On tente donc l'hôte
+          // puis chacun de ses parents ; les suffixes publics sont rejetés par le
+          // navigateur, sans dommage.
+          var parts = location.hostname.split('.');
+          var scopes = [''];
+          for (var i = 0; i < parts.length - 1; i++) {
+            var d = parts.slice(i).join('.');
+            scopes.push('; domain=' + d, '; domain=.' + d);
+          }
+          document.cookie.split(';').forEach(function (raw) {
+            var name = raw.split('=')[0].trim();
+            if (name.indexOf('_ga') !== 0 && name !== '_gid') return;
+            scopes.forEach(function (scope) {
+              document.cookie = name + '=; Max-Age=0; path=/' + scope;
+            });
+          });
+        };
+
+        // Choix enregistré, ou null si absent/expiré (→ le bandeau se réaffiche).
+        window.ljdrReadConsent = function () {
+          try {
+            var raw = localStorage.getItem(consentKey);
+            if (!raw) return null;
+            var saved = JSON.parse(raw);
+            if (!saved || typeof saved.ts !== 'number' || Date.now() - saved.ts > consentMaxAge) {
+              localStorage.removeItem(consentKey);
+              return null;
+            }
+            return saved.choice === 'granted' ? 'granted' : 'denied';
+          } catch (e) {
+            return null;
+          }
+        };
+
+        if (window.ljdrReadConsent() === 'granted') window.ljdrLoadAnalytics();
+      </script>
+    )}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+
+    {/* Placé en tête du <body> — le bandeau est en position fixed, l'affichage ne
+        bouge pas, mais le choix devient le premier élément atteint au clavier et
+        par un lecteur d'écran, au lieu d'arriver après tout le pied de page. */}
+    {CONSENT_UI_ENABLED && <CookieBanner locale={locale} />}
 
     <header class="site-header">
       <div class="wrap site-header__in">
@@ -153,7 +243,15 @@ const jsonLd = {
         </div>
         <div class="site-footer__bottom">
           <span>© {year} Les Jardins de Rio. {c.rights}</span>
-          <span>{c.footerNote}</span>
+          <span>
+            {c.footerNote}
+            {CONSENT_UI_ENABLED && (
+              <>
+                {' · '}
+                <button type="button" class="cookie-reopen" data-cookie-open>{ck.manage}</button>
+              </>
+            )}
+          </span>
         </div>
       </div>
     </footer>
