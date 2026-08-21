@@ -24,24 +24,35 @@ const url = (p: string) => `${base}${p}`;
     </div>
   </section>
 
-  <Curve fill="var(--blanc)" />
+  <Curve fill="var(--blanc)" class="curve--from-creme" />
+
+  {/* Blocs éditoriaux « image + texte à côté », comme la maison sur la page d'accueil :
+      un bloc sur deux passe sur fond crème et bascule la photo de l'autre côté. */}
+  {t.items.map((item: any, i: number) => {
+    const alt = i % 2 === 1;
+    return (
+      <Fragment>
+        <section class:list={['section', { 'section--creme': alt }]} style="padding-top: 1rem;">
+          <div class="wrap">
+            <article class:list={['xp', 'split', { 'split--reverse': alt }]} id={item.key} data-lightbox-card>
+              <div class:list={['card__img', { 'card__img--alt': alt }]}>
+                <Carousel images={galleryOr(`experiences/${item.key}`, item.img)} alt={item.title} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
+              </div>
+              <div class="card__body">
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
+              </div>
+            </article>
+          </div>
+        </section>
+        <Curve fill={alt ? 'var(--blanc)' : 'var(--creme)'} class={alt ? 'curve--from-creme' : ''} />
+      </Fragment>
+    );
+  })}
 
   <section class="section" style="padding-top: 1rem;">
-    <div class="wrap cards cards--3">
-      {t.items.map((item: any) => (
-        <article class="card" id={item.key} data-lightbox-card>
-          <div class="card__img">
-            <Carousel images={galleryOr(`experiences/${item.key}`, item.img)} alt={item.title} prevLabel={b.prevPhoto} nextLabel={b.nextPhoto} />
-          </div>
-          <div class="card__body">
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-            <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
-          </div>
-        </article>
-      ))}
-    </div>
-    <div class="wrap" style="margin-top: 2rem;">
+    <div class="wrap">
       <p style="opacity: 0.75;">{t.note}</p>
       <p style="margin-top: 1.3rem;">
         <a class="btn btn--primary" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
