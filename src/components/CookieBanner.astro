@@ -1,13 +1,15 @@
 ---
 // Bandeau de consentement cookies.
-// Le site ne dépose qu'une seule famille de cookies : la mesure d'audience GA4.
-// Le RGPD (visiteurs européens — versions FR/EN) exige un consentement PRÉALABLE :
-// gtag.js n'est donc pas chargé du tout tant que le visiteur n'a pas accepté
-// (cf. le bootstrap « Consent Mode » dans Base.astro, qui expose ljdrLoadAnalytics).
+// Le site ne dépose qu'une seule famille de cookies : la mesure d'audience GA4,
+// déclenchée comme un tag du conteneur GTM.
+// Le RGPD (visiteurs européens — versions FR/EN) exige un consentement PRÉALABLE.
+// Il est obtenu via le mode Consentement Google : le bootstrap dans Base.astro
+// pose tout en « denied » AVANT le chargement de GTM, et expose ljdrLoadAnalytics
+// que ce composant appelle au clic sur « Accepter ».
 // La LGPD brésilienne est plus souple mais couverte par le même dispositif.
 //
-// Ce composant n'est rendu que si ANALYTICS_ENABLED : sans ID GA4 (ou en
-// staging/preview), aucun cookie n'est déposé, donc aucun bandeau à afficher.
+// Ce composant n'est rendu que si CONSENT_UI_ENABLED : hors production et hors
+// preview de PR, aucun tag Google n'est posé, donc aucun bandeau à afficher.
 import { CONSENT_KEY, type Locale } from '../config';
 import { cookies } from '../i18n/ui';
 

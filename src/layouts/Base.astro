@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, ANALYTICS_ENABLED, CONSENT_UI_ENABLED, GA_MEASUREMENT_ID, GA_COOKIE_MAX_AGE_SECONDS, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
+import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, GTM_ENABLED, GTM_ID, CONSENT_UI_ENABLED, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
 import { nav, common, cookies } from '../i18n/ui';
 import CookieBanner from '../components/CookieBanner.astro';
 
@@ -37,6 +37,15 @@ const year = new Date().getFullYear();
 // Permet au job `verify` du workflow de confirmer que le site en ligne sert bien ce commit.
 const buildInfo = `${(process.env.GITHUB_SHA ?? 'local').slice(0, 7)} ${new Date().toISOString()}`;
 
+// Snippet Google Tag Manager, repris tel quel. On l'injecte via `set:html` plutôt
+// que de l'écrire dans le template : dans une expression Astro ({cond && …}), les
+// accolades du script seraient prises pour du code.
+const gtmSnippet = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BedAndBreakfast',
@@ -63,28 +72,13 @@ const jsonLd = {
 <html lang={HTML_LANG[locale]}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {STAGING_NOINDEX && <meta name="robots" content="noindex" />}
-    <meta name="build" content={buildInfo} />
-    {LOCALES.map((l) => (
-      <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(current[l])} />
-    ))}
-    <link rel="alternate" hreflang="x-default" href={abs(current.pt)} />
-    <link rel="icon" type="image/svg+xml" href={url('/logo-noir.svg')} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content={SITE.name} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;700&display=swap" rel="stylesheet" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {/* ORDRE CRITIQUE — le bootstrap du Mode Consentement ci-dessous doit
+        s'exécuter AVANT le chargement de GTM : il pose les valeurs par défaut
+        (tout « denied ») que les tags du conteneur sont censés respecter. Si
+        GTM démarrait en premier, ses tags pourraient se déclencher avant, et
+        le bandeau ne serait plus qu'un décor. Ne pas intervertir ces deux blocs. */}
     {CONSENT_UI_ENABLED && (
-      <script is:inline define:vars={{ gaId: ANALYTICS_ENABLED ? GA_MEASUREMENT_ID : '', gaCookieMaxAge: GA_COOKIE_MAX_AGE_SECONDS, consentKey: CONSENT_KEY, consentMaxAge: CONSENT_MAX_AGE }}>
+      <script is:inline define:vars={{ consentKey: CONSENT_KEY, consentMaxAge: CONSENT_MAX_AGE }}>
         // Mode Consentement Google (v2). Tout est refusé par défaut, et gtag.js n'est
         // même pas téléchargé tant que le visiteur n'a pas accepté : le RGPD exige un
         // consentement PRÉALABLE au dépôt (les visiteurs FR/EN y sont soumis ; la LGPD
@@ -101,27 +95,14 @@ const jsonLd = {
           wait_for_update: 500,
         });
 
-        var analyticsLoaded = false;
-
-        // Appelé au clic sur « Accepter », ou d'emblée si le choix est déjà enregistré.
+        // Appelé au clic sur « Accepter », ou d'emblée si le choix est déjà
+        // enregistré — auquel cas ce script s'exécutant avant GTM, le conteneur
+        // démarre directement avec le consentement accordé.
+        // Aucun script n'est injecté ici : GA4 est un tag DU conteneur GTM, qui
+        // lit ce signal. Idempotent, le visiteur pouvant refuser puis ré-accepter
+        // sans recharger la page.
         window.ljdrLoadAnalytics = function () {
-          // Toujours réémis : le visiteur peut refuser puis ré-accepter sans recharger,
-          // auquel cas gtag.js est déjà là mais le consentement, lui, est repassé
-          // en « denied » — seule l'injection du script doit être jouée une fois.
           gtag('consent', 'update', { analytics_storage: 'granted' });
-          if (!gaId) return; // preview de PR : le bandeau tourne à vide, sans GA derrière
-          if (analyticsLoaded) return;
-          analyticsLoaded = true;
-          var s = document.createElement('script');
-          s.async = true;
-          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
-          document.head.appendChild(s);
-          gtag('js', new Date());
-          gtag('config', gaId, {
-            // Plafond CNIL : 13 mois, et pas de prolongation à chaque visite.
-            cookie_expires: gaCookieMaxAge,
-            cookie_update: false,
-          });
         };
 
         // Retrait du consentement : on repasse en « denied » et on efface les cookies
@@ -166,8 +147,37 @@ const jsonLd = {
         if (window.ljdrReadConsent() === 'granted') window.ljdrLoadAnalytics();
       </script>
     )}
+    {/* Google Tag Manager. is:inline est indispensable : sans lui, Astro sortirait
+        le snippet de l'en-tête pour le regrouper dans un bundle chargé plus tard. */}
+    {GTM_ENABLED && <script is:inline set:html={gtmSnippet} />}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {STAGING_NOINDEX && <meta name="robots" content="noindex" />}
+    <meta name="build" content={buildInfo} />
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(current[l])} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={abs(current.pt)} />
+    <link rel="icon" type="image/svg+xml" href={url('/logo-noir.svg')} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;700&display=swap" rel="stylesheet" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
+    {/* Google Tag Manager (noscript) */}
+    {GTM_ENABLED && (
+      <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    )}
+
     <a class="skip-link" href="#main">Skip to content</a>
 
     {/* Placé en tête du <body> — le bandeau est en position fixed, l'affichage ne

@@ -117,30 +117,32 @@ export function emailComposers(locale: Locale, context?: string): EmailComposer[
 }
 
 // ── Mesure d'audience & consentement ────────────────────────────────────────
-// ⛑ PLACEHOLDER : coller ici l'ID de mesure GA4 (format « G-XXXXXXXXXX »),
-//   récupérable dans Google Analytics → Admin → Flux de données → Flux Web.
-//   Tant que la chaîne est vide, AUCUN script Google n'est chargé et le bandeau
-//   cookies ne s'affiche pas : le site ne dépose alors strictement aucun cookie.
-export const GA_MEASUREMENT_ID: string = '';
+// Conteneur Google Tag Manager de la cliente. C'est le SEUL chemin de chargement
+// Google du site : GA4 n'est pas appelé en direct depuis le code, il se configure
+// comme un tag DANS l'interface GTM. Deux chemins parallèles compteraient deux
+// fois les mêmes visites.
+export const GTM_ID = 'GTM-MCLC59W8';
 
-// Pas de mesure d'audience sur les previews de PR ni en staging (pages noindex) :
-// on ne pollue pas les statistiques de la cliente avec nos propres visites.
-export const ANALYTICS_ENABLED = GA_MEASUREMENT_ID !== '' && !STAGING_NOINDEX;
+// Le conteneur n'est posé que sur la production : ni sur les previews de PR et la
+// page de validation (PREVIEW=1, posé par le CI), ni en dev local — le trafic de
+// test ne doit pas polluer les statistiques de la cliente.
+export const GTM_ENABLED = import.meta.env.PROD && process.env.PREVIEW !== '1';
 
-// Le bandeau, lui, s'affiche AUSSI sur les previews de PR — sans quoi il serait
-// invisible là où on le fait justement relire. En preview il fonctionne à vide :
-// le choix est enregistré, mais il n'y a aucun GA à déclencher derrière.
-export const CONSENT_UI_ENABLED = ANALYTICS_ENABLED || process.env.PREVIEW === '1';
+// Le bandeau s'affiche partout où un tag Google peut se déclencher (donc en
+// production), et AUSSI sur les previews de PR — sans quoi il serait invisible là
+// où on le fait justement relire. En preview il tourne à vide : le choix est
+// enregistré et le Mode Consentement mis à jour, mais il n'y a aucun GTM derrière.
+export const CONSENT_UI_ENABLED = GTM_ENABLED || process.env.PREVIEW === '1';
 
-// Durée de vie du cookie de mesure (_ga) : 13 mois, plafond recommandé par la
-// CNIL. Sans ce réglage, GA4 pose un cookie de 2 ans, PROLONGÉ à chaque visite —
-// ce que la CNIL refuse explicitement (cf. cookie_update: false dans Base.astro).
-export const GA_COOKIE_MAX_AGE_SECONDS = 390 * 24 * 60 * 60; // ≈ 13 mois
-
-// ⛑ À FAIRE CÔTÉ GOOGLE, une fois l'ID renseigné :
-//   Analytics → Admin → Conservation des données → « 14 mois ».
-//   Le bandeau annonce 14 mois au visiteur ; si la propriété est réglée
-//   autrement, le texte affiché devient faux. Les deux doivent rester alignés.
+// ⛑ À FAIRE CÔTÉ GOOGLE, sur le tag GA4 configuré dans GTM :
+//   1. Conservation des données : Analytics → Admin → « 14 mois ». Le bandeau
+//      annonce 14 mois au visiteur ; si la propriété est réglée autrement, le
+//      texte affiché devient faux. Les deux doivent rester alignés.
+//   2. Durée du cookie de mesure : régler « cookie_expires » à 34128000 (≈ 13
+//      mois) et « cookie_update » à false dans les paramètres du tag GA4. Sans
+//      ça GA4 pose un cookie de 2 ans PROLONGÉ à chaque visite, ce que la CNIL
+//      refuse explicitement. Ce réglage vivait dans le code tant que GA4 était
+//      appelé en direct ; il relève désormais de la configuration GTM.
 
 // Clé localStorage du choix du visiteur ({ v, choice: 'granted' | 'denied', ts }).
 export const CONSENT_KEY = 'ljdr-consent';
