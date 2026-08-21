@@ -40,7 +40,7 @@ const url = (p: string) => `${base}${p}`;
               </div>
               <div class="card__body">
                 <h3>{item.title}</h3>
-                <p>{item.text}</p>
+                {item.text && <p>{item.text}</p>}
                 <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
               </div>
             </article>
