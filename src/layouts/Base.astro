@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, GTM_ENABLED, GTM_ID, CONSENT_UI_ENABLED, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
+import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, GOOGLE_SITE_VERIFICATION, GTM_ENABLED, GTM_ID, CONSENT_UI_ENABLED, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
 import { nav, common, cookies } from '../i18n/ui';
 import CookieBanner from '../components/CookieBanner.astro';
 
@@ -153,6 +153,7 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />
     <link rel="canonical" href={canonical} />
     {STAGING_NOINDEX && <meta name="robots" content="noindex" />}
     <meta name="build" content={buildInfo} />
