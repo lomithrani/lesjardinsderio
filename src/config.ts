@@ -116,6 +116,13 @@ export function emailComposers(locale: Locale, context?: string): EmailComposer[
   ];
 }
 
+// ── Search Console ──────────────────────────────────────────────────────────
+// Jeton de validation de propriété Google Search Console (méthode « balise HTML »).
+// Il doit rester présent en permanence : Google revérifie périodiquement, et la
+// propriété est révoquée si la balise disparaît. Posé sur toutes les pages ainsi
+// que sur la redirection racine, la validation portant sur l'URL d'accueil.
+export const GOOGLE_SITE_VERIFICATION = 'Q2Y0YUHC5UWqIpMzm0shyPNzJz3_1DPhzwDFP92GXpg';
+
 // ── Mesure d'audience & consentement ────────────────────────────────────────
 // Conteneur Google Tag Manager de la cliente. C'est le SEUL chemin de chargement
 // Google du site : GA4 n'est pas appelé en direct depuis le code, il se configure

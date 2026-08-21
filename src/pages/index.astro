@@ -1,4 +1,6 @@
 ---
+import { GOOGLE_SITE_VERIFICATION } from '../config';
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const target = `${base}/pt/`;
 ---
@@ -6,6 +8,7 @@ const target = `${base}/pt/`;
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
+    <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />
     <meta http-equiv="refresh" content={`0;url=${target}`} />
     <link rel="canonical" href={target} />
     <title>Les Jardins de Rio</title>
