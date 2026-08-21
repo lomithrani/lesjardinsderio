@@ -63,6 +63,43 @@ Le MCP GitHub ne transporte que du texte ; les images suivent donc un canal déd
   (`prebuild`/`predev`) : régénère `src/assets/` depuis `assets-src/` et `assets-b64/`
   (+ `public/favicon.png`). Ces destinations sont ignorées par git.
 
+## Indexation (SEO)
+
+Le site est **ouvert à l'indexation** (`STAGING_NOINDEX = false`, `src/config.ts`).
+Deux fichiers sont générés au build, à partir de la configuration — rien à tenir
+à jour à la main :
+
+- **`/robots.txt`** (`src/pages/robots.txt.ts`) — autorise l'exploration et
+  pointe le sitemap. Sur un build `noindex` (previews de PR, `PREVIEW=1`, ou
+  `STAGING = true`), il bascule en `Disallow: /`.
+- **`/sitemap.xml`** (`src/pages/sitemap.xml.ts`) — construit depuis `ROUTES`
+  (`src/config.ts`) : **18 URL** = 6 pages × 3 langues, chacune déclarant ses
+  alternates `hreflang` (+ `x-default` → PT). Ajouter une route dans `ROUTES`
+  suffit à l'y faire apparaître.
+
+Ce qui reste **volontairement hors du sitemap** : la redirection racine `/` et
+les pages `galerie/` (encore de simples redirections `noindex` vers l'accueil —
+à retirer de `EXCLUDED` le jour où la galerie devient une vraie page).
+
+`/preview/` et `/validation/` ne sont **pas** bloqués dans le `robots.txt` :
+ces copies portent déjà un `noindex`, et un `Disallow` empêcherait justement
+Google de le lire — une URL interdite d'exploration peut malgré tout finir
+indexée.
+
+Le job `verify` du CI vérifie que `/robots.txt` et `/sitemap.xml` répondent 200
+en ligne, comme les pages clés.
+
+### ⛑ À faire une fois, côté Google
+
+1. **Google Search Console** → ajouter la propriété `lesjardinsderio.com.br`
+   (validation par enregistrement DNS TXT, ou fichier HTML à déposer dans
+   `public/`).
+2. Y **soumettre le sitemap** : `https://lesjardinsderio.com.br/sitemap.xml`.
+3. Demander l'indexation de l'accueil PT (« Inspection d'URL » → « Demander une
+   indexation ») pour amorcer la découverte ; le reste suit par les liens.
+4. Créer/réclamer la fiche **Google Business Profile** de la maison : pour un
+   hébergement local, c'est la principale source de visibilité, devant le site.
+
 ## Mesure d'audience & cookies
 
 Le site charge le conteneur **Google Tag Manager** `GTM-MCLC59W8` (`GTM_ID`,
@@ -129,6 +166,8 @@ src/
   layouts/Base.astro # head SEO + hreflang + header/footer + JSON-LD
   templates/         # 1 template par page logique
   pages/             # pt/ en/ fr/ — pages fines (slugs localisés) + redirection racine
+    robots.txt.ts    # robots.txt généré (Disallow: / sur les builds noindex)
+    sitemap.xml.ts   # sitemap généré depuis ROUTES, avec alternates hreflang
 ```
 
 ## ⛑ Placeholders à remplacer
@@ -137,7 +176,6 @@ src/
 |---|---|
 | Paramètres du moteur NoBeds | `src/config.ts` → `SITE.NOBEDS_BETA_PARAMS` |
 | Domaine définitif | `astro.config.mjs` (`site`, retirer `base`, ajouter `public/CNAME`) + DNS |
-| Indexation | `src/config.ts` → `STAGING_NOINDEX = false` au lancement |
 | Surfaces suites Red / Garden View | `src/i18n/rooms.ts` |
 
 ## Déploiement & vérification automatique
