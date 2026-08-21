@@ -3,3 +3,4 @@ dist/
 .astro/
 src/assets/
 public/favicon.png
+bun.lock
