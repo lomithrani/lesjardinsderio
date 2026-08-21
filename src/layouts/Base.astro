@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, type Locale } from '../config';
+import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, ANALYTICS_ENABLED, GTM_ID, type Locale } from '../config';
 import { nav, common } from '../i18n/ui';
 
 interface Props {
@@ -35,6 +35,15 @@ const year = new Date().getFullYear();
 // Permet au job `verify` du workflow de confirmer que le site en ligne sert bien ce commit.
 const buildInfo = `${(process.env.GITHUB_SHA ?? 'local').slice(0, 7)} ${new Date().toISOString()}`;
 
+// Snippet Google Tag Manager, repris tel quel. On l'injecte via `set:html` plutôt
+// que de l'écrire dans le template : dans une expression Astro ({cond && …}), les
+// accolades du script seraient prises pour du code.
+const gtmSnippet = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BedAndBreakfast',
@@ -61,6 +70,9 @@ const jsonLd = {
 <html lang={HTML_LANG[locale]}>
   <head>
     <meta charset="utf-8" />
+    {/* Google Tag Manager. is:inline est indispensable : sans lui, Astro sortirait
+        le snippet de l'en-tête pour le regrouper dans un bundle chargé plus tard. */}
+    {ANALYTICS_ENABLED && <script is:inline set:html={gtmSnippet} />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -83,6 +95,12 @@ const jsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
+    {/* Google Tag Manager (noscript) */}
+    {ANALYTICS_ENABLED && (
+      <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    )}
+
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header">

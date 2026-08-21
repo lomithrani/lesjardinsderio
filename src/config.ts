@@ -6,6 +6,13 @@
 const STAGING = false;
 export const STAGING_NOINDEX = STAGING || process.env.PREVIEW === '1';
 
+// Google Tag Manager (conteneur de la cliente).
+// Le tag n'est posé que sur le site de production : ni sur les previews de PR et
+// la page de validation (PREVIEW=1, posé par le CI), ni en dev local — le trafic
+// de test ne doit pas polluer les statistiques.
+export const GTM_ID = 'GTM-MCLC59W8';
+export const ANALYTICS_ENABLED = import.meta.env.PROD && process.env.PREVIEW !== '1';
+
 export const SITE = {
   name: 'Les Jardins de Rio',
   phone: '+55 (21) 3217-1334',
