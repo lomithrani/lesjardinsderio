@@ -43,6 +43,15 @@ export const HTML_LANG: Record<Locale, string> = {
   fr: 'fr',
 };
 
+// Open Graph impose son propre format de locale (langue_PAYS, souligné), distinct
+// des codes BCP 47 de HTML_LANG ci-dessus. Facebook et WhatsApp rejettent
+// silencieusement une valeur mal formée — d'où cette table séparée.
+export const OG_LOCALE: Record<Locale, string> = {
+  pt: 'pt_BR',
+  en: 'en_US',
+  fr: 'fr_FR',
+};
+
 // Slugs localisés par page logique. Source de vérité du routing + hreflang.
 export const ROUTES: Record<string, Record<Locale, string>> = {
   home: { pt: '/pt/', en: '/en/', fr: '/fr/' },
