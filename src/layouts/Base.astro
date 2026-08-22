@@ -1,7 +1,12 @@
 ---
 import '../styles/global.css';
-import { SITE, ROUTES, LOCALES, HTML_LANG, whatsappLink, STAGING_NOINDEX, GOOGLE_SITE_VERIFICATION, GTM_ENABLED, GTM_ID, CONSENT_UI_ENABLED, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import { SITE, ROUTES, LOCALES, HTML_LANG, OG_LOCALE, whatsappLink, STAGING_NOINDEX, GOOGLE_SITE_VERIFICATION, GTM_ENABLED, GTM_ID, CONSENT_UI_ENABLED, CONSENT_KEY, CONSENT_MAX_AGE, type Locale } from '../config';
 import { nav, common, cookies } from '../i18n/ui';
+import { image, cover } from '../images';
+import { photoAlt } from '../i18n/photos';
+import { rooms } from '../i18n/rooms';
 import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
@@ -21,6 +26,42 @@ const abs = (path: string) => new URL(`${base}${path}`, Astro.site).href;
 
 const current = ROUTES[page];
 const canonical = abs(current[locale]);
+
+// ── Vignette de partage (Open Graph) ────────────────────────────────────────
+// Une photo par page : un lien vers /evenements partagé sur WhatsApp doit montrer
+// la piscine sous la canopée, pas la façade. Les IDs pointent vers assets-src/ ;
+// `image()` échoue au build si l'un d'eux disparaît — la vignette ne peut donc
+// pas se casser en silence.
+// La description de la photo (i18n/photos.ts) sert d'og:image:alt : c'est l'image
+// qu'elle doit décrire, pas la page. Les photos de chambres n'y figurent pas —
+// elles retombent sur la description de la page, faute de mieux.
+const fromPhoto = (id: string) => ({ src: image(id), alt: photoAlt(id, locale) });
+
+const OG_IMAGES: Record<keyof typeof ROUTES, { src: ImageMetadata; alt: string }> = {
+  home: fromPhoto('photos/hero-maison-piscine'),
+  rooms: { src: cover('rooms/presidential-white', 'photos/interieur-perspective'), alt: description },
+  spa: fromPhoto('photos/jardin-transats'),
+  events: fromPhoto('photos/piscine-canopee'),
+  experiences: fromPhoto('photos/jardin-aerien'),
+  gallery: fromPhoto('photos/piscine-jardin'),
+  contact: fromPhoto('photos/facade-palmiers'),
+};
+
+// 1200 × 630 (ratio 1.91:1) : le format attendu par Facebook, WhatsApp, LinkedIn
+// et X. Recadrage centré plutôt que déformation. En JPEG — WhatsApp n'affiche pas
+// les vignettes WebP de façon fiable, alors qu'Astro sert du WebP par défaut.
+const ogAsset = await getImage({
+  src: OG_IMAGES[page].src,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  position: 'center',
+  format: 'jpeg',
+});
+
+// Les URL d'assets produites par Astro portent DÉJÀ le préfixe `base` : les passer
+// à `abs()` (qui le rajoute) donnerait /preview/pr-12/preview/pr-12/_astro/…
+const ogImage = new URL(ogAsset.src, Astro.site).href;
 
 const navItems: Array<[keyof typeof ROUTES, string]> = [
   ['home', t.home],
@@ -46,26 +87,119 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`;
 
-const jsonLd = {
-  '@context': 'https://schema.org',
+// ── Données structurées (JSON-LD) ───────────────────────────────────────────
+// Un @graph plutôt que des blocs isolés : les nœuds se référencent par @id, si
+// bien que Google comprend que la salle d'événements et les suites appartiennent
+// à CET établissement, et pas à trois entités homonymes.
+//
+// Règle de rédaction : rien ici ne doit être inventé. Chaque valeur est reprise
+// du contenu du site, de src/config.ts ou de la fiche Google du lieu. Un schéma
+// qui contredit la page est pénalisé — mieux vaut un champ absent que faux.
+//
+// ⛑ À FAIRE CONFIRMER PAR LA CLIENTE, puis ajouter ici :
+//   priceRange (ex. 'R$$$'), checkinTime / checkoutTime, starRating.
+//   Ces trois champs alimentent Google Hotels ; on les laisse vides tant que la
+//   valeur exacte n'est pas connue.
+const homeUrl = abs(ROUTES.home[locale]);
+const hotelId = `${homeUrl}#hotel`;
+
+const postalAddress = {
+  '@type': 'PostalAddress',
+  streetAddress: 'Rua Cosme Velho, 1342',
+  addressLocality: 'Rio de Janeiro',
+  addressRegion: 'RJ',
+  postalCode: '22241-091',
+  addressCountry: 'BR',
+};
+
+// Photo de l'établissement, en 16:9 — le ratio que Google privilégie pour les
+// résultats enrichis. Distincte de la vignette de partage (1.91:1), et identique
+// sur toutes les pages : c'est la maison qu'elle représente, pas la page.
+const hotelPhoto = await getImage({
+  src: image('photos/hero-maison-piscine'),
+  width: 1200,
+  height: 675,
+  fit: 'cover',
+  position: 'center',
+  format: 'jpeg',
+});
+
+const hotel = {
   '@type': 'BedAndBreakfast',
+  '@id': hotelId,
   name: SITE.name,
-  url: abs(ROUTES.home[locale]),
-  telephone: '+552132171334',
+  url: homeUrl,
+  image: new URL(hotelPhoto.src, Astro.site).href,
+  telephone: SITE.phoneHref.replace('tel:', ''),
   email: SITE.email,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Rua Cosme Velho, 1342',
-    addressLocality: 'Rio de Janeiro',
-    addressRegion: 'RJ',
-    postalCode: '22241-091',
-    addressCountry: 'BR',
-  },
+  address: postalAddress,
+  // Coordonnées du marqueur de la fiche Google du lieu (cf. SITE.mapsUrl).
+  geo: { '@type': 'GeoCoordinates', latitude: -22.941071, longitude: -43.2062929 },
+  hasMap: SITE.mapsUrl,
+  sameAs: [SITE.instagram],
+  // Dérivé de la liste des suites : impossible de désynchroniser le schéma du site.
+  numberOfRooms: rooms.length,
+  // Horaires de la réception, tels qu'annoncés sur la page Contact.
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '09:00',
+    closes: '17:00',
+  }],
   amenityFeature: [
-    { '@type': 'LocationFeatureSpecification', name: 'Swimming pool' },
-    { '@type': 'LocationFeatureSpecification', name: 'Tropical garden' },
+    { '@type': 'LocationFeatureSpecification', name: 'Swimming pool', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Tropical garden', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Rooftop', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Bar', value: true },
   ],
   additionalType: 'https://schema.org/EventVenue',
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${homeUrl}#website`,
+  url: homeUrl,
+  name: SITE.name,
+  inLanguage: HTML_LANG[locale],
+  publisher: { '@id': hotelId },
+};
+
+// Fil d'Ariane : la navigation est plate, donc deux niveaux au plus. Google
+// l'affiche à la place de l'URL nue dans les résultats.
+const breadcrumb = page === 'home' ? null : {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t.home, item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: t[page], item: canonical },
+  ],
+};
+
+// Nœuds propres à certaines pages, là où le contenu le justifie.
+const pageNodes: Record<string, object[]> = {
+  events: [{
+    '@type': 'EventVenue',
+    '@id': `${canonical}#venue`,
+    name: SITE.name,
+    url: canonical,
+    address: postalAddress,
+    // « la casa inteira pode ser privatizada para celebrações de até 500 convidados »
+    maximumAttendeeCapacity: 500,
+    photo: ogImage,
+  }],
+  rooms: rooms.map((room) => ({
+    '@type': 'HotelRoom',
+    name: room.name[locale],
+    description: room.desc[locale],
+    containedInPlace: { '@id': hotelId },
+    // MTK = mètre carré (code d'unité UN/CEFACT). Absent quand la surface n'a
+    // pas encore été validée par la cliente (cf. src/i18n/rooms.ts).
+    ...(room.size ? { floorSize: { '@type': 'QuantitativeValue', value: room.size, unitCode: 'MTK' } } : {}),
+  })),
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [hotel, website, ...(breadcrumb ? [breadcrumb] : []), ...(pageNodes[page] ?? [])],
 };
 ---
 <!doctype html>
@@ -167,6 +301,21 @@ const jsonLd = {
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={ogImage} />
+    {/* Largeur et hauteur déclarées : sans elles, les aperçus WhatsApp et Facebook
+        n'apparaissent qu'au SECOND partage, le temps que le robot aille chercher
+        l'image et en mesure les dimensions lui-même. */}
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={OG_IMAGES[page].alt} />
+    <meta property="og:locale" content={OG_LOCALE[locale]} />
+    {LOCALES.filter((l) => l !== locale).map((l) => (
+      <meta property="og:locale:alternate" content={OG_LOCALE[l]} />
+    ))}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;700&display=swap" rel="stylesheet" />

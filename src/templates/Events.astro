@@ -5,6 +5,7 @@ import Curve from '../components/Curve.astro';
 import EmailButton from '../components/EmailButton.astro';
 import { image } from '../images';
 import { events, common } from '../i18n/ui';
+import { photoAlt } from '../i18n/photos';
 import { SITE, whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
@@ -24,7 +25,7 @@ const waContext: Record<Locale, string> = {
         <p class="lede">{t.intro}</p>
       </div>
       <div class="ph">
-        <Image src={image('photos/piscine-canopee')} alt="" widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" loading="eager" />
+        <Image src={image('photos/piscine-canopee')} alt={photoAlt('photos/piscine-canopee', locale)} widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" loading="eager" />
       </div>
     </div>
   </section>
@@ -57,7 +58,7 @@ const waContext: Record<Locale, string> = {
         <p>{t.privatizationText}</p>
       </div>
       <div class="ph ph--alt">
-        <Image src={image('photos/jardin-transats')} alt="" widths={[480, 800]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Image src={image('photos/jardin-transats')} alt={photoAlt('photos/jardin-transats', locale)} widths={[480, 800]} sizes="(min-width: 820px) 45vw, 92vw" />
       </div>
     </div>
   </section>

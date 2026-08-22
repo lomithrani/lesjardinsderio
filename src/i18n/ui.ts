@@ -560,6 +560,29 @@ export const roomsPage: Dict = {
 // personnelle au sens du RGPD), on nomme le destinataire (Google) et le transfert
 // possible hors UE, et on n'affirme sur la publicité que ce que la configuration
 // garantit réellement (signaux publicitaires en « denied » en dur, cf. Base.astro).
+// Page 404. Servie par GitHub Pages à la racine du domaine pour toute URL
+// inconnue, donc rendue dans les trois langues d'un coup (cf. src/pages/404.astro).
+export const notFound: Dict = {
+  pt: {
+    title: 'Esta página não existe',
+    text: 'O endereço está errado, ou a página mudou de lugar. Os jardins, esses, continuam no mesmo sítio.',
+    home: 'Voltar ao início',
+    elsewhere: 'Ou continue a visita :',
+  },
+  en: {
+    title: 'This page does not exist',
+    text: 'The address is wrong, or the page has moved. The gardens, however, are exactly where you left them.',
+    home: 'Back to home',
+    elsewhere: 'Or carry on with the visit:',
+  },
+  fr: {
+    title: "Cette page n'existe pas",
+    text: "L'adresse est erronée, ou la page a changé de place. Les jardins, eux, n'ont pas bougé.",
+    home: "Retour à l'accueil",
+    elsewhere: 'Ou poursuivez la visite :',
+  },
+};
+
 export const cookies: Dict = {
   pt: {
     title: 'Cookies e privacidade',
