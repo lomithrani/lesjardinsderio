@@ -406,39 +406,36 @@ body.lightbox-open { overflow: hidden; }
 .emailmenu__item.is-copied svg { color: var(--vert); }
 
 /* ---------- Bandeau cookies ---------- */
-/* Non modal : le bandeau se pose au-dessus du contenu sans le bloquer ni piéger
-   le focus. Refuser et Accepter ont la même taille et la même place (exigence
-   RGPD : le refus doit être aussi simple que l'acceptation). */
+/* Barre pleine largeur posée au bas de l'écran. Non modale : elle ne bloque ni
+   la page ni le focus. Refuser et Accepter ont la même taille et la même place
+   (exigence RGPD : le refus doit être aussi simple que l'acceptation). */
 .cookie-banner {
   position: fixed; z-index: 95; left: 0; right: 0; bottom: 0;
-  /* Marge entre la carte et le bas de l'écran. Nommée pour être réutilisée par
-     le calcul de hauteur de la carte : les deux doivent rester d'accord. */
-  --cookie-gutter: clamp(0.6rem, 2vw, 1.2rem);
-  /* env(safe-area-inset-*) : sur iPhone, la barre d'accueil mange le bas de
-     l'écran et l'encoche un côté en paysage. Sans ça les boutons finissent
-     dessous, injoignables. Valeur 0 partout ailleurs. */
-  padding-block: 0 calc(var(--cookie-gutter) + env(safe-area-inset-bottom, 0px));
-  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
-  pointer-events: none; /* laisse cliquer la page autour de la carte */
+  pointer-events: none; /* laisse cliquer la page autour de la barre */
 }
 .cookie-banner[hidden] { display: none; }
 
+/* La barre elle-même : de bord à bord, quelle que soit la largeur d'écran.
+   C'est ce qui règle l'ancien défaut — une carte à coins carrés qui flottait
+   à 190 px du bord droit sur grand écran, sans toucher aucun bord. */
 .cookie-banner__card {
   pointer-events: auto;
-  max-width: 46rem; margin-left: auto;
-  background: var(--blanc); border: 1px solid var(--sable);
-  border-radius: 0 1.6rem 0 0; box-shadow: var(--shadow-soft);
-  padding: clamp(1rem, 3vw, 1.2rem) clamp(1.1rem, 4vw, 1.4rem) 0;
-  /* Colonne : le texte défile, la rangée de boutons reste posée en bas. */
+  background: var(--blanc); border-top: 1px solid var(--sable);
+  box-shadow: var(--shadow-soft);
+  /* env(safe-area-inset-bottom) : sur iPhone, la barre d'accueil mange le bas
+     de l'écran ; sans ça les boutons finissent dessous, injoignables. */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* La barre ne prend jamais tout l'écran. 100vh se mesure barre d'URL mobile
+     DÉPLIÉE : la barre débordait sous le bord visible sur iOS/Android. 100dvh
+     suit la hauteur réellement visible ; la ligne vh reste en repli pour les
+     navigateurs qui ignorent dvh. Les 3rem laissent voir un bout de page. */
+  max-height: calc(100vh - 3rem);
+  max-height: calc(100dvh - 3rem);
+  /* Colonne, et non ligne : dans un conteneur flex en ligne, max-height rogne
+     les enfants étirés au lieu de les comprimer — le texte disparaissait sous
+     le bord au lieu de défiler. En colonne, .cookie-banner__inner rétrécit
+     vraiment, ce qui rend sa hauteur définie et déclenche le défilement. */
   display: flex; flex-direction: column; overflow: hidden;
-  /* La carte ne doit jamais dépasser l'écran. 100vh se mesure barre d'URL
-     mobile DÉPLIÉE : la carte débordait sous le bord visible sur iOS/Android.
-     100dvh suit la hauteur réellement visible ; la ligne vh reste en repli
-     pour les navigateurs qui ignorent dvh. Le dernier 1rem laisse voir un
-     bout de page au-dessus, pour que ça reste un bandeau et pas une modale. */
-  max-height: calc(100vh - var(--cookie-gutter) - env(safe-area-inset-bottom, 0px) - 1rem);
-  max-height: calc(100dvh - var(--cookie-gutter) - env(safe-area-inset-bottom, 0px) - 1rem);
-  overflow-wrap: break-word; /* les URL de la politique Google ne débordent pas */
   animation: cookie-in 0.28s ease-out both;
 }
 @keyframes cookie-in {
@@ -449,19 +446,42 @@ body.lightbox-open { overflow: hidden; }
   .cookie-banner__card { animation: none; }
 }
 
+/* Le contenu reste dans la colonne du site (.wrap donne max-width + gouttières),
+   donc aligné sur le texte des pages malgré le fond pleine largeur.
+   Écran large : texte à gauche, boutons à droite sur la même ligne. */
+.cookie-banner__inner {
+  flex: 1 1 auto; min-height: 0;
+  /* Grille et non flex-wrap : il faut que la zone de texte puisse RÉTRÉCIR
+     sous la hauteur de son contenu pour déclencher son propre défilement.
+     Une ligne flex qui passe à la ligne garde une hauteur dictée par le
+     contenu — les boutons finissaient poussés hors de l'écran. minmax(0, 1fr)
+     autorise justement ce rétrécissement. */
+  display: grid; align-items: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0.9rem clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(0.9rem, 2.5vw, 1.25rem);
+}
+
 /* Seul le corps défile. Avant, c'était la carte entière avec des boutons en
    position: sticky : le texte réapparaissait dans le padding-bottom, sous les
    boutons. min-height: 0 est indispensable — sans lui un enfant flex refuse de
-   descendre sous sa hauteur de contenu et la carte déborde au lieu de défiler. */
+   descendre sous sa hauteur de contenu et la barre déborde au lieu de défiler. */
 .cookie-banner__body {
-  min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  /* align-self: stretch contre le align-items: center de la grille — sans lui
+     la zone de texte garde sa hauteur de contenu et déborde de sa rangée au
+     lieu de défiler. Les boutons, eux, restent centrés. */
+  align-self: stretch;
+  min-width: 0; min-height: 0;
+  overflow-y: auto; overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  overflow-wrap: break-word; /* l'URL de la politique Google ne déborde pas */
 }
 
-.cookie-banner__title { font-size: clamp(1.1rem, 4vw, 1.25rem); margin: 0 0 0.4rem; }
-.cookie-banner__text { margin: 0 0 0.7rem; font-size: 0.95rem; }
+.cookie-banner__title { font-size: clamp(1.05rem, 3.5vw, 1.2rem); margin: 0 0 0.3rem; }
+.cookie-banner__text { margin: 0 0 0.5rem; font-size: 0.95rem; }
 
-.cookie-banner__more { margin-bottom: 0.2rem; font-size: 0.9rem; }
+.cookie-banner__more { font-size: 0.9rem; }
 .cookie-banner__more summary {
   cursor: pointer; font-weight: 700; color: var(--sauge);
   font-size: 0.85rem; letter-spacing: 0.04em;
@@ -469,24 +489,35 @@ body.lightbox-open { overflow: hidden; }
 .cookie-banner__more p { margin: 0.6rem 0 0; color: var(--encre); opacity: 0.85; }
 .cookie-banner__more a { color: var(--sauge); font-weight: 700; }
 
-/* Petit écran + « En savoir plus » déplié : le texte défile, mais les deux
-   boutons restent visibles en bas — le choix ne doit jamais demander de
-   scroller. Le filet marque la limite quand le texte passe derrière. */
+/* Les boutons ne défilent jamais : ils sont hors du corps scrollable, calés à
+   droite de la barre. Le choix ne doit jamais demander de scroller. */
 .cookie-banner__actions {
-  flex: none;
   display: flex; flex-wrap: wrap; gap: 0.7rem;
-  border-top: 1px solid var(--sable);
-  padding-block: 0.9rem clamp(1rem, 3vw, 1.3rem);
 }
 /* Deux <button> strictement identiques : on neutralise le rendu natif (dont la
    bordure ajoutée par le navigateur) pour que « Refuser » et « Accepter » aient
-   exactement la même boîte, la même couleur et le même poids visuel.
-   Base de 7rem (et non 10) : à 320px de large les deux tiennent encore côte à
-   côte, au lieu de s'empiler sur deux rangées pleine largeur. */
+   exactement la même boîte, la même couleur et le même poids visuel. */
 .cookie-banner__actions .btn {
-  flex: 1 1 7rem; min-width: 0; text-align: center; cursor: pointer;
+  text-align: center; cursor: pointer;
   appearance: none; -webkit-appearance: none; border: 0;
-  padding-inline: 1rem;
+}
+
+/* Sous 820px le texte et les boutons ne tiennent plus sur une ligne : les
+   boutons passent dessous et se partagent la largeur. Base de 7rem — à 320px
+   ils tiennent encore côte à côte au lieu de s'empiler sur deux rangées. */
+@media (max-width: 820px) {
+  .cookie-banner__inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .cookie-banner__actions .btn { flex: 1 1 7rem; min-width: 0; padding-inline: 1rem; }
+}
+/* Téléphone en paysage : à peine 375px de haut, dont la barre d'URL. On
+   resserre le texte pour que les boutons tiennent sans défilement. */
+@media (max-height: 460px) {
+  .cookie-banner__text { font-size: 0.88rem; margin-bottom: 0.4rem; }
+  .cookie-banner__more { font-size: 0.85rem; }
+  .cookie-banner__inner { padding-block: 0.7rem; }
 }
 
 /* Lien « Cookies » du pied de page : rouvre le bandeau à tout moment. */
@@ -496,13 +527,3 @@ body.lightbox-open { overflow: hidden; }
   text-decoration: underline; text-decoration-color: var(--or); text-underline-offset: 3px;
 }
 
-@media (max-width: 680px) {
-  .cookie-banner__card { border-radius: 0 1.2rem 0 0; }
-}
-/* Téléphone en paysage : à peine 375px de haut, dont la barre d'URL. On
-   resserre le texte pour que les boutons tiennent sans défilement. */
-@media (max-height: 460px) {
-  .cookie-banner__text { font-size: 0.88rem; margin-bottom: 0.5rem; }
-  .cookie-banner__more { font-size: 0.85rem; }
-  .cookie-banner__actions { padding-block: 0.7rem 0.8rem; }
-}
