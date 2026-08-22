@@ -29,16 +29,21 @@ const t = cookies[locale];
       tabindex="-1"
       data-cookie-card
     >
-      <h2 class="cookie-banner__title" id="cookie-banner-title">{t.title}</h2>
-      <p class="cookie-banner__text">{t.text}</p>
+      {/* Le corps est le seul élément qui défile : les boutons restent posés
+          au bas de la carte, jamais poussés hors de l'écran par « En savoir
+          plus » déplié sur un petit téléphone. */}
+      <div class="cookie-banner__body">
+        <h2 class="cookie-banner__title" id="cookie-banner-title">{t.title}</h2>
+        <p class="cookie-banner__text">{t.text}</p>
 
-      <details class="cookie-banner__more">
-        <summary>{t.more}</summary>
-        <p>{t.details}</p>
-        <p>
-          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">{t.policy}</a>
-        </p>
-      </details>
+        <details class="cookie-banner__more">
+          <summary>{t.more}</summary>
+          <p>{t.details}</p>
+          <p>
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">{t.policy}</a>
+          </p>
+        </details>
+      </div>
 
       {/* Les deux boutons sont volontairement identiques (même style, même taille,
           même poids visuel) : la CNIL demande que refuser soit aussi immédiat
@@ -61,6 +66,7 @@ const t = cookies[locale];
   if (banner) {
     const key = banner.dataset.key || 'ljdr-consent';
     const card = banner.querySelector<HTMLElement>('[data-cookie-card]');
+    const body = banner.querySelector<HTMLElement>('.cookie-banner__body');
 
     const save = (choice: 'granted' | 'denied') => {
       try {
@@ -78,6 +84,9 @@ const t = cookies[locale];
     const show = (from: HTMLElement | null) => {
       opener = from;
       banner.hidden = false;
+      // Réouverture depuis le pied de page : on repart du haut du texte, sinon
+      // le bandeau réapparaît là où le visiteur avait laissé son défilement.
+      if (body) body.scrollTop = 0;
       if (from) card?.focus();
     };
     const hide = () => {

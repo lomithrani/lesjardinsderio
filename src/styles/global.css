@@ -411,7 +411,14 @@ body.lightbox-open { overflow: hidden; }
    RGPD : le refus doit être aussi simple que l'acceptation). */
 .cookie-banner {
   position: fixed; z-index: 95; left: 0; right: 0; bottom: 0;
-  padding-block: 0 clamp(0.6rem, 2vw, 1.2rem);
+  /* Marge entre la carte et le bas de l'écran. Nommée pour être réutilisée par
+     le calcul de hauteur de la carte : les deux doivent rester d'accord. */
+  --cookie-gutter: clamp(0.6rem, 2vw, 1.2rem);
+  /* env(safe-area-inset-*) : sur iPhone, la barre d'accueil mange le bas de
+     l'écran et l'encoche un côté en paysage. Sans ça les boutons finissent
+     dessous, injoignables. Valeur 0 partout ailleurs. */
+  padding-block: 0 calc(var(--cookie-gutter) + env(safe-area-inset-bottom, 0px));
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
   pointer-events: none; /* laisse cliquer la page autour de la carte */
 }
 .cookie-banner[hidden] { display: none; }
@@ -421,21 +428,40 @@ body.lightbox-open { overflow: hidden; }
   max-width: 46rem; margin-left: auto;
   background: var(--blanc); border: 1px solid var(--sable);
   border-radius: 0 1.6rem 0 0; box-shadow: var(--shadow-soft);
-  padding: 1.2rem 1.4rem 1.3rem;
-  /* Le détail « En savoir plus » est long : la carte ne doit jamais dépasser
-     l'écran, elle défile à l'intérieur d'elle-même. */
-  max-height: calc(100vh - 2rem); overflow-y: auto;
+  padding: clamp(1rem, 3vw, 1.2rem) clamp(1.1rem, 4vw, 1.4rem) 0;
+  /* Colonne : le texte défile, la rangée de boutons reste posée en bas. */
+  display: flex; flex-direction: column; overflow: hidden;
+  /* La carte ne doit jamais dépasser l'écran. 100vh se mesure barre d'URL
+     mobile DÉPLIÉE : la carte débordait sous le bord visible sur iOS/Android.
+     100dvh suit la hauteur réellement visible ; la ligne vh reste en repli
+     pour les navigateurs qui ignorent dvh. Le dernier 1rem laisse voir un
+     bout de page au-dessus, pour que ça reste un bandeau et pas une modale. */
+  max-height: calc(100vh - var(--cookie-gutter) - env(safe-area-inset-bottom, 0px) - 1rem);
+  max-height: calc(100dvh - var(--cookie-gutter) - env(safe-area-inset-bottom, 0px) - 1rem);
+  overflow-wrap: break-word; /* les URL de la politique Google ne débordent pas */
   animation: cookie-in 0.28s ease-out both;
 }
 @keyframes cookie-in {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .cookie-banner__card { animation: none; }
+}
 
-.cookie-banner__title { font-size: 1.25rem; margin: 0 0 0.4rem; }
+/* Seul le corps défile. Avant, c'était la carte entière avec des boutons en
+   position: sticky : le texte réapparaissait dans le padding-bottom, sous les
+   boutons. min-height: 0 est indispensable — sans lui un enfant flex refuse de
+   descendre sous sa hauteur de contenu et la carte déborde au lieu de défiler. */
+.cookie-banner__body {
+  min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cookie-banner__title { font-size: clamp(1.1rem, 4vw, 1.25rem); margin: 0 0 0.4rem; }
 .cookie-banner__text { margin: 0 0 0.7rem; font-size: 0.95rem; }
 
-.cookie-banner__more { margin-bottom: 1rem; font-size: 0.9rem; }
+.cookie-banner__more { margin-bottom: 0.2rem; font-size: 0.9rem; }
 .cookie-banner__more summary {
   cursor: pointer; font-weight: 700; color: var(--sauge);
   font-size: 0.85rem; letter-spacing: 0.04em;
@@ -443,18 +469,24 @@ body.lightbox-open { overflow: hidden; }
 .cookie-banner__more p { margin: 0.6rem 0 0; color: var(--encre); opacity: 0.85; }
 .cookie-banner__more a { color: var(--sauge); font-weight: 700; }
 
-/* Petit écran + « En savoir plus » déplié : la carte défile, mais les deux
-   boutons restent collés en bas — le choix ne doit jamais demander de scroller. */
+/* Petit écran + « En savoir plus » déplié : le texte défile, mais les deux
+   boutons restent visibles en bas — le choix ne doit jamais demander de
+   scroller. Le filet marque la limite quand le texte passe derrière. */
 .cookie-banner__actions {
+  flex: none;
   display: flex; flex-wrap: wrap; gap: 0.7rem;
-  position: sticky; bottom: 0; background: var(--blanc); padding-top: 0.6rem;
+  border-top: 1px solid var(--sable);
+  padding-block: 0.9rem clamp(1rem, 3vw, 1.3rem);
 }
 /* Deux <button> strictement identiques : on neutralise le rendu natif (dont la
    bordure ajoutée par le navigateur) pour que « Refuser » et « Accepter » aient
-   exactement la même boîte, la même couleur et le même poids visuel. */
+   exactement la même boîte, la même couleur et le même poids visuel.
+   Base de 7rem (et non 10) : à 320px de large les deux tiennent encore côte à
+   côte, au lieu de s'empiler sur deux rangées pleine largeur. */
 .cookie-banner__actions .btn {
-  flex: 1 1 10rem; text-align: center; cursor: pointer;
+  flex: 1 1 7rem; min-width: 0; text-align: center; cursor: pointer;
   appearance: none; -webkit-appearance: none; border: 0;
+  padding-inline: 1rem;
 }
 
 /* Lien « Cookies » du pied de page : rouvre le bandeau à tout moment. */
@@ -465,5 +497,12 @@ body.lightbox-open { overflow: hidden; }
 }
 
 @media (max-width: 680px) {
-  .cookie-banner__card { border-radius: 0 1.2rem 0 0; padding: 1rem 1.1rem 1.1rem; }
+  .cookie-banner__card { border-radius: 0 1.2rem 0 0; }
+}
+/* Téléphone en paysage : à peine 375px de haut, dont la barre d'URL. On
+   resserre le texte pour que les boutons tiennent sans défilement. */
+@media (max-height: 460px) {
+  .cookie-banner__text { font-size: 0.88rem; margin-bottom: 0.5rem; }
+  .cookie-banner__more { font-size: 0.85rem; }
+  .cookie-banner__actions { padding-block: 0.7rem 0.8rem; }
 }
