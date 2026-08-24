@@ -25,7 +25,7 @@ export const SITE = {
   // Paramètres NoBeds (réglables) : calendars = nb de mois affichés, minstay = séjour
   // minimum, rates/hotel = options d'affichage, book=1 active le moteur de réservation.
   NOBEDS_BETA_PARAMS: 'calendars=1&minstay=1&rates=1&hotel=1&book=1',
-  NOBEDS_DEFAULT_ID: '2515855', // Suite Deluxe (Red) — repli si id absent
+  NOBEDS_DEFAULT_ID: '2515855', // Red Room (Garden View) — repli si id absent
 } as const;
 
 // Construit l'URL du moteur de réservation NoBeds d'une chambre (iframe de l'overlay).

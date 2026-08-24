@@ -15,7 +15,7 @@ L'ordre d'affichage = ordre alphabétique des noms → préfixer `01-`, `02-`, �
 
 | Page | Dossier | Clés / suites | État actuel |
 |---|---|---|---|
-| Chambres + accueil | `assets-src/rooms/<id>/` | presidential-white, presidential-pink, luxury-violet, master-orange, luxury-yellow, deluxe-red, deluxe-garden, deluxe-green | 1 photo chacune (white = repli CDN) |
+| Chambres + accueil | `assets-src/rooms/<id>/` | presidential-white, luxury-violet, presidential-pink, deluxe-green, master-orange, deluxe-garden, deluxe-red, luxury-yellow — **nomenclature : [`assets-src/README.md`](../assets-src/README.md)** | 1 photo chacune (white = repli CDN) |
 | Accueil — Espaces | `assets-src/spaces/<key>/` | lounge, rooftop, janus, piscine, evenementiel | vides (repli 1 photo) |
 | Expériences | `assets-src/experiences/<key>/` | dayuse, workshops, gastronomy | vides (repli 1 photo) |
 | Spa | `assets-src/spa/<key>/` | soins, eau, yoga | vides (repli 1 photo) |
