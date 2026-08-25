@@ -32,6 +32,15 @@ const waContext: Record<Locale, string> = {
 
   <Curve fill="var(--blanc)" />
 
+  <!-- Texte éditorial : donne à la page un contenu rédigé (lieu, capacités, organisation)
+       plutôt que deux listes à puces, pour le visiteur comme pour l'indexation. -->
+  <section class="section" style="padding-top: 1rem; padding-bottom: 0;">
+    <div class="wrap">
+      <h2>{t.aboutTitle}</h2>
+      {t.about.map((p: string) => (<p class="prose prose--justifie">{p}</p>))}
+    </div>
+  </section>
+
   <section class="section" style="padding-top: 1rem;">
     <div class="wrap split">
       <div>

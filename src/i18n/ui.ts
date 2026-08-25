@@ -165,6 +165,12 @@ export const events: Dict = {
     eyebrow: 'Eventos & celebrações',
     title: 'O talento para tornar os momentos inesquecíveis',
     intro: 'Les Jardins de Rio dispõe de grandes, médios e pequenos espaços adaptáveis para o seu evento. Para todos eles, a casa pode ser privatizada a partir do meio-dia.',
+    aboutTitle: 'Uma casa feita para celebrar, aos pés do Corcovado',
+    about: [
+      'Les Jardins de Rio é uma casa modernista de 1.400 m² em um terreno de 5.000 m² de jardim tropical, no Cosme Velho, um dos bairros residenciais mais tranquilos do Rio de Janeiro — ao lado da Fundação Roberto Marinho, a poucos minutos de Laranjeiras, da estação do trem do Corcovado e das praias da Zona Sul. Projetada nos anos 1970 por Roberto Bastos Cruz, parceiro de Oscar Niemeyer, e inteiramente restaurada em 2013, ela oferece algo raro na cidade: um espaço privativo onde todo o evento, da cerimônia à última música, acontece ao ar livre, sob as árvores e os braços abertos do Cristo.',
+      'Todos os espaços se combinam. O lounge principal, de 99 m² e teto de vidro a 8 metros de altura, recebe até 100 convidados para um jantar sentado; o rooftop panorâmico abriga cerimônias ao pôr do sol para 80 pessoas, com a Baía de Guanabara ao fundo; a Sala Janus acolhe 40 pessoas sentadas para uma oficina ou um casamento intimista; e o gramado de 650 m² abre-se para até 500 convidados em shows, festivais e recepções ao ar livre. A piscina, seu bar coberto e equipado e o pool house prolongam a festa noite adentro, com uma sala de jantar coberta caso a chuva resolva aparecer.',
+      'A casa é privatizada a partir do meio-dia, e as oito suítes permitem que seus convidados mais próximos durmam no local. Nossa equipe coordena tudo o que o dia exigir — buffet, open bar, DJ ou banda ao vivo, decoração, segurança e manobrista — com um único contato, da primeira visita ao último convidado.',
+    ],
     typesTitle: 'Tipos de eventos',
     types: [
       'Casamentos, festas da noiva, aniversários',
@@ -194,6 +200,12 @@ export const events: Dict = {
     eyebrow: 'Events & celebrations',
     title: 'A talent for making moments unforgettable',
     intro: 'Les Jardins de Rio offers large, medium and small adaptable spaces for your event. For all of them, the house can be privatized from noon onwards.',
+    aboutTitle: 'A house made for celebrations, at the foot of Corcovado',
+    about: [
+      "Les Jardins de Rio is a 1,400 sqm modernist house set in 5,000 sqm of tropical garden in Cosme Velho, one of Rio de Janeiro's quietest residential neighbourhoods — next to the Roberto Marinho Foundation, a few minutes from Laranjeiras, the Corcovado train station and the beaches of the Zona Sul. Designed in the 1970s by Roberto Bastos Cruz, a collaborator of Oscar Niemeyer, and fully restored in 2013, it offers something rare in the city: a private venue where the whole event, from the ceremony to the last dance, unfolds outdoors under the trees and the open arms of the Christ.",
+      'Every space can be combined. The 99 sqm main lounge, crowned by an 8-metre glass ceiling, seats up to 100 guests for dinner; the panoramic rooftop hosts sunset ceremonies for 80, with Guanabara Bay as a backdrop; the Janus room welcomes 40 seated guests for a workshop or an intimate wedding; and the 650 sqm lawn opens to 500 people for concerts, festivals and open-air receptions. The pool, its equipped covered bar and the pool house carry the party into the night, with a covered dining room should the rain invite itself.',
+      'The house is privatized from noon, and the eight suites let your closest guests stay on site. Our team coordinates everything the day requires — catering, open bar, DJ or live band, decoration, security and valet parking — with a single contact, from the first site visit to the last guest.',
+    ],
     typesTitle: 'Types of events',
     types: [
       'Weddings, bridal parties, birthdays',
@@ -223,6 +235,12 @@ export const events: Dict = {
     eyebrow: 'Événements & célébrations',
     title: 'Le talent de rendre les moments inoubliables',
     intro: "Les Jardins de Rio disposent de grands, moyens et petits espaces adaptables pour votre événement. Pour tous, la maison peut être privatisée à partir de midi.",
+    aboutTitle: 'Une maison faite pour célébrer, au pied du Corcovado',
+    about: [
+      "Les Jardins de Rio, c'est une maison moderniste de 1 400 m² posée sur 5 000 m² de jardin tropical, à Cosme Velho, l'un des quartiers résidentiels les plus paisibles de Rio de Janeiro — à côté de la Fondation Roberto Marinho, à quelques minutes de Laranjeiras, de la gare du train du Corcovado et des plages de la Zona Sul. Dessinée dans les années 70 par Roberto Bastos Cruz, partenaire d'Oscar Niemeyer, et entièrement restaurée en 2013, elle offre une chose rare dans la ville : un lieu entièrement privatisable où tout l'événement, de la cérémonie à la dernière danse, se vit dehors, sous les arbres et les bras ouverts du Christ.",
+      "Tous les espaces se combinent. Le salon principal de 99 m², coiffé d'un plafond de verre à 8 mètres, accueille jusqu'à 100 convives à table ; le rooftop panoramique reçoit des cérémonies au coucher du soleil pour 80 personnes, la baie de Guanabara en toile de fond ; la salle Janus réunit 40 personnes assises pour un atelier ou un mariage intime ; et la pelouse de 650 m² s'ouvre à 500 invités pour des concerts, des festivals et des réceptions en plein air. La piscine, son bar couvert et équipé et le pool house prolongent la fête tard dans la nuit, avec une salle à manger couverte si la pluie s'invite.",
+      "La maison est privatisée à partir de midi, et les huit suites permettent à vos proches de dormir sur place. Notre équipe coordonne tout ce que la journée demande — traiteur, open bar, DJ ou groupe live, décoration, sécurité et voiturier — avec un interlocuteur unique, de la première visite au dernier invité.",
+    ],
     typesTitle: "Types d'événements",
     types: [
       'Mariages, fêtes de la mariée, anniversaires',
