@@ -335,7 +335,7 @@ export const experiences: Dict = {
     items: [
       { key: 'dayuse', img: 'photos/jardin-aerien', title: 'Day use', text: 'Um dia inteiro à beira da piscina cristalina, no jardim tropical, ao som dos pássaros. Fórmulas com acesso aos espaços e ao bar.' },
       { key: 'workshops', img: 'photos/terrasse-palmier', title: 'Oficinas & workshops', text: 'Café da manhã-ateliê, yoga no rooftop, oficinas holísticas e criativas: formatos íntimos em um cenário inspirador.' },
-      { key: 'gastronomy', img: 'photos/bar-interieur', title: 'Bar', text: '' },
+      { key: 'gastronomy', img: 'photos/bar-interieur', title: 'Bar', text: 'Um bar coberto e equipado à beira da piscina, prolongado pelo pool house e por uma sala de jantar coberta. De manhã, o café da manhã é servido de frente para o jardim — frutas tropicais, sucos naturais, waffles e pães frescos, café brasileiro. Ao entardecer, entram os coquetéis do barman e uma seleção de vinhos, noite adentro sob a copa das árvores.' },
       { key: 'activities', img: 'photos/piscine-jungle', title: 'Atividades & arredores', text: 'A poucos minutos a pé do Cristo Redentor e da Floresta da Tijuca, a poucos minutos de carro de Santa Teresa e das praias icônicas do Rio. Um equilíbrio raro entre um refúgio tropical tranquilo e o melhor do Rio, bem pertinho.' },
     ],
     note: 'Preços e calendário sob consulta — fale conosco pelo WhatsApp.',
@@ -389,7 +389,7 @@ export const experiences: Dict = {
     items: [
       { key: 'dayuse', img: 'photos/jardin-aerien', title: 'Day use', text: 'A full day by the crystal-clear pool, in the tropical garden, to the sound of birds. Packages with access to the spaces and the bar.' },
       { key: 'workshops', img: 'photos/terrasse-palmier', title: 'Workshops', text: 'Breakfast-ateliers, rooftop yoga, holistic and creative workshops: intimate formats in an inspiring setting.' },
-      { key: 'gastronomy', img: 'photos/bar-interieur', title: 'Bar', text: '' },
+      { key: 'gastronomy', img: 'photos/bar-interieur', title: 'Bar', text: 'A covered, fully equipped bar by the pool, extended by the pool house and a covered dining room. Mornings begin with breakfast facing the garden — tropical fruit, freshly pressed juices, waffles and warm breads, Brazilian coffee. Come evening, the barman takes over with cocktails and a selection of wines, late into the night under the canopy.' },
       { key: 'activities', img: 'photos/piscine-jungle', title: 'Activities & surroundings', text: "Just steps from Christ the Redeemer and the Tijuca rainforest, minutes from the boho-chic streets of Santa Teresa and Rio's iconic beaches. A rare balance between a peaceful garden retreat and the best of Rio, all within easy reach." },
     ],
     note: 'Prices and calendar on request — chat with us on WhatsApp.',
@@ -443,7 +443,7 @@ export const experiences: Dict = {
     items: [
       { key: 'dayuse', img: 'photos/jardin-aerien', title: 'Day use', text: 'Une journée entière au bord de la piscine cristalline, dans le jardin tropical, au chant des oiseaux. Formules avec accès aux espaces et au bar.' },
       { key: 'workshops', img: 'photos/terrasse-palmier', title: 'Ateliers & workshops', text: 'Petit-déjeuner-atelier, yoga sur le rooftop, ateliers holistiques et créatifs : des formats intimes dans un cadre inspirant.' },
-      { key: 'gastronomy', img: 'photos/bar-interieur', title: 'Bar', text: '' },
+      { key: 'gastronomy', img: 'photos/bar-interieur', title: 'Bar', text: 'Un bar couvert et équipé au bord de la piscine, prolongé par le pool house et une salle à manger couverte. Le matin, le petit-déjeuner se prend face au jardin — fruits tropicaux, jus pressés, gaufres et pains frais, café brésilien. Le soir venu, place aux cocktails du barman et à une sélection de vins, jusque tard sous la canopée.' },
       { key: 'activities', img: 'photos/piscine-jungle', title: 'Activités & alentours', text: 'À quelques minutes à pied du Christ Rédempteur et de la forêt de Tijuca, à quelques minutes en voiture de Santa Teresa et des plages emblématiques de Rio. Un équilibre rare entre un havre de paix tropical et le meilleur de Rio, à portée de main.' },
     ],
     note: 'Tarifs et calendrier sur demande — écrivez-nous sur WhatsApp.',
