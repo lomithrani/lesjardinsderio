@@ -180,6 +180,12 @@ p { margin: 0 0 1em; }
 
 /* ---------- Blocs éditoriaux (alentours, plages) ---------- */
 .prose { max-width: 46rem; }
+/* Justification réservée aux longs blocs éditoriaux, et seulement quand la colonne
+   est assez large : sur mobile elle creuserait des rivières. La césure suit la
+   langue déclarée sur <html>. */
+@media (min-width: 720px) {
+  .prose--justifie { text-align: justify; hyphens: auto; }
+}
 .nearby { display: grid; gap: 1.6rem 2.4rem; margin-top: 1.4rem; }
 @media (min-width: 720px) { .nearby { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1040px) { .nearby--tight { grid-template-columns: repeat(3, 1fr); } }
