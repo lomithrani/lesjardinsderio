@@ -90,6 +90,10 @@ const b = booking[locale];
     const open = (card) => {
       // Photos : clones des <img> déjà rendues par le carrousel de la carte (srcset conservé).
       track.innerHTML = '';
+      // Purge immédiate du crédit : center() ne s'exécute qu'à la frame suivante,
+      // sans ça l'auteur de la carte précédente resterait affiché le temps d'une
+      // frame sur une photo qui n'est pas la sienne.
+      if (creditEl) creditEl.textContent = '';
       for (const img of card.querySelectorAll('.card__img img')) {
         const slide = document.createElement('div');
         slide.className = 'lightbox__slide';
