@@ -54,3 +54,8 @@ sans extension (ex. `rooms/deluxe-green/01-suite-green`). Dans le code :
 
 Si un dossier de chambre est vide, le build échoue volontairement : une chambre
 sans photo est un bug de contenu.
+
+**Crédit photo** : si la photo ajoutée a un auteur à créditer, l'ajouter à
+`src/credits.ts` (table `PHOTO_CREDIT`, clé = identifiant de la photo). Le crédit
+s'affiche alors automatiquement sur la photo, et la suit partout où elle est
+réutilisée.

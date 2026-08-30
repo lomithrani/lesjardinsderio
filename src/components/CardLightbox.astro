@@ -1,6 +1,7 @@
 ---
 import { booking } from '../i18n/booking';
 import type { Locale } from '../config';
+import '../styles/credits.css';
 
 // Overlay « grand format » des cartes à carrousel (Home espaces, Chambres, Expériences, Spa).
 // Un seul overlay par page : au clic sur une carte [data-lightbox-card], son contenu déjà rendu
@@ -28,6 +29,7 @@ const b = booking[locale];
       <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label={b.nextPhoto} hidden>
         <span aria-hidden="true">&rsaquo;</span>
       </button>
+      <p class="lightbox__credit" data-lightbox-credit></p>
       <div class="lightbox__counter" data-lightbox-counter aria-hidden="true"></div>
     </div>
 
@@ -49,6 +51,7 @@ const b = booking[locale];
     const viewport = box.querySelector('[data-lightbox-viewport]');
     const track = box.querySelector('[data-lightbox-track]');
     const counter = box.querySelector('[data-lightbox-counter]');
+    const creditEl = box.querySelector('[data-lightbox-credit]');
     const titleEl = box.querySelector('[data-lightbox-title]');
     const metaEl = box.querySelector('[data-lightbox-meta]');
     const descEl = box.querySelector('[data-lightbox-desc]');
@@ -72,6 +75,12 @@ const b = booking[locale];
       if (!animate) void track.offsetWidth; // force le reflow avant de réactiver la transition
       slides.forEach((s, i) => s.setAttribute('data-active', String(i === index)));
       if (counter) counter.textContent = slides.length > 1 ? `${index + 1} / ${slides.length}` : '';
+      // Crédit de la photo affichée : porté par l'<img> clonée (data-credit posé
+      // par le Carousel depuis src/credits.ts). Vide → masqué par CSS (:empty).
+      if (creditEl) {
+        const author = slide.querySelector('img')?.getAttribute('data-credit') || '';
+        creditEl.textContent = author ? `© ${author}` : '';
+      }
     };
     const show = (next) => {
       index = (next + slides.length) % slides.length;
