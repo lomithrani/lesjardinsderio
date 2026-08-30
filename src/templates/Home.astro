@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import Carousel from '../components/Carousel.astro';
 import CardLightbox from '../components/CardLightbox.astro';
+import Credit from '../components/Credit.astro';
 import { image, cover, galleryOr } from '../images';
 import { home, spaces, common } from '../i18n/ui';
 import { photoAlt } from '../i18n/photos';
@@ -36,6 +37,7 @@ const teaser = rooms.slice(0, 3);
         <a class="btn btn--ghost" style="color: var(--blanc); border-color: var(--sable);" href={url(ROUTES.rooms[locale])}>{t.heroCtaRooms}</a>
       </div>
     </div>
+    <Credit id="photos/hero-maison-piscine" variant="hero" />
     <Curve fill="var(--blanc)" class="curve--overlap" />
   </section>
 
@@ -117,6 +119,7 @@ const teaser = rooms.slice(0, 3);
       </div>
       <div class="ph ph--alt">
         <Image src={image('photos/piscine-jungle')} alt={photoAlt('photos/piscine-jungle', locale)} widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Credit id="photos/piscine-jungle" />
       </div>
     </div>
   </section>
@@ -128,6 +131,7 @@ const teaser = rooms.slice(0, 3);
     <div class="wrap split">
       <div class="ph ph--soft">
         <Image src={image('photos/facade-palmiers')} alt={photoAlt('photos/facade-palmiers', locale)} widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" />
+        <Credit id="photos/facade-palmiers" />
       </div>
       <div>
         <p class="eyebrow">{t.locationEyebrow}</p>
