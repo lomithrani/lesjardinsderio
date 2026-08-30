@@ -1,0 +1,38 @@
+/* ===========================================================
+   Crédit photo — mention discrète de l'auteur sur la photo.
+   Feuille dédiée plutôt que global.css : ces règles ne servent
+   qu'aux composants Credit.astro et CardLightbox.astro, qui
+   l'importent tous les deux (Astro dédoublonne à la compilation).
+   Aucune de ces règles n'entre en concurrence avec global.css,
+   l'ordre de cascade entre les deux feuilles est donc indifférent.
+   =========================================================== */
+
+/* Ancre le crédit en surimpression : sans cela, le positionnement absolu
+   remonterait jusqu'au <body>. .hero est déjà en position: relative. */
+.ph { position: relative; }
+
+.credit {
+  position: absolute; right: 0.7rem; bottom: 0.6rem; z-index: 2; margin: 0;
+  font-family: var(--font-body); font-size: 0.72rem; line-height: 1;
+  letter-spacing: 0.06em; color: var(--blanc);
+  background: rgba(27, 61, 50, 0.45); backdrop-filter: blur(3px);
+  padding: 0.32rem 0.62rem; border-radius: 999px;
+  pointer-events: none; /* ne gêne ni le survol ni le clic de la carte */
+}
+
+/* Héros : la courbe de séparation déborde sur le bas de la section (.curve--overlap,
+   même hauteur) — on remonte le crédit au-dessus d'elle. */
+.credit--hero {
+  bottom: calc(clamp(46px, 8vw, 110px) + 0.7rem);
+  right: clamp(1.1rem, 4vw, 2.5rem);
+}
+
+/* Lightbox : pendant du compteur, dans l'autre coin. */
+.lightbox__credit {
+  position: absolute; left: 1rem; bottom: 0.8rem; z-index: 2; margin: 0;
+  font-size: 0.78rem; letter-spacing: 0.06em; line-height: 1;
+  color: var(--blanc); background: rgba(27, 61, 50, 0.55);
+  padding: 0.3rem 0.7rem; border-radius: 999px;
+  pointer-events: none;
+}
+.lightbox__credit:empty { display: none; }
