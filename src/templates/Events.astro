@@ -22,7 +22,6 @@ const waContext: Record<Locale, string> = {
       <div>
         <p class="eyebrow">{t.eyebrow}</p>
         <h1>{t.title}</h1>
-        <p class="lede">{t.intro}</p>
       </div>
       <div class="ph">
         <Image src={image('photos/piscine-canopee')} alt={photoAlt('photos/piscine-canopee', locale)} widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" loading="eager" />
@@ -32,39 +31,22 @@ const waContext: Record<Locale, string> = {
 
   <Curve fill="var(--blanc)" />
 
-  <!-- Texte éditorial : donne à la page un contenu rédigé (lieu, capacités, organisation)
-       plutôt que deux listes à puces, pour le visiteur comme pour l'indexation. -->
-  <section class="section" style="padding-top: 1rem; padding-bottom: 0;">
-    <div class="wrap">
-      <h2>{t.aboutTitle}</h2>
-      {t.about.map((p: string) => (<p class="prose prose--justifie">{p}</p>))}
-    </div>
-  </section>
-
+  <!-- Le lieu : cadre, architecture, espaces disponibles. -->
   <section class="section" style="padding-top: 1rem;">
-    <div class="wrap split">
-      <div>
-        <h2>{t.typesTitle}</h2>
-        <ul class="list-cols">
-          {t.types.map((item: string) => <li>{item}</li>)}
-        </ul>
-      </div>
-      <div>
-        <h2>{t.servicesTitle}</h2>
-        <ul class="list-cols">
-          {t.services.map((item: string) => <li>{item}</li>)}
-        </ul>
-      </div>
+    <div class="wrap">
+      <h2>{t.venueTitle}</h2>
+      {t.venue.map((p: string) => (<p class="prose prose--justifie">{p}</p>))}
     </div>
   </section>
 
   <Curve fill="var(--vert)" />
 
+  <!-- Les occasions : types d'événements + privatisation + suites. -->
   <section class="section section--vert" style="padding-top: 1rem;">
     <div class="wrap split split--reverse">
       <div>
-        <h2>{t.privatizationTitle}</h2>
-        <p>{t.privatizationText}</p>
+        <h2>{t.celebrateTitle}</h2>
+        {t.celebrate.map((p: string) => (<p>{p}</p>))}
       </div>
       <div class="ph ph--alt">
         <Image src={image('photos/jardin-transats')} alt={photoAlt('photos/jardin-transats', locale)} widths={[480, 800]} sizes="(min-width: 820px) 45vw, 92vw" />
@@ -72,7 +54,20 @@ const waContext: Record<Locale, string> = {
     </div>
   </section>
 
-  <Curve fill="var(--creme)" flip />
+  <Curve fill="var(--blanc)" flip />
+
+  <!-- Les services proposés autour de l'événement. -->
+  <section class="section" style="padding-top: 1rem;">
+    <div class="wrap">
+      <h2>{t.servicesTitle}</h2>
+      <p>{t.servicesIntro}</p>
+      <ul class="list-cols">
+        {t.services.map((item: string) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Curve fill="var(--creme)" />
 
   <section class="section section--creme cta-band">
     <div class="wrap">
