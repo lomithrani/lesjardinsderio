@@ -1,0 +1,21 @@
+---
+import { photoCredit } from '../credits';
+import '../styles/credits.css';
+
+// Crédit photo posé en surimpression, en bas à droite de l'image.
+// Ne rend rien si la photo n'a pas d'auteur déclaré dans src/credits.ts —
+// on peut donc l'appeler sans condition côté template.
+//
+// Le conteneur parent doit être en position: relative (c'est le cas de .ph et
+// de .hero). La variante « hero » remonte le crédit au-dessus de la courbe de
+// séparation, qui déborde sur le bas du héros.
+interface Props {
+  id: string; // ID de la photo (cf. src/images.ts)
+  variant?: 'hero';
+}
+const { id, variant } = Astro.props;
+const author = photoCredit(id);
+---
+{author && (
+  <p class:list={['credit', variant === 'hero' && 'credit--hero']}>© {author}</p>
+)}

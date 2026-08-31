@@ -20,9 +20,18 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 const byId = new Map<string, ImageMetadata>();
+// Table inverse : permet de retrouver l'ID d'une image qu'on ne tient que sous
+// forme d'ImageMetadata (cas des collections/carrousels), pour aller chercher
+// ses métadonnées associées — crédit photo, par exemple (cf. src/credits.ts).
+// Indexée sur l'IDENTITÉ de l'objet, pas sur son `src` : deux fichiers sources
+// au contenu identique sont dédupliqués par Astro et partagent alors le même
+// `src`, ce qui rendrait le lookup ambigu. Les objets, eux, restent distincts —
+// et `image()` / `gallery()` renvoient ceux-ci, jamais des copies.
+const idByImage = new WeakMap<ImageMetadata, string>();
 for (const [path, mod] of Object.entries(modules)) {
   const id = path.replace(/^\.\/assets\//, '').replace(/\.(jpe?g|png|webp)$/i, '');
   byId.set(id, mod.default);
+  idByImage.set(mod.default, id);
 }
 
 /** Une image précise par son ID (chemin sans extension). Échoue au build si absente. */
@@ -34,6 +43,11 @@ export function image(id: string): ImageMetadata {
     );
   }
   return img;
+}
+
+/** ID (chemin sans extension) d'une image, ou '' si elle ne vient pas de src/assets/. */
+export function idOf(img: ImageMetadata): string {
+  return idByImage.get(img) ?? '';
 }
 
 /** Toutes les images d'une collection (enfants directs du dossier), triées par nom de fichier. */
