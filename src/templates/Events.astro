@@ -4,7 +4,8 @@ import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import EmailButton from '../components/EmailButton.astro';
 import { image } from '../images';
-import { events, common } from '../i18n/ui';
+import { common } from '../i18n/ui';
+import { events } from '../i18n/events';
 import { photoAlt } from '../i18n/photos';
 import { SITE, whatsappLink, type Locale } from '../config';
 
@@ -62,8 +63,11 @@ const waContext: Record<Locale, string> = {
       <h2>{t.servicesTitle}</h2>
       <p>{t.servicesIntro}</p>
       <ul class="list-cols">
-        {t.services.map((item: string) => <li>{item}</li>)}
+        {t.services.map((item: any) => (
+          <li><strong>{item.title}</strong> — {item.text}</li>
+        ))}
       </ul>
+      <p style="margin-top: 1.4rem;">{t.servicesClosing}</p>
     </div>
   </section>
 
