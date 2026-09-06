@@ -95,7 +95,7 @@ p { margin: 0 0 1em; }
 
 .site-nav { margin-left: auto; }
 .site-nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; align-items: center; }
-.site-nav a { text-decoration: none; font-size: 0.95rem; font-weight: 700; color: var(--encre); }
+.site-nav a { text-decoration: none; font-size: 0.95rem; font-weight: 700; color: var(--encre); white-space: nowrap; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--sauge); }
 /* Le bouton Réserver du header garde les couleurs des boutons primaires
    (sinon les règles .site-nav a ci-dessus écrasent son texte blanc). */
@@ -108,7 +108,9 @@ p { margin: 0 0 1em; }
 
 .nav-toggle { display: none; margin-left: auto; background: none; border: 1px solid var(--or); border-radius: 8px; padding: 0.45rem 0.7rem; font-size: 1rem; color: var(--encre); }
 
-@media (max-width: 880px) {
+/* Bascule vers le menu burger à 1180 px : en dessous, les sept entrées de
+   navigation (+ langues + Réserver) ne tiennent plus sur une ligne en FR. */
+@media (max-width: 1180px) {
   .nav-toggle { display: block; }
   .site-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--blanc); border-bottom: 1px solid var(--sable); padding: 1rem 1.4rem 1.4rem; margin: 0; }
   .site-nav.is-open { display: block; }
@@ -466,7 +468,7 @@ body.lightbox-open { overflow: hidden; }
   .cookie-banner__card { animation: none; }
 }
 
-/* Le contenu reste dans la colonne du site (.wrap donne max-width + gouttières),
+/* Le contenu reste dans la colonne du site (.wrap donne max-width + goutières),
    donc aligné sur le texte des pages malgré le fond pleine largeur.
    Écran large : texte à gauche, boutons à droite sur la même ligne. */
 .cookie-banner__inner {
