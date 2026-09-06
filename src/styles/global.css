@@ -89,13 +89,15 @@ p { margin: 0 0 1em; }
   border-bottom: 1px solid rgba(201, 169, 110, 0.35);
 }
 .site-header__in { display: flex; align-items: center; gap: 1.4rem; padding-block: 0.7rem; }
-.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--encre); }
+/* flex-shrink: 0 sur le logo et la nav : sans lui, quand la ligne est juste, la
+   flexbox comprime le logo et « Les Jardins de Rio » passe sous « Accueil ». */
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--encre); flex-shrink: 0; }
 .brand img { width: 42px; height: 42px; }
 .brand span { font-family: var(--font-display); font-size: 1.18rem; letter-spacing: 0.04em; white-space: nowrap; }
 
-.site-nav { margin-left: auto; }
-.site-nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; align-items: center; }
-.site-nav a { text-decoration: none; font-size: 0.95rem; font-weight: 700; color: var(--encre); }
+.site-nav { margin-left: auto; flex-shrink: 0; }
+.site-nav ul { display: flex; gap: 1.15rem; list-style: none; margin: 0; padding: 0; align-items: center; }
+.site-nav a { text-decoration: none; font-size: 0.95rem; font-weight: 700; color: var(--encre); white-space: nowrap; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--sauge); }
 /* Le bouton Réserver du header garde les couleurs des boutons primaires
    (sinon les règles .site-nav a ci-dessus écrasent son texte blanc). */
@@ -108,7 +110,9 @@ p { margin: 0 0 1em; }
 
 .nav-toggle { display: none; margin-left: auto; background: none; border: 1px solid var(--or); border-radius: 8px; padding: 0.45rem 0.7rem; font-size: 1rem; color: var(--encre); }
 
-@media (max-width: 880px) {
+/* Bascule vers le menu burger à 1220 px : en dessous, logo + sept entrées de
+   navigation (+ langues + Réserver) ne tiennent plus sur une ligne en FR. */
+@media (max-width: 1220px) {
   .nav-toggle { display: block; }
   .site-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--blanc); border-bottom: 1px solid var(--sable); padding: 1rem 1.4rem 1.4rem; margin: 0; }
   .site-nav.is-open { display: block; }
@@ -466,7 +470,7 @@ body.lightbox-open { overflow: hidden; }
   .cookie-banner__card { animation: none; }
 }
 
-/* Le contenu reste dans la colonne du site (.wrap donne max-width + gouttières),
+/* Le contenu reste dans la colonne du site (.wrap donne max-width + goutières),
    donc aligné sur le texte des pages malgré le fond pleine largeur.
    Écran large : texte à gauche, boutons à droite sur la même ligne. */
 .cookie-banner__inner {
