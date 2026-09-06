@@ -27,7 +27,7 @@ const abs = (path: string) => new URL(`${base}${path}`, Astro.site).href;
 const current = ROUTES[page];
 const canonical = abs(current[locale]);
 
-// ── Vignette de partage (Open Graph) ────────────────────────────────────────
+// ── Vignette de partage (Open Graph) ────────────────────────────────────
 // Une photo par page : un lien vers /evenements partagé sur WhatsApp doit montrer
 // la piscine sous la canopée, pas la façade. Les IDs pointent vers assets-src/ ;
 // `image()` échoue au build si l'un d'eux disparaît — la vignette ne peut donc
@@ -43,6 +43,7 @@ const OG_IMAGES: Record<keyof typeof ROUTES, { src: ImageMetadata; alt: string }
   spa: fromPhoto('photos/jardin-transats'),
   events: fromPhoto('photos/piscine-canopee'),
   experiences: fromPhoto('photos/jardin-aerien'),
+  about: fromPhoto('photos/piscine-jungle'),
   gallery: fromPhoto('photos/piscine-jardin'),
   contact: fromPhoto('photos/facade-palmiers'),
   terms: fromPhoto('photos/piscine-escalier'),
@@ -70,6 +71,7 @@ const navItems: Array<[keyof typeof ROUTES, string]> = [
   ['experiences', t.experiences],
   ['spa', t.spa],
   ['events', t.events],
+  ['about', t.about],
   ['contact', t.contact],
 ];
 
