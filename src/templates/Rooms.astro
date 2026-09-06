@@ -7,13 +7,15 @@ import { galleryOr } from '../images';
 import { roomsPage, common } from '../i18n/ui';
 import { booking } from '../i18n/booking';
 import { rooms } from '../i18n/rooms';
-import { nobedsBooking, whatsappLink, type Locale } from '../config';
+import { ROUTES, nobedsBooking, whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = roomsPage[locale];
 const c = common[locale];
 const b = booking[locale];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = (path: string) => `${base}${path}`;
 ---
 <Base locale={locale} page="rooms" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
@@ -21,7 +23,9 @@ const b = booking[locale];
       <p class="eyebrow">{t.eyebrow}</p>
       <h1>{t.title}</h1>
       <p class="lede">{t.intro}</p>
-      <p style="font-size: 0.9rem; opacity: 0.75;">{t.bookNote}</p>
+      <p style="font-size: 0.9rem; opacity: 0.75;">
+        {t.bookNote} <a href={url(ROUTES.terms[locale])}>{t.termsLink}</a>
+      </p>
     </div>
   </section>
 

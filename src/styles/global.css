@@ -195,6 +195,15 @@ p { margin: 0 0 1em; }
 /* Les distances sont une info utile, pas un ornement : contraste renforcé vs l’or des eyebrows. */
 .nearby__item .card__meta { color: var(--sauge); }
 
+/* ---------- Texte légal (CGV) ---------- */
+/* Colonne étroite et interlignage aéré : un texte contractuel se lit en entier,
+   pas en diagonale. Les clauses sont séparées par un filet plutôt que par un
+   fond coloré, pour rester sobre au milieu d'un site très photographique. */
+.legal__clause + .legal__clause { margin-top: 2rem; border-top: 1px solid var(--sable); padding-top: 1.6rem; }
+.legal__clause h3 { font-size: 1.28rem; margin-bottom: 0.5rem; }
+.legal__clause p { margin-bottom: 0.85rem; }
+.legal__clause p:last-child { margin-bottom: 0; }
+
 /* ---------- Listes éditoriales ---------- */
 .list-cols { columns: 1; column-gap: 3rem; padding-left: 1.1rem; }
 @media (min-width: 720px) { .list-cols { columns: 2; } }

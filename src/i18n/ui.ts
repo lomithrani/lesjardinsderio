@@ -3,9 +3,9 @@ import type { Locale } from '../config';
 type Dict = Record<Locale, any>;
 
 export const nav: Dict = {
-  pt: { home: 'Início', rooms: 'Quartos', spa: 'Spa', events: 'Eventos', experiences: 'Experiências', gallery: 'Galeria', contact: 'Contato', book: 'Reservar' },
-  en: { home: 'Home', rooms: 'Rooms', spa: 'Spa', events: 'Events', experiences: 'Experiences', gallery: 'Gallery', contact: 'Contact', book: 'Book now' },
-  fr: { home: 'Accueil', rooms: 'Chambres', spa: 'Spa', events: 'Événements', experiences: 'Expériences', gallery: 'Galerie', contact: 'Contact', book: 'Réserver' },
+  pt: { home: 'Início', rooms: 'Quartos', spa: 'Spa', events: 'Eventos', experiences: 'Experiências', gallery: 'Galeria', contact: 'Contato', terms: 'Condições gerais', book: 'Reservar' },
+  en: { home: 'Home', rooms: 'Rooms', spa: 'Spa', events: 'Events', experiences: 'Experiences', gallery: 'Gallery', contact: 'Contact', terms: 'Terms & conditions', book: 'Book now' },
+  fr: { home: 'Accueil', rooms: 'Chambres', spa: 'Spa', events: 'Événements', experiences: 'Expériences', gallery: 'Galerie', contact: 'Contact', terms: 'Conditions générales', book: 'Réserver' },
 };
 
 export const common: Dict = {
@@ -442,6 +442,7 @@ export const roomsPage: Dict = {
     title: 'Quartos & suítes',
     intro: 'Oito suítes, cada uma com sua personalidade, entre mármore branco, madeiras raras e jardim tropical.',
     bookNote: 'A reserva é feita pelo nosso sistema seguro NoBeds.',
+    termsLink: 'Ver as condições de cancelamento',
   },
   en: {
     metaTitle: 'Rooms & suites — Les Jardins de Rio',
@@ -450,6 +451,7 @@ export const roomsPage: Dict = {
     title: 'Rooms & suites',
     intro: 'Eight suites, each with its own personality, amid white marble, rare woods and the tropical garden.',
     bookNote: 'Bookings are handled through our secure NoBeds system.',
+    termsLink: 'See our cancellation policy',
   },
   fr: {
     metaTitle: 'Chambres & suites — Les Jardins de Rio',
@@ -458,6 +460,187 @@ export const roomsPage: Dict = {
     title: 'Chambres & suites',
     intro: 'Huit suites, chacune avec sa personnalité, entre marbre blanc, bois rares et jardin tropical.',
     bookNote: 'La réservation passe par notre système sécurisé NoBeds.',
+    termsLink: 'Voir nos conditions d’annulation',
+  },
+};
+
+// Conditions générales de vente — la politique d'annulation de la maison.
+//
+// Le texte de référence est l'anglais : c'est la version fournie par la cliente,
+// reprise ici mot pour mot. Le portugais et le français en sont la traduction
+// fidèle, sans ajout ni omission — sur une page contractuelle, une nuance
+// introduite par la traduction crée une divergence entre les trois versions,
+// toutes également opposables au client qui a réservé dans SA langue.
+//
+// ⛑ Toute modification de la politique doit être répercutée dans les TROIS
+// langues d'un seul tenant, et alignée sur ce qui est réellement paramétré dans
+// le moteur de réservation (NoBeds) et sur les plateformes (Booking, Expedia…) :
+// c'est la politique affichée au moment de la réservation qui fait foi.
+export const terms: Dict = {
+  pt: {
+    metaTitle: 'Condições gerais de venda — Les Jardins de Rio',
+    metaDesc: 'Política de cancelamento de Les Jardins de Rio: tarifa flexível, tarifa não reembolsável, datas especiais, alterações de reserva e erros de preço.',
+    eyebrow: 'Informações legais',
+    title: 'Condições gerais de venda',
+    intro: 'As condições abaixo se aplicam às reservas de hospedagem em Les Jardins de Rio.',
+    policyTitle: 'Política de cancelamento',
+    sections: [
+      {
+        title: 'Tarifa flexível',
+        paragraphs: [
+          'Os hóspedes podem cancelar a reserva gratuitamente até 21 dias antes da data prevista de chegada.',
+          'Para cancelamentos feitos com menos de 21 dias de antecedência em relação à chegada, será cobrado 100% do valor total da reserva.',
+          'Em caso de não comparecimento (no-show) ou de saída antecipada, será cobrado 100% do valor restante da reserva.',
+        ],
+      },
+      {
+        title: 'Tarifa não reembolsável',
+        paragraphs: [
+          'As reservas feitas sob tarifa não reembolsável são integralmente pré-pagas e não podem ser canceladas, alteradas ou reembolsadas, salvo quando a legislação aplicável dispuser de outra forma.',
+        ],
+      },
+      {
+        title: 'Datas especiais & períodos de alta demanda',
+        paragraphs: [
+          'Para o Réveillon, o Carnaval e outros períodos de alta demanda ou eventos especiais assim designados, podem ser aplicadas condições específicas de cancelamento e de pagamento.',
+          'Essas condições são exibidas com clareza no momento da reserva e passam a fazer parte dela.',
+        ],
+      },
+      {
+        title: 'Alterações na reserva',
+        paragraphs: [
+          'Qualquer pedido de alteração de datas, categoria de quarto ou número de hóspedes está sujeito à disponibilidade e pode implicar mudança de tarifa e/ou das condições de cancelamento.',
+          'As alterações só são confirmadas depois de aceitas por Les Jardins de Rio ou pela plataforma de reserva.',
+        ],
+      },
+      {
+        title: 'Erros de preço',
+        paragraphs: [
+          'Em caso de erro de preço manifesto e substancial, inclusive erro técnico ou de sistema evidente que resulte em uma tarifa substancialmente inferior à tarifa aplicável, Les Jardins de Rio reserva-se o direito de entrar em contato com o hóspede prontamente para esclarecer a situação.',
+          'Quando permitido pela legislação aplicável, o hotel poderá oferecer ao hóspede a possibilidade de manter a reserva pela tarifa correta. Caso a reserva não possa ser razoavelmente honrada pela tarifa equivocada, o hotel poderá cancelá-la e reembolsar integralmente os valores já pagos.',
+          'Esta disposição não se aplica a tarifas promocionais, descontos ou ofertas especiais genuínos, publicados intencionalmente por Les Jardins de Rio.',
+        ],
+      },
+      {
+        title: 'Condições gerais',
+        paragraphs: [
+          'A política de cancelamento aplicável a uma reserva é aquela exibida e aceita pelo hóspede no momento da reserva.',
+          'Nada nesta política pretende excluir ou limitar os direitos assegurados aos consumidores pela legislação brasileira aplicável.',
+        ],
+      },
+    ],
+    contactTitle: 'Dúvidas sobre a sua reserva?',
+    contactText: 'Fale conosco pelo WhatsApp ou por e-mail — respondemos todos os dias.',
+  },
+  en: {
+    metaTitle: 'Terms & conditions — Les Jardins de Rio',
+    metaDesc: 'Cancellation policy of Les Jardins de Rio: flexible rate, non-refundable rate, special dates, changes to a reservation and pricing errors.',
+    eyebrow: 'Legal information',
+    title: 'Terms & conditions of sale',
+    intro: 'The conditions below apply to stay reservations at Les Jardins de Rio.',
+    policyTitle: 'Cancellation policy',
+    sections: [
+      {
+        title: 'Flexible Rate',
+        paragraphs: [
+          'Guests may cancel their reservation free of charge up to 21 days before the scheduled arrival date.',
+          'For cancellations made less than 21 days before arrival, 100% of the total reservation amount will be charged.',
+          'In case of no-show or early departure, 100% of the remaining reservation amount will be charged.',
+        ],
+      },
+      {
+        title: 'Non-Refundable Rate',
+        paragraphs: [
+          'Reservations booked under a Non-Refundable Rate are fully prepaid and cannot be cancelled, modified or refunded, except where otherwise required by applicable law.',
+        ],
+      },
+      {
+        title: 'Special Dates & High-Demand Periods',
+        paragraphs: [
+          "For New Year's Eve, Carnival and other designated high-demand periods or special events, specific cancellation and payment conditions may apply.",
+          'These conditions will be clearly displayed at the time of booking and will form part of the reservation.',
+        ],
+      },
+      {
+        title: 'Changes to a Reservation',
+        paragraphs: [
+          'Any request to change the dates, room category or number of guests is subject to availability and may result in a change of rate and/or cancellation conditions.',
+          'Changes are only confirmed once accepted by Les Jardins de Rio or by the booking platform.',
+        ],
+      },
+      {
+        title: 'Pricing Errors',
+        paragraphs: [
+          'In the event of a manifest and substantial pricing error, including an obvious technical or system error resulting in a rate substantially below the applicable rate, Les Jardins de Rio reserves the right to contact the guest promptly to clarify the situation.',
+          'Where permitted by applicable law, the hotel may offer the guest the possibility of maintaining the reservation at the correct rate. If the reservation cannot reasonably be honoured at the erroneous rate, the hotel may cancel the reservation and provide a full refund of any amount already paid.',
+          'This provision does not apply to genuine promotional rates, discounts or special offers intentionally published by Les Jardins de Rio.',
+        ],
+      },
+      {
+        title: 'General Conditions',
+        paragraphs: [
+          'The cancellation policy applicable to a reservation is the policy displayed and accepted by the guest at the time of booking.',
+          'Nothing in this policy is intended to exclude or limit any mandatory rights granted to consumers under applicable Brazilian law.',
+        ],
+      },
+    ],
+    contactTitle: 'A question about your booking?',
+    contactText: 'Reach us on WhatsApp or by e-mail — we reply every day.',
+  },
+  fr: {
+    metaTitle: 'Conditions générales de vente — Les Jardins de Rio',
+    metaDesc: "Politique d’annulation des Jardins de Rio : tarif flexible, tarif non remboursable, dates spéciales, modification de réservation et erreurs de tarif.",
+    eyebrow: 'Informations légales',
+    title: 'Conditions générales de vente',
+    intro: 'Les conditions ci-dessous s’appliquent aux réservations de séjour aux Jardins de Rio.',
+    policyTitle: "Politique d’annulation",
+    sections: [
+      {
+        title: 'Tarif flexible',
+        paragraphs: [
+          "Les clients peuvent annuler leur réservation sans frais jusqu’à 21 jours avant la date d’arrivée prévue.",
+          "Pour toute annulation intervenant moins de 21 jours avant l’arrivée, 100 % du montant total de la réservation sera facturé.",
+          'En cas de non-présentation (no-show) ou de départ anticipé, 100 % du montant restant de la réservation sera facturé.',
+        ],
+      },
+      {
+        title: 'Tarif non remboursable',
+        paragraphs: [
+          'Les réservations effectuées sous un tarif non remboursable sont intégralement prépayées et ne peuvent être ni annulées, ni modifiées, ni remboursées, sauf disposition contraire de la loi applicable.',
+        ],
+      },
+      {
+        title: 'Dates spéciales & périodes de forte demande',
+        paragraphs: [
+          "Pour le réveillon du Nouvel An, le Carnaval et les autres périodes de forte demande ou événements spéciaux désignés comme tels, des conditions d’annulation et de paiement spécifiques peuvent s’appliquer.",
+          'Ces conditions sont clairement affichées au moment de la réservation et font partie intégrante de celle-ci.',
+        ],
+      },
+      {
+        title: "Modification d’une réservation",
+        paragraphs: [
+          "Toute demande de modification des dates, de la catégorie de chambre ou du nombre de personnes est soumise à disponibilité et peut entraîner un changement de tarif et/ou de conditions d’annulation.",
+          'Les modifications ne sont confirmées qu’une fois acceptées par Les Jardins de Rio ou par la plateforme de réservation.',
+        ],
+      },
+      {
+        title: 'Erreurs de tarif',
+        paragraphs: [
+          "En cas d’erreur de tarif manifeste et substantielle, y compris une erreur technique ou système évidente aboutissant à un tarif nettement inférieur au tarif applicable, Les Jardins de Rio se réserve le droit de contacter rapidement le client afin de clarifier la situation.",
+          "Dans les limites autorisées par la loi applicable, l’établissement peut proposer au client de maintenir la réservation au tarif correct. Si la réservation ne peut raisonnablement être honorée au tarif erroné, l’établissement peut l’annuler et rembourser intégralement les sommes déjà versées.",
+          'Cette disposition ne s’applique pas aux véritables tarifs promotionnels, remises ou offres spéciales publiés intentionnellement par Les Jardins de Rio.',
+        ],
+      },
+      {
+        title: 'Conditions générales',
+        paragraphs: [
+          "La politique d’annulation applicable à une réservation est celle affichée et acceptée par le client au moment de la réservation.",
+          'Aucune disposition de la présente politique n’a pour objet d’exclure ou de limiter les droits impératifs reconnus aux consommateurs par la loi brésilienne applicable.',
+        ],
+      },
+    ],
+    contactTitle: 'Une question sur votre réservation ?',
+    contactText: 'Écrivez-nous sur WhatsApp ou par e-mail — nous répondons tous les jours.',
   },
 };
 

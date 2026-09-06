@@ -138,7 +138,7 @@ jobs:
             if echo "$HTML" | grep -q "name=\"build\" content=\"$SHA_SHORT"; then
               echo "✓ Le site sert le commit $SHA_SHORT (tentative $i)"
               FAIL=0
-              for p in "" "pt/" "pt/quartos/" "pt/eventos/" "pt/experiencias/" "pt/galeria/" "pt/contato/" "en/" "en/rooms/" "fr/" "fr/chambres/" "robots.txt" "sitemap.xml"; do
+              for p in "" "pt/" "pt/quartos/" "pt/eventos/" "pt/experiencias/" "pt/galeria/" "pt/contato/" "pt/condicoes-gerais/" "en/" "en/rooms/" "fr/" "fr/chambres/" "robots.txt" "sitemap.xml"; do
                 code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$BASE/$p")
                 echo "  HTTP $code  /$p"
                 [ "$code" = "200" ] || FAIL=1
