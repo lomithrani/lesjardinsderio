@@ -1,0 +1,11 @@
+{
+  "_comment": "Recadrages appliqués au build (scripts/prepare-assets.mjs). Clé = identifiant de la photo (chemin sans extension), valeur = pixels à retirer par bord (left/top/right/bottom). Ces 8 photos (série 1288×952) ont une bande blanche d'export de ~20 px sur le bord droit ; supprimer l'entrée quand l'original propre est déposé.",
+  "photos/piscine-canopee": { "right": 21 },
+  "photos/jardin-transats": { "right": 21 },
+  "photos/hero-maison-piscine": { "right": 21 },
+  "photos/courbes-ciel": { "right": 21 },
+  "photos/pelouse-jardin": { "right": 21 },
+  "photos/allee-piscine": { "right": 21 },
+  "photos/piscine-arbres": { "right": 21 },
+  "photos/coin-art-rose": { "right": 21 }
+}
