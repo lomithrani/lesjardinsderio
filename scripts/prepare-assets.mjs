@@ -4,8 +4,7 @@
 //    dossier assets-src/<collection>/, c'est tout). Les éventuels logo-* / favicon.png
 //    posés à plat à la racine du repo y sont aussi pris en charge (legacy logo/favicon).
 // 2. assets-b64/**.b64 (canal texte pour le MCP GitHub), décodés.
-// Fallbacks : favicon absent → copie du logo ; suite White absente → téléchargée
-// depuis le CDN du site actuel (réseau libre sur les runners GitHub Actions).
+// Fallback : favicon absent → copie du logo.
 import { readdirSync, readFileSync, writeFileSync, copyFileSync, mkdirSync, statSync, existsSync, rmSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 
@@ -66,24 +65,6 @@ if (existsSync('assets-b64')) {
 if (!existsSync('public/favicon.png') && existsSync('src/assets/logo-noir.png')) {
   place('favicon.png', (out) => copyFileSync('src/assets/logo-noir.png', out));
   console.log('ℹ favicon.png absent → copie de logo-noir.png');
-  count++;
-}
-
-// Fallback distant : suite White (en attendant l'ajout d'une vraie photo dans
-// assets-src/rooms/presidential-white/). Réseau libre sur les runners GitHub Actions.
-const REMOTE_FALLBACKS = {
-  'rooms/presidential-white/01-suite-white.jpg':
-    'https://d14tal8bchn59o.cloudfront.net/Q56ektZrIes7uw4rxYfV3bY4IChm6vNi99S0UeAD6no/rs:fill:960:960:1/plain/https%3A%2F%2F02f0a56ef46d93f03c90-22ac5f107621879d5667e0d7ed595bdb.ssl.cf2.rackcdn.com%2Fsites%2F110430%2Fphotos%2F23039211%2FPHOTO-2025-08-10-15-04-05_%25281%2529_original.jpg',
-};
-for (const [rel, url] of Object.entries(REMOTE_FALLBACKS)) {
-  const out = outPath(rel);
-  if (existsSync(out)) continue;
-  console.log(`ℹ ${rel} absent → téléchargement depuis le CDN…`);
-  const res = await fetch(url, { signal: AbortSignal.timeout(20000) });
-  if (!res.ok) throw new Error(`Téléchargement échoué (${res.status}) pour ${rel}`);
-  const buf = Buffer.from(await res.arrayBuffer());
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, buf);
   count++;
 }
 
