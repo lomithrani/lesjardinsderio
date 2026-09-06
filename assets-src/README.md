@@ -48,6 +48,11 @@ propres, communs à tous les canaux de réservation. Pour les modifier ou change
 une surface : [`src/i18n/rooms.ts`](../src/i18n/rooms.ts), source de vérité unique
 (page Chambres, vignettes Accueil, libellés de réservation, balisage SEO).
 
+**Recadrer une photo sans la retoucher** : `crops.json` (à la racine de ce
+dossier) déclare, par identifiant, des pixels à retirer par bord
+(`{ "photos/x": { "right": 21 } }`) ; le recadrage est appliqué au build, le
+fichier source reste intact. Supprimer l'entrée quand un original propre est déposé.
+
 **Réutiliser une photo ailleurs** : chaque photo a un identifiant = son chemin
 sans extension (ex. `rooms/deluxe-green/01-suite-green`). Dans le code :
 `image('rooms/deluxe-green/01-suite-green')`. On référence, on ne duplique pas.
