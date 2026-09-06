@@ -126,4 +126,25 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/contact/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/contato/" />
   </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/pt/condicoes-gerais/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/condicoes-gerais/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/conditions-generales/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/condicoes-gerais/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/condicoes-gerais/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/conditions-generales/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/condicoes-gerais/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/conditions-generales/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/condicoes-gerais/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/conditions-generales/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/condicoes-gerais/" />
+  </url>
 </urlset>
