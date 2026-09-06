@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import Curve from '../components/Curve.astro';
+import EmailButton from '../components/EmailButton.astro';
+import { terms, common } from '../i18n/ui';
+import { SITE, whatsappLink, type Locale } from '../config';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = terms[locale];
+const c = common[locale];
+
+interface Section { title: string; paragraphs: string[] }
+
+const waContext: Record<Locale, string> = {
+  pt: 'reserva', en: 'booking', fr: 'réservation',
+};
+---
+<Base locale={locale} page="terms" title={t.metaTitle} description={t.metaDesc}>
+  <section class="section section--creme" style="padding-bottom: 0.5rem;">
+    <div class="wrap">
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h1>{t.title}</h1>
+      <p class="lede">{t.intro}</p>
+    </div>
+  </section>
+
+  <Curve fill="var(--blanc)" />
+
+  {/* Un <article> plutôt qu'une suite de sections colorées : c'est un texte
+      contractuel, il se lit d'un trait. Colonne étroite (.prose) et titres de
+      niveau 2 par clause, pour qu'il reste navigable au lecteur d'écran. */}
+  <section class="section" style="padding-top: 1rem;">
+    <div class="wrap">
+      <article class="legal prose">
+        <h2>{t.policyTitle}</h2>
+        {t.sections.map((s: Section) => (
+          <section class="legal__clause">
+            <h3>{s.title}</h3>
+            {s.paragraphs.map((p: string) => <p>{p}</p>)}
+          </section>
+        ))}
+      </article>
+    </div>
+  </section>
+
+  <Curve fill="var(--creme)" flip />
+
+  <section class="section section--creme cta-band">
+    <div class="wrap">
+      <h2>{t.contactTitle}</h2>
+      <p class="lede" style="margin-inline: auto;">{t.contactText}</p>
+      <div class="cta-band__actions">
+        <a class="btn btn--primary" href={whatsappLink(locale, waContext[locale])}>{c.writeWhatsApp}</a>
+        <EmailButton locale={locale} context={waContext[locale]} variant="ghost" align="center" />
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.92rem; opacity: 0.75;">
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+    </div>
+  </section>
+</Base>

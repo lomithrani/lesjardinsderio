@@ -45,6 +45,7 @@ const OG_IMAGES: Record<keyof typeof ROUTES, { src: ImageMetadata; alt: string }
   experiences: fromPhoto('photos/jardin-aerien'),
   gallery: fromPhoto('photos/piscine-jardin'),
   contact: fromPhoto('photos/facade-palmiers'),
+  terms: fromPhoto('photos/piscine-escalier'),
 };
 
 // 1200 × 630 (ratio 1.91:1) : le format attendu par Facebook, WhatsApp, LinkedIn
@@ -384,6 +385,10 @@ const jsonLd = {
               {navItems.map(([key, label]) => (
                 <li><a href={url(ROUTES[key][locale])}>{label}</a></li>
               ))}
+              {/* Page légale : elle vit ici et sur la page Chambres, pas dans la
+                  navigation principale — mais elle doit rester à un clic depuis
+                  n'importe quelle page. */}
+              <li><a href={url(ROUTES.terms[locale])}>{t.terms}</a></li>
             </ul>
           </div>
           <div>

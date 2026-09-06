@@ -73,7 +73,7 @@ Deux fichiers sont générés au build, à partir de la configuration — rien �
   pointe le sitemap. Sur un build `noindex` (previews de PR, `PREVIEW=1`, ou
   `STAGING = true`), il bascule en `Disallow: /`.
 - **`/sitemap.xml`** (`src/pages/sitemap.xml.ts`) — construit depuis `ROUTES`
-  (`src/config.ts`) : **18 URL** = 6 pages × 3 langues, chacune déclarant ses
+  (`src/config.ts`) : **21 URL** = 7 pages × 3 langues, chacune déclarant ses
   alternates `hreflang` (+ `x-default` → PT). Ajouter une route dans `ROUTES`
   suffit à l'y faire apparaître.
 

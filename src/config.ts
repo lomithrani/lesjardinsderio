@@ -61,6 +61,10 @@ export const ROUTES: Record<string, Record<Locale, string>> = {
   experiences: { pt: '/pt/experiencias/', en: '/en/experiences/', fr: '/fr/experiences/' },
   gallery: { pt: '/pt/galeria/', en: '/en/gallery/', fr: '/fr/galerie/' },
   contact: { pt: '/pt/contato/', en: '/en/contact/', fr: '/fr/contact/' },
+  // Conditions générales de vente (politique d'annulation). Page légale : elle
+  // vit dans le pied de page et sur la page Chambres, pas dans la navigation
+  // principale — mais elle est indexable comme les autres (cf. sitemap.xml.ts).
+  terms: { pt: '/pt/condicoes-gerais/', en: '/en/terms/', fr: '/fr/conditions-generales/' },
 };
 
 export function whatsappLink(locale: Locale, context?: string): string {
