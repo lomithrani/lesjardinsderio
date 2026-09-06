@@ -106,6 +106,27 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/experiencias/" />
   </url>
   <url>
+    <loc>https://lesjardinsderio.com.br/pt/sobre-nos/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/sobre-nos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/about-us/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/a-propos-de-nous/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/sobre-nos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/en/about-us/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/sobre-nos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/about-us/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/a-propos-de-nous/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/sobre-nos/" />
+  </url>
+  <url>
+    <loc>https://lesjardinsderio.com.br/fr/a-propos-de-nous/</loc>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/sobre-nos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/about-us/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://lesjardinsderio.com.br/fr/a-propos-de-nous/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lesjardinsderio.com.br/pt/sobre-nos/" />
+  </url>
+  <url>
     <loc>https://lesjardinsderio.com.br/pt/contato/</loc>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lesjardinsderio.com.br/pt/contato/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://lesjardinsderio.com.br/en/contact/" />
