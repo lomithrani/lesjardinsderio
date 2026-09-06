@@ -11,7 +11,6 @@ import { ROUTES, type Locale } from '../config';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = experiences[locale];
-const a = t.activities;
 const c = common[locale];
 const b = booking[locale];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -51,54 +50,6 @@ const url = (p: string) => `${base}${p}`;
       </Fragment>
     );
   })}
-
-  <!-- Détail des activités & alentours : quartiers, plages et accès, depuis experiences[locale].activities. -->
-  <section class="section" style="padding-top: 1rem;" id="activities-detail">
-    <div class="wrap">
-      <p class="eyebrow">{a.eyebrow}</p>
-      <h2>{a.title}</h2>
-      {a.intro.map((p: string) => (<p class="prose">{p}</p>))}
-    </div>
-
-    <div class="wrap" style="margin-top: 2.6rem;">
-      <h3>{a.placesTitle}</h3>
-      <div class="nearby">
-        {a.places.map((place: any) => (
-          <article class="nearby__item">
-            <span class="card__meta">{place.meta}</span>
-            <h4>{place.title}</h4>
-            <p>{place.text}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-
-    <div class="wrap" style="margin-top: 2.6rem;">
-      <h3>{a.beachesTitle}</h3>
-      <p class="prose">{a.beachesText}</p>
-      <div class="nearby nearby--tight">
-        {a.beaches.map((beach: any) => (
-          <article class="nearby__item">
-            <span class="card__meta">{beach.meta}</span>
-            <h4>{beach.title}</h4>
-            <p>{beach.text}</p>
-          </article>
-        ))}
-      </div>
-      <p style="opacity: 0.75; margin-top: 1.2rem;">{a.beachesNote}</p>
-    </div>
-
-    <div class="wrap" style="margin-top: 2.6rem;">
-      <h3>{a.accessTitle}</h3>
-      <ul class="list-cols">
-        {a.access.map((i: string) => (<li>{i}</li>))}
-      </ul>
-    </div>
-
-    <div class="wrap" style="margin-top: 2rem;">
-      <p class="prose">{a.closing}</p>
-    </div>
-  </section>
 
   <section class="section" style="padding-top: 1rem;">
     <div class="wrap">

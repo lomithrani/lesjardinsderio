@@ -59,6 +59,7 @@ export const ROUTES: Record<string, Record<Locale, string>> = {
   spa: { pt: '/pt/spa/', en: '/en/spa/', fr: '/fr/spa/' },
   events: { pt: '/pt/eventos/', en: '/en/events/', fr: '/fr/evenements/' },
   experiences: { pt: '/pt/experiencias/', en: '/en/experiences/', fr: '/fr/experiences/' },
+  about: { pt: '/pt/sobre-nos/', en: '/en/about-us/', fr: '/fr/a-propos-de-nous/' },
   gallery: { pt: '/pt/galeria/', en: '/en/gallery/', fr: '/fr/galerie/' },
   contact: { pt: '/pt/contato/', en: '/en/contact/', fr: '/fr/contact/' },
   // Conditions générales de vente (politique d'annulation). Page légale : elle
