@@ -19,29 +19,23 @@ La **première** photo du dossier sert de couverture (vignettes de l'Accueil).
 
 ## Nomenclature des chambres
 
-⚠️ **Les dossiers portent l'ancien code couleur, pas le nom commercial.** Les noms
-ont changé en août 2026 ; les dossiers, eux, n'ont pas bougé — les renommer
-casserait toutes les galeries. Pour déposer les photos d'une chambre, se repérer
-avec cette table.
+Les dossiers suivent le nom commercial (renommés en septembre 2026 ; les anciens
+codes couleur sont rappelés ci-dessous pour s'y retrouver dans l'historique).
+Les photos d'un dossier se nomment `NN-<dossier>.jpg` (`01-library.jpg`, …).
 
-| Dossier photos | Nom commercial (site, Booking, Expedia) | Surface | NoBeds | Expedia |
-|---|---|---|---|---|
-| `rooms/presidential-white/` | Presidential White Suite (Private Terrace) | 65 m² | 2515860 | 200714660 |
-| `rooms/luxury-violet/`      | The Amethyst Suite                        | 54 m² | 2515862 | 200719046 |
-| `rooms/presidential-pink/`  | The Library Suite (Private Terrace)       | 52 m² | 2515859 | 200817763 |
-| `rooms/deluxe-green/`       | The Botanical Suite                       | 37 m² | 2515858 | 324004551 |
-| `rooms/master-orange/`      | The Sunset Garden Room (Private Terrace)  | 29 m² | 2515857 | 323606968 |
-| `rooms/deluxe-garden/`      | Blue Suite (Private Terrace)              | 22 m² | 2515861 | 200719049 |
-| `rooms/deluxe-red/`         | Red Room (Garden View)                    | 18 m² | 2515855 | 323606954 |
-| `rooms/luxury-yellow/`      | Maracuja Room (Private Terrace)           | 17 m² | 2515856 | 324004544 |
+| Dossier photos | Nom commercial (site, Booking, Expedia) | Surface | NoBeds | Expedia | Ancien dossier |
+|---|---|---|---|---|---|
+| `rooms/presidential-white/` | Presidential White Suite (Private Terrace) | 65 m² | 2515860 | 200714660 | *(inchangé)* |
+| `rooms/amethyst/`           | The Amethyst Suite                        | 54 m² | 2515862 | 200719046 | `luxury-violet` |
+| `rooms/library/`            | The Library Suite (Private Terrace)       | 52 m² | 2515859 | 200817763 | `presidential-pink` |
+| `rooms/botanical/`          | The Botanical Suite                       | 37 m² | 2515858 | 324004551 | `deluxe-green` |
+| `rooms/sunset-garden/`      | The Sunset Garden Room (Private Terrace)  | 29 m² | 2515857 | 323606968 | `master-orange` |
+| `rooms/corcovado/`          | The Corcovado Room                        | 22 m² | 2515861 | 200719049 | `deluxe-garden` (ex-Blue Suite) |
+| `rooms/red/`                | Red Room (Garden View)                    | 18 m² | 2515855 | 323606954 | `deluxe-red` |
+| `rooms/maracuja/`           | Maracuja Room (Private Terrace)           | 17 m² | 2515856 | 324004544 | `luxury-yellow` |
 
-Les deux pièges de cette table :
-
-- `deluxe-garden` **n'est pas** la Red Room malgré son « Garden View » : c'est la
-  **Blue Suite** (linge bleu nuit, ouverture sur le patio). La Red Room, c'est
-  `deluxe-red` (plaid rouge, verrière sur la salle de bains).
-- `master-orange` et `luxury-violet` ne gardent plus rien d'orange ni de violet
-  dans leur nom public — ce sont la Sunset Garden Room et l'Amethyst Suite.
+Renommer un dossier impose de changer l'`id` correspondant dans
+[`src/i18n/rooms.ts`](../src/i18n/rooms.ts) : l'id de la chambre EST le nom du dossier.
 
 Les noms sont **identiques en portugais, anglais et français** : ce sont des noms
 propres, communs à tous les canaux de réservation. Pour les modifier ou changer
@@ -54,8 +48,8 @@ dossier) déclare, par identifiant, des pixels à retirer par bord
 fichier source reste intact. Supprimer l'entrée quand un original propre est déposé.
 
 **Réutiliser une photo ailleurs** : chaque photo a un identifiant = son chemin
-sans extension (ex. `rooms/deluxe-green/01-suite-green`). Dans le code :
-`image('rooms/deluxe-green/01-suite-green')`. On référence, on ne duplique pas.
+sans extension (ex. `rooms/botanical/01-botanical`). Dans le code :
+`image('rooms/botanical/01-botanical')`. On référence, on ne duplique pas.
 
 Si un dossier de chambre est vide, le build échoue volontairement : une chambre
 sans photo est un bug de contenu.

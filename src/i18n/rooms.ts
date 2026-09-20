@@ -13,8 +13,8 @@ export interface Room {
 // Noms commerciaux et surfaces : alignés sur la fiche Expedia de l'hôtel (h8409409),
 // elle-même synchronisée avec Booking et le channel manager. C'est la source de vérité :
 // un client qui a réservé « The Library Suite » doit retrouver ce nom ici.
-// Les `id` restent les anciens codes couleur — ce sont les noms de dossiers photos
-// (assets-src/rooms/<id>/), invisibles du visiteur ; les renommer casserait les galeries.
+// Les `id` sont les noms de dossiers photos (assets-src/rooms/<id>/) et les ancres de la
+// page Chambres : renommer un id impose de renommer le dossier ET ses photos (NN-<id>.jpg).
 // Les noms sont identiques en pt/en/fr : ce sont des noms propres, communs à tous les canaux.
 //
 // ORDRE : de la plus grande surface à la plus petite. C'est l'ordre d'affichage de la page
@@ -35,7 +35,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'luxury-violet', nobedsId: '2515862', size: 54, // Expedia 200719046
+    id: 'amethyst', nobedsId: '2515862', size: 54, // Expedia 200719046
     name: {
       pt: 'The Amethyst Suite',
       en: 'The Amethyst Suite',
@@ -48,7 +48,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'presidential-pink', nobedsId: '2515859', size: 52, // Expedia 200817763
+    id: 'library', nobedsId: '2515859', size: 52, // Expedia 200817763
     name: {
       pt: 'The Library Suite (Private Terrace)',
       en: 'The Library Suite (Private Terrace)',
@@ -61,7 +61,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'deluxe-green', nobedsId: '2515858', size: 37, // Expedia 324004551
+    id: 'botanical', nobedsId: '2515858', size: 37, // Expedia 324004551
     name: {
       pt: 'The Botanical Suite',
       en: 'The Botanical Suite',
@@ -74,7 +74,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'master-orange', nobedsId: '2515857', size: 29, // Expedia 323606968
+    id: 'sunset-garden', nobedsId: '2515857', size: 29, // Expedia 323606968
     name: {
       pt: 'The Sunset Garden Room (Private Terrace)',
       en: 'The Sunset Garden Room (Private Terrace)',
@@ -87,11 +87,11 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'deluxe-garden', nobedsId: '2515861', size: 22, // Expedia 200719049
+    id: 'corcovado', nobedsId: '2515861', size: 22, // Expedia 200719049
     name: {
-      pt: 'Blue Suite (Private Terrace)',
-      en: 'Blue Suite (Private Terrace)',
-      fr: 'Blue Suite (Private Terrace)',
+      pt: 'The Corcovado Room',
+      en: 'The Corcovado Room',
+      fr: 'The Corcovado Room',
     },
     desc: {
       pt: 'Suíte espaçosa de grandes proporções, com vários pátios e closet.',
@@ -100,7 +100,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'deluxe-red', nobedsId: '2515855', size: 18, // Expedia 323606954
+    id: 'red', nobedsId: '2515855', size: 18, // Expedia 323606954
     name: {
       pt: 'Red Room (Garden View)',
       en: 'Red Room (Garden View)',
@@ -113,7 +113,7 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'luxury-yellow', nobedsId: '2515856', size: 17, // Expedia 324004544
+    id: 'maracuja', nobedsId: '2515856', size: 17, // Expedia 324004544
     name: {
       pt: 'Maracuja Room (Private Terrace)',
       en: 'Maracuja Room (Private Terrace)',
