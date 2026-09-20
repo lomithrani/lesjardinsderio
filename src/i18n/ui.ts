@@ -169,7 +169,7 @@ export const spa: Dict = {
     introText: 'Longe da agitação da cidade, a casa convida ao descanso: espreguiçadeiras à sombra das palmeiras, água turquesa, terraços envoltos em verde. Nossos tratamentos e massagens são reservados sob consulta, neste cenário de exceção.',
     items: [
       { key: 'soins', img: 'photos/terrasse-coussins', title: 'Tratamentos & massagens', text: 'Massagens e tratamentos corporais sob agendamento, no quarto ou de frente para o jardim, com profissionais parceiros.' },
-      { key: 'eau', img: 'photos/piscine-canopee', title: 'Relaxar à beira da água', text: 'Piscina cristalina, espreguiçadeiras e pool bar: uma pausa aquática sob a copa tropical.' },
+      { key: 'eau', img: 'photos/terrasse-coussins', title: 'Relaxar à beira da água', text: 'Piscina cristalina, espreguiçadeiras e pool bar: uma pausa aquática sob a copa tropical.' },
       { key: 'yoga', img: 'photos/jardin-aerien', title: 'Yoga & holístico', text: 'Sessões de yoga no rooftop e oficinas holísticas, em formatos íntimos, sob consulta.' },
     ],
     dayuseEyebrow: 'Sem se hospedar',
@@ -188,7 +188,7 @@ export const spa: Dict = {
     introText: "Away from the city's bustle, the house naturally invites rest: sunbeds in the shade of palm trees, turquoise water, terraces nestled in greenery. Our treatments and massages are booked on request, in this exceptional setting.",
     items: [
       { key: 'soins', img: 'photos/terrasse-coussins', title: 'Treatments & massages', text: 'Body treatments and massages by appointment, in your room or facing the garden, by partner practitioners.' },
-      { key: 'eau', img: 'photos/piscine-canopee', title: 'Relaxation by the water', text: 'Crystal-clear pool, sunbeds and pool bar: an aquatic pause under the tropical canopy.' },
+      { key: 'eau', img: 'photos/terrasse-coussins', title: 'Relaxation by the water', text: 'Crystal-clear pool, sunbeds and pool bar: an aquatic pause under the tropical canopy.' },
       { key: 'yoga', img: 'photos/jardin-aerien', title: 'Yoga & holistic', text: 'Rooftop yoga sessions and holistic workshops, in intimate formats, on request.' },
     ],
     dayuseEyebrow: 'Without staying over',
@@ -207,7 +207,7 @@ export const spa: Dict = {
     introText: "Loin de l'agitation de la ville, la maison se prête naturellement au repos : transats à l'ombre des palmiers, eau turquoise, terrasses lovées dans la verdure. Nos soins et massages se réservent sur demande, dans ce décor d'exception.",
     items: [
       { key: 'soins', img: 'photos/terrasse-coussins', title: 'Soins & massages', text: 'Massages et soins du corps sur réservation, en chambre ou face au jardin, dispensés par des praticiens partenaires.' },
-      { key: 'eau', img: 'photos/piscine-canopee', title: "Détente au fil de l'eau", text: 'Piscine cristalline, transats et pool bar : une parenthèse aquatique sous la canopée tropicale.' },
+      { key: 'eau', img: 'photos/terrasse-coussins', title: "Détente au fil de l'eau", text: 'Piscine cristalline, transats et pool bar : une parenthèse aquatique sous la canopée tropicale.' },
       { key: 'yoga', img: 'photos/jardin-aerien', title: 'Yoga & holistique', text: 'Séances de yoga sur le rooftop et ateliers holistiques, en formats intimes, sur demande.' },
     ],
     dayuseEyebrow: 'Sans séjourner',

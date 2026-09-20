@@ -30,7 +30,7 @@ Les photos d'un dossier se nomment `NN-<dossier>.jpg` (`01-library.jpg`, …).
 | `rooms/library/`            | The Library Suite (Private Terrace)       | 52 m² | 2515859 | 200817763 | `presidential-pink` |
 | `rooms/botanical/`          | The Botanical Suite                       | 37 m² | 2515858 | 324004551 | `deluxe-green` |
 | `rooms/sunset-garden/`      | The Sunset Garden Room (Private Terrace)  | 29 m² | 2515857 | 323606968 | `master-orange` |
-| `rooms/corcovado/`          | The Corcovado Room                        | 22 m² | 2515861 | 200719049 | `deluxe-garden` (ex-Blue Suite) |
+| `rooms/corcovado/`          | The Corcovado Room (Private Terrace)      | 22 m² | 2515861 | 200719049 | `deluxe-garden` (ex-Blue Suite) |
 | `rooms/red/`                | Red Room (Garden View)                    | 18 m² | 2515855 | 323606954 | `deluxe-red` |
 | `rooms/maracuja/`           | Maracuja Room (Private Terrace)           | 17 m² | 2515856 | 324004544 | `luxury-yellow` |
 

@@ -17,8 +17,10 @@ export interface Room {
 // page Chambres : renommer un id impose de renommer le dossier ET ses photos (NN-<id>.jpg).
 // Les noms sont identiques en pt/en/fr : ce sont des noms propres, communs à tous les canaux.
 //
-// ORDRE : de la plus grande surface à la plus petite. C'est l'ordre d'affichage de la page
-// Chambres et des vignettes de l'Accueil — insérer une chambre à sa place, pas à la fin.
+// ORDRE : choix éditorial de la maison (harmonie visuelle des vignettes), globalement de la
+// plus grande à la plus petite — avec deux entorses voulues : la Library Suite juste après la
+// White, et la Maracuja Room avant la Red Room. C'est l'ordre d'affichage de la page Chambres
+// et des vignettes de l'Accueil — ne pas « retrier » par surface.
 // Table de correspondance dossier photos ↔ nom commercial : assets-src/README.md.
 export const rooms: Room[] = [
   {
@@ -35,19 +37,6 @@ export const rooms: Room[] = [
     },
   },
   {
-    id: 'amethyst', nobedsId: '2515862', size: 54, // Expedia 200719046
-    name: {
-      pt: 'The Amethyst Suite',
-      en: 'The Amethyst Suite',
-      fr: 'The Amethyst Suite',
-    },
-    desc: {
-      pt: 'Recentemente modernizada, oferece uma experiência serena: acesso direto ao jardim, terraço privativo perfeito para relaxar, ducha e estação de boas-vindas com iPad.',
-      en: 'Recently modernized for a peaceful, serene experience: direct garden access, a private terrace perfect for relaxing, a shower and an iPad welcome station.',
-      fr: 'Récemment modernisée pour une expérience sereine : accès direct au jardin, terrasse privée parfaite pour se détendre, douche et station d’accueil iPad.',
-    },
-  },
-  {
     id: 'library', nobedsId: '2515859', size: 52, // Expedia 200817763
     name: {
       pt: 'The Library Suite (Private Terrace)',
@@ -58,6 +47,19 @@ export const rooms: Room[] = [
       pt: 'Ampla e relaxante, com decoração inspirada em uma biblioteca. Terraço privativo com acesso direto à piscina e aos jardins, banheiro balinês com banheira e dupla cuba. Ideal para uma família de quatro.',
       en: 'Spacious and relaxing, inspired by the decor of a library. Private terrace with direct access to the pool and gardens, authentic Balinese bathroom with bathtub and double washbasin. Ideal for a family of four.',
       fr: 'Spacieuse et apaisante, à la décoration inspirée d’une bibliothèque. Terrasse privée avec accès direct à la piscine et aux jardins, salle de bains balinaise avec baignoire et double vasque. Idéale pour une famille de quatre.',
+    },
+  },
+  {
+    id: 'amethyst', nobedsId: '2515862', size: 54, // Expedia 200719046
+    name: {
+      pt: 'The Amethyst Suite',
+      en: 'The Amethyst Suite',
+      fr: 'The Amethyst Suite',
+    },
+    desc: {
+      pt: 'Recentemente modernizada, oferece uma experiência serena: acesso direto ao jardim, terraço privativo perfeito para relaxar, ducha e estação de boas-vindas com iPad.',
+      en: 'Recently modernized for a peaceful, serene experience: direct garden access, a private terrace perfect for relaxing, a shower and an iPad welcome station.',
+      fr: 'Récemment modernisée pour une expérience sereine : accès direct au jardin, terrasse privée parfaite pour se détendre, douche et station d’accueil iPad.',
     },
   },
   {
@@ -89,27 +91,14 @@ export const rooms: Room[] = [
   {
     id: 'corcovado', nobedsId: '2515861', size: 22, // Expedia 200719049
     name: {
-      pt: 'The Corcovado Room',
-      en: 'The Corcovado Room',
-      fr: 'The Corcovado Room',
+      pt: 'The Corcovado Room (Private Terrace)',
+      en: 'The Corcovado Room (Private Terrace)',
+      fr: 'The Corcovado Room (Private Terrace)',
     },
     desc: {
       pt: 'Suíte espaçosa de grandes proporções, com vários pátios e closet.',
       en: 'A spacious suite with a large layout, multiple patios and a walk-in closet.',
       fr: 'Suite spacieuse aux grands volumes, avec plusieurs patios et un dressing.',
-    },
-  },
-  {
-    id: 'red', nobedsId: '2515855', size: 18, // Expedia 323606954
-    name: {
-      pt: 'Red Room (Garden View)',
-      en: 'Red Room (Garden View)',
-      fr: 'Red Room (Garden View)',
-    },
-    desc: {
-      pt: 'Suíte moderna no prédio principal, com vista para a piscina e persianas de madeira exclusivas e acolhedoras.',
-      en: 'A modern suite in the main building overlooking the pool, with exclusive, warm wooden blinds.',
-      fr: 'Suite moderne du bâtiment principal, avec vue sur la piscine et stores en bois exclusifs et chaleureux.',
     },
   },
   {
@@ -123,6 +112,19 @@ export const rooms: Room[] = [
       pt: 'Uma mistura única de decoração moderna e original, com banheira de mármore e entrada independente pelo exterior da casa.',
       en: 'A unique blend of modern and original decoration, featuring a marble tub and its own exclusive entrance from outside the house.',
       fr: 'Un mélange unique de décoration moderne et d’origine, avec baignoire en marbre et entrée indépendante depuis l’extérieur de la maison.',
+    },
+  },
+  {
+    id: 'red', nobedsId: '2515855', size: 18, // Expedia 323606954
+    name: {
+      pt: 'Red Room (Garden View)',
+      en: 'Red Room (Garden View)',
+      fr: 'Red Room (Garden View)',
+    },
+    desc: {
+      pt: 'Suíte moderna no prédio principal, com vista para a piscina e persianas de madeira exclusivas e acolhedoras.',
+      en: 'A modern suite in the main building overlooking the pool, with exclusive, warm wooden blinds.',
+      fr: 'Suite moderne du bâtiment principal, avec vue sur la piscine et stores en bois exclusifs et chaleureux.',
     },
   },
 ];
