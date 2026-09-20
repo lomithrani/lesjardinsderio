@@ -114,6 +114,21 @@ export const PHOTO_ALT: Record<string, Record<Locale, string>> = {
     en: 'Foliage by the pool',
     fr: 'Feuillages au bord de la piscine',
   },
+  'photos/porte-entree-vallee': {
+    pt: 'A porta de entrada aberta para o vale e a Mata Atlântica',
+    en: 'The front door opening onto the valley and the Atlantic Forest',
+    fr: 'La porte d’entrée ouverte sur la vallée et la forêt atlantique',
+  },
+  'photos/evenement-buffet': {
+    pt: 'Mesa de doces decorada com hortênsias azuis e lanternas turquesa',
+    en: 'Dessert table dressed with blue hydrangeas and turquoise lanterns',
+    fr: 'Buffet de desserts décoré d’hortensias bleus et de lanternes turquoise',
+  },
+  'photos/evenement-bouquet': {
+    pt: 'Noiva com seu buquê de flores brancas',
+    en: 'Bride holding her bouquet of white flowers',
+    fr: 'Mariée tenant son bouquet de fleurs blanches',
+  },
   'photos/courbes-ciel': {
     pt: 'Curvas contra o céu',
     en: 'Curves against the sky',

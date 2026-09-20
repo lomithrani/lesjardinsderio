@@ -4,7 +4,7 @@ import type { ImageMetadata } from 'astro';
 // Toute image sous src/assets/ (peuplé par scripts/prepare-assets.mjs depuis
 // assets-src/) est identifiée par son CHEMIN relatif sans extension :
 //   'photos/hero-maison-piscine'
-//   'rooms/deluxe-green/01-chambre'
+//   'rooms/botanical/01-botanical'
 // Le chemin EST l'ID — aucune table de correspondance à maintenir.
 //
 // Une « collection » est un dossier : rooms/<id>, spaces/<key>,

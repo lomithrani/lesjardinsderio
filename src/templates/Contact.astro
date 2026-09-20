@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Curve from '../components/Curve.astro';
 import EmailButton from '../components/EmailButton.astro';
+import { image } from '../images';
 import { contact, common } from '../i18n/ui';
+import { photoAlt } from '../i18n/photos';
 import { SITE, whatsappLink, type Locale } from '../config';
 
 interface Props { locale: Locale }
@@ -12,10 +15,15 @@ const c = common[locale];
 ---
 <Base locale={locale} page="contact" title={t.metaTitle} description={t.metaDesc}>
   <section class="section section--creme" style="padding-bottom: 0.5rem;">
-    <div class="wrap">
-      <p class="eyebrow">{t.eyebrow}</p>
-      <h1>{t.title}</h1>
-      <p class="lede">{t.intro}</p>
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1>{t.title}</h1>
+        <p class="lede">{t.intro}</p>
+      </div>
+      <div class="ph contact-hero">
+        <Image src={image('photos/porte-entree-vallee')} alt={photoAlt('photos/porte-entree-vallee', locale)} widths={[480, 800, 1200]} sizes="(min-width: 820px) 45vw, 92vw" loading="eager" />
+      </div>
     </div>
   </section>
 
@@ -48,3 +56,11 @@ const c = common[locale];
     </div>
   </section>
 </Base>
+
+<style>
+  /* Photo portrait : bandeau bas sur mobile (les coordonnées restent proches du haut
+     de page), cadrage en hauteur à partir de la mise en page deux colonnes. */
+  .contact-hero { aspect-ratio: 3 / 2; }
+  .contact-hero :global(img) { object-position: center 45%; }
+  @media (min-width: 820px) { .contact-hero { aspect-ratio: 4 / 5; max-height: 34rem; justify-self: end; } }
+</style>

@@ -25,7 +25,7 @@ dossier** — aucun code à modifier :
 
 ```
 assets-src/
-  rooms/<id de la suite>/      # carrousel de la page Chambres (ex. rooms/presidential-pink/)
+  rooms/<id de la suite>/      # carrousel de la page Chambres (ex. rooms/library/)
   experiences/<clé>/           # carrousel des cartes Expériences (dayuse, workshops, gastronomy)
   spa/<clé>/                   # carrousel des cartes Spa (soins, eau, yoga)
   spaces/<clé>/                # carrousel des espaces sur la Home (lounge, rooftop, janus, piscine, evenementiel)
@@ -33,7 +33,7 @@ assets-src/
 ```
 
 Mode d'emploi (sans git) : sur GitHub, **naviguer dans le dossier cible**
-(ex. `assets-src/rooms/presidential-pink/`) puis « Add file → Upload files ».
+(ex. `assets-src/rooms/library/`) puis « Add file → Upload files ».
 ⚠ Uploader depuis l'intérieur du dossier — un upload depuis la racine ne préserve
 pas l'arborescence.
 
@@ -41,15 +41,10 @@ Conventions :
 - les photos d'un dossier sont triées par nom de fichier → préfixer `01-`, `02-`, …
   pour contrôler l'ordre du carrousel ; la première photo sert de couverture ;
 - **l'ID d'une photo = son chemin sans extension** (ex. `photos/salon-large`,
-  `rooms/presidential-pink/suite-pink`), réutilisable partout via `image(id)`
+  `rooms/library/01-library`), réutilisable partout via `image(id)`
   (`src/images.ts`) — on référence, on ne duplique jamais un binaire ;
 - formats acceptés : jpg, jpeg, png, webp ;
 - une collection référencée mais vide **fait échouer le build** (message explicite).
-
-> Note : `presidential-white` n'a pas encore de vraie photo ; en attendant, sa
-> couverture est téléchargée au build depuis le CDN du site actuel (fallback dans
-> `prepare-assets.mjs`). Déposer une photo dans `assets-src/rooms/presidential-white/`
-> rend ce fallback inutile.
 
 ### Pipeline d'assets binaires
 
