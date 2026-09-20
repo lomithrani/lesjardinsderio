@@ -114,6 +114,11 @@ export const PHOTO_ALT: Record<string, Record<Locale, string>> = {
     en: 'Foliage by the pool',
     fr: 'Feuillages au bord de la piscine',
   },
+  'photos/evenement-buffet': {
+    pt: 'Mesa de doces decorada com hortênsias azuis e lanternas turquesa',
+    en: 'Dessert table dressed with blue hydrangeas and turquoise lanterns',
+    fr: 'Buffet de desserts décoré d’hortensias bleus et de lanternes turquoise',
+  },
   'photos/evenement-bouquet': {
     pt: 'Noiva com seu buquê de flores brancas',
     en: 'Bride holding her bouquet of white flowers',

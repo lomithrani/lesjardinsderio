@@ -29,7 +29,7 @@ const canonical = abs(current[locale]);
 
 // ── Vignette de partage (Open Graph) ────────────────────────────────────
 // Une photo par page : un lien vers /evenements partagé sur WhatsApp doit montrer
-// la piscine sous la canopée, pas la façade. Les IDs pointent vers assets-src/ ;
+// le buffet fleuri d'une réception, pas la façade. Les IDs pointent vers assets-src/ ;
 // `image()` échoue au build si l'un d'eux disparaît — la vignette ne peut donc
 // pas se casser en silence.
 // La description de la photo (i18n/photos.ts) sert d'og:image:alt : c'est l'image
@@ -41,7 +41,7 @@ const OG_IMAGES: Record<keyof typeof ROUTES, { src: ImageMetadata; alt: string }
   home: fromPhoto('photos/hero-maison-piscine'),
   rooms: { src: cover('rooms/presidential-white', 'photos/interieur-perspective'), alt: description },
   spa: fromPhoto('photos/jardin-transats'),
-  events: fromPhoto('photos/piscine-canopee'),
+  events: fromPhoto('photos/evenement-buffet'),
   experiences: fromPhoto('photos/jardin-aerien'),
   about: fromPhoto('photos/piscine-jungle'),
   gallery: fromPhoto('photos/piscine-jardin'),
