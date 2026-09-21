@@ -41,7 +41,8 @@ const url = (p: string) => `${base}${p}`;
               <div class="card__body">
                 <h3>{item.title}</h3>
                 {item.text && <p>{item.text}</p>}
-                <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{c.contactUs}</a>
+                {/* `cta` (i18n/ui.ts) : false = pas de bouton, texte = libellé propre au bloc. */}
+                {item.cta !== false && <a class="btn btn--ghost" href={url(ROUTES.contact[locale])}>{item.cta ?? c.contactUs}</a>}
               </div>
             </article>
           </div>

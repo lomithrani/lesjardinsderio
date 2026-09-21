@@ -164,6 +164,9 @@ p { margin: 0 0 1em; }
 .card__img { aspect-ratio: 4 / 3; overflow: hidden; }
 .card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
 .card:hover .card__img img { transform: scale(1.04); }
+/* Carte sans photo : le logo de la maison, entier et centré sur fond crème. */
+.card__img--logo { background: var(--creme); display: grid; place-items: center; }
+.card__img--logo img { width: auto; height: 86%; object-fit: contain; }
 .card__body { padding: 1.3rem 1.4rem 1.6rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
 .card__meta { font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--or); font-weight: 700; }
 .card__body h3 { margin-bottom: 0.2rem; }
@@ -181,6 +184,8 @@ p { margin: 0 0 1em; }
 .xp .card__body h3 { font-size: clamp(1.7rem, 3.6vw, 2.6rem); margin-bottom: 0.55rem; }
 .xp .card__body p { font-size: 1.0625rem; margin-bottom: 1.3rem; }
 .xp .card__body .btn { margin-top: 0; }
+/* Bloc sans bouton : sans cette marge résiduelle, le texte reste centré sur la photo. */
+.xp .card__body > p:last-child { margin-bottom: 0; }
 
 /* ---------- Blocs éditoriaux (alentours, plages) ---------- */
 .prose { max-width: 46rem; }
